@@ -1,0 +1,24 @@
+name = "lattice_volume_interpolation"
+version = "0.1.0"
+keywords = ["math", "geometry-of-numbers", "lattices", "lean"]
+defaultTargets = ["LatticeVolumeInterpolation"]
+
+[leanOptions]
+pp.unicode.fun = true
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.31.0"
+
+[[require]]
+name = "discrete_minkowski"
+git = "https://github.com/LeonardoSanBenitez/discrete-minkowski-lean.git"
+rev = "bce1544"
+
+[[lean_lib]]
+name = "LatticeVolumeInterpolation"
+globs = ["LatticeVolumeInterpolation", "LviBasic"]

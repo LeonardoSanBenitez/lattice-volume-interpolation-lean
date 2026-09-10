@@ -1,0 +1,2042 @@
+{
+  "schema_version": "1.0",
+  "paper": {
+    "title": "Interpolating between volume and lattice point enumerator with successive minima",
+    "authors": ["Ansgar Freyer", "Eduardo Lucas"],
+    "affiliation": "Technische Universitaet Berlin; Universidad de Murcia",
+    "venue": "Monatshefte fuer Mathematik 198 (2022), no. 4, 717-740",
+    "arxiv_id": "2105.13090",
+    "version": "v2",
+    "arxiv_abs_url": "https://arxiv.org/abs/2105.13090v2",
+    "doi": "10.1007/s00605-022-01713-1",
+    "source_of_truth": "Mathematics cataloged from the authors' LaTeX e-print (arxiv.org/e-print/2105.13090v2, single file main.tex, 1291 lines after comment stripping). Every printed number, page and section reference is taken from the published open-access version of record (Springer, CC BY 4.0, 24 pages), because the two do not agree: the source numbers every display environment while the version of record leaves several unnumbered, so from Davenport's inequality onward a source-order number runs three ahead of the printed one. All pdf_page fields index the 24-page version of record, whose page 1 is journal page 717. The version of record prints exactly 27 numbered equations: (1.1) to (1.16), (2.1), (4.1) to (4.5) and (5.1) to (5.5); section 3 prints none.",
+    "scope_note": "This is a theorem paper, not a framework paper. It proves two-sided bounds on the ratio between the lattice point enumerator G(K) and the volume of an n-dimensional convex body in terms of its successive minima (Theorem 1.1), deduces a bound of the shape G(K) <= prod (2/lambda_i + c_i) with c_i independent of the body (Corollary 1.2), reverses the Henze/Schymura projection inequality (Theorem 1.3), proves the conjectured planar upper bound and a weaker planar lower bound (Theorem 1.4), confirms the exact symmetric lower conjecture for origin-symmetric lattice polygons (Proposition 1.5), and gives tight covering-radius bounds (Proposition 1.6). The engine is a rearrangement: Blaschke's shaking reduces an arbitrary convex body to an anti-blocking one without changing the volume, without losing lattice points and without increasing any successive minimum (Theorem 3.1). Two conjectures of Betke, Henk and Wills are stated and not proved; later results establish only specified special cases or weakenings. The paper also quotes established results from other work, including Minkowski's second theorem, the Betke-Henk-Wills and Malikiosis bounds, Davenport's and Henze's projection inequalities, van der Corput's theorem, the Rogers-Shephard section-projection inequality, the covering-radius bound of Kannan and Lovasz, Pick's theorem, and the boundary bound of Henk, Schuermann and Wills. Each is cataloged separately from the paper's own results."
+  },
+  "items": [
+    {
+      "id": "convex_body_class",
+      "label": "Sec. 1, opening sentence; Sec. 2",
+      "name": "The class K^n of n-dimensional convex bodies",
+      "kind": "definition",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, first sentence; repeated in Sec. 2, second paragraph",
+          "pdf_page_statement": 2
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L138, L387-388"
+        }
+      },
+      "background_notation": {
+        "K^n": "the class of admissible bodies",
+        "int K": "interior of K"
+      },
+      "hypotheses": [],
+      "statement_informal": "K^n is the class of compact convex subsets of R^n with non-empty interior, that is the n-dimensional convex bodies.",
+      "statement_formal": "K^n = { K subseteq R^n : K compact, K convex, int K nonempty }.",
+      "proof_as_in_paper": "A definition; nothing is proved. Sec. 1 explicitly says compact and convex with non-empty interior. Sec. 2 abbreviates this as the class of n-dimensional convex bodies, i.e. compact and convex sets; the qualifier n-dimensional retains the full-dimensional convention.",
+      "proof_completeness": "definition",
+      "external_dependencies": [],
+      "depends_on": [],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "support_function",
+      "label": "Sec. 2, support-function display",
+      "name": "Support function of a convex body",
+      "kind": "definition",
+      "references": {
+        "human": {
+          "statement": "Sec. 2, display defining the support function",
+          "pdf_page_statement": 7
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L388-391"
+        }
+      },
+      "background_notation": {
+        "h(K,x)": "the support function of K at x",
+        "<x,y>": "the standard scalar product"
+      },
+      "hypotheses": ["K is in K^n.", "x is in R^n."],
+      "statement_informal": "The support function records the largest scalar product with a point of the convex body.",
+      "statement_formal": "h(K,x) = max { <x,y> : y in K }.",
+      "proof_as_in_paper": "A definition. Compactness of K ensures that the displayed maximum is attained.",
+      "proof_completeness": "definition",
+      "external_dependencies": [],
+      "depends_on": ["convex_body_class"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "gauge_function",
+      "label": "Sec. 2, gauge-function display",
+      "name": "Gauge of an origin-symmetric convex body",
+      "kind": "definition",
+      "references": {
+        "human": {
+          "statement": "Sec. 2, display defining the gauge function",
+          "pdf_page_statement": 7
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L392-395"
+        }
+      },
+      "background_notation": {
+        "|x|_K": "the gauge or Minkowski functional of K"
+      },
+      "hypotheses": ["K is in K^n with K = -K.", "x is in R^n."],
+      "statement_informal": "The gauge of x is the least dilation factor needed for the dilated body to contain x.",
+      "statement_formal": "|x|_K = inf { r > 0 : x in rK }; for x nonzero this infimum is the minimum printed by the paper, and |0|_K = 0.",
+      "proof_as_in_paper": "A definition. The paper writes min { r > 0 : x in rK } for every x.",
+      "proof_completeness": "definition with a literal-reading endpoint defect at x = 0",
+      "external_dependencies": [],
+      "depends_on": ["convex_body_class"],
+      "known_issues_in_paper": [
+        "At x = 0, every r > 0 is admissible, so min { r > 0 : 0 in rK } does not exist; the gauge is 0 as an infimum. For x nonzero, compactness and the fact that an origin-symmetric full-dimensional convex body contains 0 in its interior give a positive attained minimum."
+      ],
+      "formalization_notes": "Use Mathlib's gauge/Minkowski functional or an infimum-based definition with |0|_K = 0, then prove the attained-minimum characterization only for x nonzero."
+    },
+    {
+      "id": "central_symmetral",
+      "label": "Sec. 1, sentence following Eq. (1.1)",
+      "name": "Central symmetral of a convex body",
+      "kind": "definition",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, sentence defining cs(K)",
+          "pdf_page_statement": 2
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L143-144"
+        }
+      },
+      "background_notation": {
+        "cs(K)": "the central symmetral of K"
+      },
+      "hypotheses": ["K is in K^n."],
+      "statement_informal": "The central symmetral is the origin-symmetric convex body obtained by halving the difference body.",
+      "statement_formal": "cs(K) = (1/2)(K - K).",
+      "proof_as_in_paper": "A definition, used immediately to extend the successive-minima notation from symmetric bodies to arbitrary convex bodies.",
+      "proof_completeness": "definition",
+      "external_dependencies": [],
+      "depends_on": ["convex_body_class"],
+      "known_issues_in_paper": [],
+      "formalization_notes": "Bridge cs(K) to the half difference body already used by the preceding discrete-Minkowski formalization. Prove cs(U K) = U(cs(K)) for the unimodular-invariance lemma."
+    },
+    {
+      "id": "successive_minima",
+      "label": "Sec. 1, Eq. (1.1)",
+      "name": "Successive minima of a convex body with respect to the integer lattice",
+      "kind": "definition",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, Eq. (1.1) and the sentence following it",
+          "pdf_page_statement": 2,
+          "equations": ["(1.1)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:lambdai"],
+          "statement_lines": "main.tex L139-145"
+        }
+      },
+      "background_notation": {
+        "lambda_i(K)": "i-th successive minimum",
+        "cs(K)": "the central symmetral (1/2)(K - K)",
+        "dim": "dimension of the real span"
+      },
+      "hypotheses": [
+        "K is in K^n.",
+        "For Eq. (1.1) as printed, K = -K."
+      ],
+      "statement_informal": "For an origin-symmetric body, the i-th successive minimum is the smallest dilation factor for which the dilated body contains i linearly independent integer points. For a general body the definition is applied to its central symmetral.",
+      "statement_formal": "For K = -K in K^n and 1 <= i <= n, lambda_i(K) = min { lambda > 0 : dim(lambda K intersect Z^n) >= i }. For general K in K^n, lambda_i(K) := lambda_i(cs(K)) where cs(K) = (1/2)(K - K).",
+      "proof_as_in_paper": "A definition. The paper does not argue that the minimum is attained; the min is written rather than an inf.",
+      "proof_completeness": "definition",
+      "external_dependencies": [],
+      "depends_on": ["convex_body_class"],
+      "known_issues_in_paper": [
+        "Eq. (1.1) writes min rather than inf; attainment holds because the set of admissible dilation factors is closed under the compactness of K, but the paper does not say so."
+      ]
+    },
+    {
+      "id": "successive_minima_via_gauge",
+      "label": "Sec. 2, third paragraph",
+      "name": "The successive minima expressed through the gauge of the central symmetral",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Sec. 2, paragraph beginning 'If K satisfies -K = K, its gauge function'",
+          "pdf_page_statement": 7
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L389-397"
+        }
+      },
+      "background_notation": {
+        "|x|_K": "gauge of an origin-symmetric body K, min { r > 0 : x in rK }",
+        "|x|_cs(K)": "gauge of the central symmetral, the notation the paper writes as |x|_{cs(K)}"
+      },
+      "hypotheses": ["K is in K^n."],
+      "statement_informal": "The paper claims that the successive minima can be recovered recursively from gauge values outside the span generated at the preceding minimum.",
+      "statement_formal": "lambda_1(K) = min { |z|_cs(K) : z in Z^n, z nonzero }, and for i >= 2, lambda_i(K) = min { |z|_cs(K) : z in Z^n outside span(lambda_{i-1}(K) cs(K) intersect Z^n) }.",
+      "proof_as_in_paper": "Stated as an alternative to Eq. (1.1); the equivalence is not argued.",
+      "proof_technique": "Equivalence of a dilation description and a gauge description of the same infimum.",
+      "proof_completeness": "literal-reading conflict: the recurrence is false when consecutive minima coincide; Eq. (1.1) remains the valid definition",
+      "external_dependencies": [],
+      "depends_on": ["successive_minima", "gauge_function"],
+      "known_issues_in_paper": [
+        "For K = [-1,1]^2 one has lambda_1(K) = lambda_2(K) = 1, while span(lambda_1(K) K intersect Z^2) = R^2, so the displayed minimization set for lambda_2 is empty. Thus the recursive formula is false as written whenever the preceding minimum already spans too large a subspace; no strict-minima hypothesis is part of the paper."
+      ],
+      "formalization_notes": "Use Eq. (1.1) as the definition. Prove the gauge characterization through a greedy flag or through the threshold subspaces span({z in Z^n : |z|_cs(K) <= r}), so repeated minima are handled without adding lambda_{i-1} < lambda_i."
+    },
+    {
+      "id": "lattice_point_enumerator",
+      "label": "Sec. 1 and Sec. 2, notation",
+      "name": "Lattices and the lattice point enumerator",
+      "kind": "definition",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, sentence introducing G(K); Sec. 2, paragraph 'A lattice ... is the integral span'",
+          "pdf_page_statement": 7
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L155, L398-402"
+        }
+      },
+      "background_notation": {
+        "G_Lambda(A)": "number of points of the lattice Lambda in the set A",
+        "G(A)": "G_{Z^n}(A)"
+      },
+      "hypotheses": [],
+      "statement_informal": "A lattice is the integral span of linearly independent vectors; the lattice point enumerator counts the lattice points of a set, and the unsubscripted enumerator refers to the integer lattice.",
+      "statement_formal": "Lambda = { sum_{i=1}^k m_i x_i : m_i in Z } for linearly independent x_1, ..., x_k in R^n; G_Lambda(A) = card(A intersect Lambda); G(A) = G_{Z^n}(A).",
+      "proof_as_in_paper": "A definition.",
+      "proof_completeness": "definition",
+      "external_dependencies": [],
+      "depends_on": [],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "projection_of_lattice_is_lattice",
+      "label": "Sec. 2, sentence after the lattice definition",
+      "name": "The projection of a lattice along a sublattice span is again a lattice",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Sec. 2, sentence 'We will use that for any X subseteq Lambda, the set Lambda|span(X)^perp is also a lattice'",
+          "pdf_page_statement": 7
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L402"
+        }
+      },
+      "background_notation": {
+        "A|L": "image of the orthogonal projection of A onto the linear subspace L"
+      },
+      "hypotheses": ["Lambda is a lattice in R^n.", "X is a subset of Lambda."],
+      "statement_informal": "Projecting a lattice orthogonally along the span of any subset of its own points leaves a lattice.",
+      "statement_formal": "For a lattice Lambda in R^n and X subseteq Lambda, the image Lambda|span(X)^perp is a lattice.",
+      "proof_as_in_paper": "Asserted as a fact that will be used; no proof is given.",
+      "proof_completeness": "asserted, not derived",
+      "external_dependencies": [],
+      "depends_on": ["lattice_point_enumerator"],
+      "known_issues_in_paper": [
+        "The statement is true because span(X) is spanned by lattice vectors, which makes the projected group discrete. Projecting along the span of an arbitrary subspace does not give a lattice, so the hypothesis X subseteq Lambda carries the whole content and is easy to lose."
+      ]
+    },
+    {
+      "id": "covering_radius",
+      "label": "Sec. 1, sentence before Proposition 1.6",
+      "name": "Covering radius of a convex body with respect to the integer lattice",
+      "kind": "definition",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, sentence 'In dimension n, we also obtain the following bounds in terms of the covering radius'",
+          "pdf_page_statement": 6
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L352"
+        }
+      },
+      "background_notation": {"mu(K)": "covering radius"},
+      "hypotheses": ["K is in K^n."],
+      "statement_informal": "The covering radius is the smallest dilation factor for which the integer translates of the dilated body cover the whole space.",
+      "statement_formal": "mu(K) = min { mu > 0 : mu K + Z^n = R^n }.",
+      "proof_as_in_paper": "A definition.",
+      "proof_completeness": "definition",
+      "external_dependencies": [],
+      "depends_on": ["convex_body_class"],
+      "known_issues_in_paper": [
+        "Written as 'the smallest number mu > 0 such that mu K + Z^n = R^n'; attainment of the minimum again is not argued."
+      ]
+    },
+    {
+      "id": "anti_blocking_body",
+      "label": "Sec. 3, opening paragraph",
+      "name": "Anti-blocking convex body",
+      "kind": "definition",
+      "references": {
+        "human": {
+          "statement": "Sec. 3, first paragraph",
+          "pdf_page_statement": 8
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L415-416"
+        }
+      },
+      "background_notation": {
+        "R^n_{>=0}": "the non-negative orthant",
+        "e_i^perp": "the coordinate hyperplane orthogonal to e_i"
+      },
+      "hypotheses": ["K is a convex body contained in the non-negative orthant."],
+      "statement_informal": "A convex body in the non-negative orthant is anti-blocking when it is downward closed: every point dominated coordinatewise by a point of the body is again in the body. For a convex body this is the same as saying that intersecting with a coordinate hyperplane and projecting onto it give the same set.",
+      "statement_formal": "K subseteq R^n_{>=0} is anti-blocking iff for every x in K the set { x' in R^n_{>=0} : x'_i <= x_i for all i in [n] } is contained in K; equivalently, given convexity, K intersect e_i^perp = K|e_i^perp for all i in [n].",
+      "proof_as_in_paper": "A definition together with an equivalence stated as immediate from convexity; the equivalence is not proved.",
+      "proof_technique": "Coordinatewise domination versus fibrewise projection.",
+      "proof_completeness": "asserted, not derived",
+      "external_dependencies": [],
+      "depends_on": ["convex_body_class"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "blaschke_shaking",
+      "label": "Sec. 3, display after Theorem 3.1",
+      "name": "Blaschke shaking with respect to an oriented hyperplane",
+      "kind": "definition",
+      "references": {
+        "human": {
+          "statement": "Sec. 3, unnumbered display following Theorem 3.1, with Fig. 1",
+          "pdf_page_statement": 8
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L434-443"
+        }
+      },
+      "background_notation": {
+        "sh_u(K)": "the Blaschke shaking of K with respect to u",
+        "f_{u,K}(x)": "the length of the preimage of x under the orthogonal projection of K onto u^perp"
+      },
+      "hypotheses": ["K is in K^n.", "u is a non-zero vector of R^n."],
+      "statement_informal": "The shaking of a body pushes each of its fibres in the direction u down onto the hyperplane orthogonal to u, keeping the fibre's length. The result is the union of segments starting on the projection of the body.",
+      "statement_formal": "sh_u(K) = union over x in K|u^perp of the segment [ x, x + (f_{u,K}(x)/|u|) u ], where f_{u,K}(x) is the length of the fibre of K over x.",
+      "proof_as_in_paper": "A definition, with a figure showing two consecutive shakings.",
+      "proof_completeness": "definition",
+      "external_dependencies": [],
+      "depends_on": ["convex_body_class"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "general_blaschke_shaking",
+      "label": "Sec. 5, display defining sh_{u,l}",
+      "name": "Blaschke shaking along a direction onto a line, in the plane",
+      "kind": "definition",
+      "references": {
+        "human": {
+          "statement": "Sec. 5, unnumbered display defining sh_{u,l}, with the remark that sh_u = sh_{u,u^perp}",
+          "pdf_page_statement": 16
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L700-712"
+        }
+      },
+      "background_notation": {
+        "pi_{u,l}": "the projection onto the line l along the direction u",
+        "sh_{u,l}(K)": "the shaking of K in direction u onto l"
+      },
+      "hypotheses": ["K is in K^2.", "l is an affine line in R^2.", "u is a non-zero vector not parallel to l."],
+      "statement_informal": "The same construction with a possibly oblique projection: each fibre in direction u is moved so that it starts on the line l, keeping its length.",
+      "statement_formal": "sh_{u,l}(K) = union over x in pi_{u,l}(K) of the segment [ x, x + vol_1(K intersect (x + R u)) u/|u| ]. In particular sh_u = sh_{u, u^perp}.",
+      "proof_as_in_paper": "A definition generalizing the one of Sec. 3.",
+      "proof_completeness": "definition",
+      "external_dependencies": [],
+      "depends_on": ["blaschke_shaking"],
+      "known_issues_in_paper": []
+    },
+
+    {
+      "id": "minkowski_second_theorem",
+      "label": "Sec. 1, Eq. (1.2)",
+      "name": "Minkowski's second theorem on successive minima",
+      "kind": "theorem",
+      "kind_note": "Classical result of other authors, quoted by the paper and used in the proofs of Corollary 1.2, Proposition 1.5 and Theorem 1.4.",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, Eq. (1.2)",
+          "pdf_page_statement": 2,
+          "equations": ["(1.2)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:minkowski2ndtheorem"],
+          "statement_lines": "main.tex L145-153"
+        }
+      },
+      "background_notation": {"vol": "n-dimensional Lebesgue measure"},
+      "hypotheses": ["K is in K^n."],
+      "statement_informal": "The volume of a convex body is bounded above and below by the product of the reciprocals of its successive minima, up to the factorial factor on the lower side.",
+      "statement_formal": "(1/n!) prod_{i=1}^n (2/lambda_i(K)) <= vol(K) <= prod_{i=1}^n (2/lambda_i(K)).",
+      "proof_as_in_paper": "Not proved here. The paper attributes the origin-symmetric case to Minkowski, derives the general upper bound from vol(K) <= vol(cs(K)), itself a special case of the Brunn-Minkowski inequality, and points to an inclusion argument through the convex hull of the n segments realizing the minima for the general lower bound. It lists alternative proofs by Davenport, Weyl, Estermann, Bambah-Woods-Zassenhaus and Henk.",
+      "proof_technique": "Quoted classical theorem. The general upper bound is reduced to the symmetric theorem through the central symmetral; the general lower bound uses the cross-polytope contained in the convex hull of segments realizing the minima.",
+      "proof_completeness": "relies on external Minkowski, Geometry of Numbers, Ch. 2, Theorems 9.1 and 9.2, plus Brunn-Minkowski for the non-symmetric upper bound and Henk-Henze-Hernandez Cifre, Remark 1.1, for the non-symmetric lower bound",
+      "external_dependencies": [
+        "Minkowski's second theorem for origin-symmetric bodies, as in Gruber and Lekkerkerker, Geometry of Numbers, Ch. 2, Theorems 9.1 and 9.2.",
+        "The Brunn-Minkowski inequality, in the form vol(K) <= vol(cs(K)).",
+        "Henk, Henze and Hernandez Cifre, Remark 1.1, for the non-symmetric lower bound."
+      ],
+      "depends_on": ["successive_minima", "convex_body_class"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "minkowski_second_theorem_equality_examples",
+      "label": "Sec. 1, sentence after Eq. (1.2)",
+      "name": "A simplex and a cube attain the two bounds in Minkowski's second theorem",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, sentence beginning 'The lower and upper bound in (1.2) are attained'",
+          "pdf_page_statement": 2
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L156"
+        }
+      },
+      "background_notation": {
+        "T_n": "the standard simplex conv{0,e_1,...,e_n}",
+        "C_n": "the cube [-1,1]^n"
+      },
+      "hypotheses": ["n is positive."],
+      "statement_informal": "The standard simplex realizes equality in the lower volume bound and the origin-symmetric cube realizes equality in the upper volume bound.",
+      "statement_formal": "lambda_i(T_n)=2 for every i and vol(T_n)=1/n!=(1/n!) prod_i (2/lambda_i(T_n)); lambda_i(C_n)=1 for every i and vol(C_n)=2^n=prod_i (2/lambda_i(C_n)).",
+      "proof_as_in_paper": "The paper states the equality examples without calculating them.",
+      "proof_technique": "The standard coordinate descriptions of the simplex and cube, their elementary volumes, and direct computation of the successive minima.",
+      "proof_completeness": "asserted, not derived",
+      "external_dependencies": [],
+      "depends_on": ["successive_minima", "convex_body_class"],
+      "known_issues_in_paper": [],
+      "formalization_notes": "Reuse the same proof of lambda_i(T_n)=2 required by simplex_equality_cases; prove the cube computation coordinatewise."
+    },
+    {
+      "id": "betke_henk_wills_two_sided_bound",
+      "label": "Sec. 1, unnumbered display before Conjecture 1",
+      "name": "The Betke-Henk-Wills two-sided bound on the lattice point enumerator",
+      "kind": "theorem",
+      "kind_note": "Result of other authors, quoted as the starting point of the whole line of work. The version of record prints this display without a number.",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, unnumbered display immediately before Conjecture 1",
+          "pdf_page_statement": 2
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:minkowskibhw"],
+          "statement_lines": "main.tex L156-161"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": [
+        "K is in K^n with K = -K.",
+        "For the lower bound only, lambda_n(K) <= 2."
+      ],
+      "statement_informal": "For an origin-symmetric body the number of lattice points is bounded on both sides by products in the successive minima.",
+      "statement_formal": "(1/n!) prod_{i=1}^n (1/lambda_i(K) - 1) <= G(K) <= prod_{i=1}^n (2 i / lambda_i(K) + 1), the lower bound under lambda_n(K) <= 2.",
+      "proof_as_in_paper": "Not proved here; attributed to Betke, Henk and Wills, Proposition 2.1 and Corollary 2.1. Their Proposition 2.1 gives the displayed upper bound, but their Corollary 2.1 has the stronger lower factors 2/lambda_i-1, not the target paper's printed 1/lambda_i-1. The target then says its printed lower bound is best possible.",
+      "proof_completeness": "the upper bound relies on external Betke, Henk and Wills, Proposition 2.1; the printed lower bound is true but is not the cited Corollary 2.1 and its best-possible claim is false",
+      "external_dependencies": [
+        "Betke, Henk and Wills, Discrete Comput. Geom. 9 (1993), Proposition 2.1 and Corollary 2.1."
+      ],
+      "depends_on": ["successive_minima", "lattice_point_enumerator"],
+      "known_issues_in_paper": [
+        "The cited Betke-Henk-Wills Corollary 2.1 has factors 2/lambda_i-1, whereas the target display prints 1/lambda_i-1. These normalizations agree neither for the target's origin-symmetric K nor under its definition of central symmetral.",
+        "Consequently the sentence 'the lower bound is best-possible' is false for the displayed lower bound: the cited source itself gives a strictly stronger universal lower estimate. Under lambda_n <= 2 the printed lower bound can instead be proved directly from 0 in K intersect Z^n, since a negative product is trivial and a positive product is at most 1."
+      ],
+      "formalization_notes": "Formalize the literal target display as printed and separately prove the exact stronger primary-source Corollary 2.1 in the dependency layer. Do not silently replace the target's factor 1 by 2, and do not formalize the false best-possible sentence as a theorem."
+    },
+    {
+      "id": "bhw_lattice_point_conjecture",
+      "label": "Conjecture 1",
+      "name": "Betke-Henk-Wills conjecture on the lattice point enumerator",
+      "kind": "conjecture",
+      "kind_note": "The paper states this as an open conjecture and does not prove it. Its display is unnumbered in the version of record.",
+      "references": {
+        "human": {
+          "statement": "Conjecture 1",
+          "pdf_page_statement": 2
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:discminkconj"],
+          "statement_lines": "main.tex L162-170"
+        }
+      },
+      "background_notation": {"floor(x)": "the largest integer not exceeding x"},
+      "hypotheses": ["K is in K^n."],
+      "statement_informal": "The number of lattice points of a convex body is conjectured to be at most the product of the floors of 2/lambda_i + 1.",
+      "statement_formal": "G(K) <= prod_{i=1}^n floor(2/lambda_i(K) + 1).",
+      "proof_as_in_paper": "No proof; the paper records that the conjecture is confirmed in dimension 2 by Betke, Henk and Wills and in dimension 3 by Malikiosis. The primary sources prove those dimensional cases only for origin-symmetric bodies, so the two exact established subcases are cataloged separately. Its integer-box equality witness is also cataloged separately.",
+      "proof_completeness": "asserted as an open conjecture; not derived",
+      "external_dependencies": [
+        "Betke, Henk and Wills, Conjecture 2.1, for the statement; their Theorem 2.2 for the planar case; Malikiosis, Section 3.2, for dimension 3."
+      ],
+      "depends_on": ["successive_minima", "lattice_point_enumerator"],
+      "known_issues_in_paper": [
+        "As stated here, Conjecture 1 allows arbitrary convex bodies because lambda_i(K) is defined through the central symmetral. Betke-Henk-Wills Theorem 2.2 and Malikiosis Section 3.2 prove only the origin-symmetric cases in dimensions 2 and 3. Thus the sentence that 'the conjecture' as printed has been confirmed in those dimensions overstates the cited results."
+      ]
+    },
+    {
+      "id": "bhw_lattice_conjecture_dimension_two_symmetric",
+      "label": "Sec. 1, dimension-two confirmation sentence after Conjecture 1",
+      "name": "The Betke-Henk-Wills lattice-point bound for origin-symmetric planar bodies",
+      "kind": "theorem",
+      "kind_note": "Exact established subcase of Conjecture 1 proved by Betke, Henk and Wills; its symmetry hypothesis is absent from the target paper's surrounding conjecture.",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, sentence beginning 'In dimension 2 the conjecture has been confirmed'",
+          "pdf_page_statement": 3
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L170"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^2 with K=-K."],
+      "statement_informal": "For an origin-symmetric planar convex body, the conjectured product of floored reciprocal successive minima bounds its lattice-point count.",
+      "statement_formal": "G(K) <= floor(2/lambda_1(K)+1) floor(2/lambda_2(K)+1).",
+      "proof_as_in_paper": "Not proved here; attributed to Betke, Henk and Wills, Theorem 2.2. Their primary statement explicitly assumes an origin-symmetric planar convex body and an arbitrary full lattice.",
+      "proof_completeness": "relies on external Betke, Henk and Wills, Theorem 2.2",
+      "external_dependencies": ["Betke, Henk and Wills, Successive-minima-type inequalities, Theorem 2.2."],
+      "depends_on": ["successive_minima", "lattice_point_enumerator"],
+      "known_issues_in_paper": ["This theorem does not establish the target's arbitrary-body dimension-two specialization; origin symmetry is a source hypothesis, not an assumption to be added to Conjecture 1."],
+      "formalization_notes": "Prove this exact symmetric theorem as an upstream dependency result and retain the broader dimension-two target specialization as unproved unless independently established."
+    },
+    {
+      "id": "bhw_lattice_conjecture_dimension_three_symmetric",
+      "label": "Sec. 1, dimension-three confirmation sentence after Conjecture 1",
+      "name": "Malikiosis's three-dimensional Betke-Henk-Wills bound for origin-symmetric bodies",
+      "kind": "theorem",
+      "kind_note": "Exact established subcase of Conjecture 1 proved in Malikiosis, Section 3.2; the proof uses non-symmetric planar slices but starts from an origin-symmetric three-dimensional body.",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, sentence continuing 'and in dimension 3 it has been shown by Malikiosis'",
+          "pdf_page_statement": 3
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L170"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^3 with K=-K."],
+      "statement_informal": "For an origin-symmetric three-dimensional convex body, the conjectured product of floored reciprocal successive minima bounds its lattice-point count.",
+      "statement_formal": "G(K) <= prod_{i=1}^3 floor(2/lambda_i(K)+1).",
+      "proof_as_in_paper": "Not proved here; attributed to Malikiosis, Section 3.2. The arXiv v1 introduction and Section 3.2 explicitly work from K in the origin-symmetric class; non-symmetric bodies occur as lower-dimensional slices inside the induction.",
+      "proof_completeness": "relies on external Malikiosis, Section 3.2",
+      "external_dependencies": ["Malikiosis, A discrete analogue for Minkowski's second theorem on successive minima, Section 3.2."],
+      "depends_on": ["successive_minima", "lattice_point_enumerator"],
+      "known_issues_in_paper": ["This theorem does not establish the target's arbitrary-body dimension-three specialization; the source's initial body is origin-symmetric."],
+      "formalization_notes": "Formalize the exact symmetric theorem and its source hypotheses. Do not infer the arbitrary-body case merely because the inductive slices are non-symmetric."
+    },
+    {
+      "id": "integer_box_equality_for_bhw_lattice_conjecture",
+      "label": "Sec. 1, equality sentence after Conjecture 1",
+      "name": "Integer coordinate boxes attain the Betke-Henk-Wills lattice-point conjecture",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, sentence immediately after Conjecture 1",
+          "pdf_page_statement": 2
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L170"
+        }
+      },
+      "background_notation": {
+        "B": "the origin-symmetric box product_i [-m_i,m_i]"
+      },
+      "hypotheses": [
+        "m_1, ..., m_n are positive integers, reordered so m_1 >= ... >= m_n.",
+        "B = product_{i=1}^n [-m_i,m_i]."
+      ],
+      "statement_informal": "An axis-parallel box with positive integer half-side lengths gives equality in Conjecture 1.",
+      "statement_formal": "lambda_i(B) = 1/m_i, G(B) = prod_{i=1}^n (2m_i + 1), and prod_{i=1}^n floor(2/lambda_i(B) + 1) = prod_{i=1}^n (2m_i + 1) = G(B).",
+      "proof_as_in_paper": "The paper states the equality family without deriving the minima or the count.",
+      "proof_technique": "Coordinatewise lattice-point counting and the successive minima of an axis-parallel box.",
+      "proof_completeness": "asserted, not derived",
+      "external_dependencies": [],
+      "depends_on": ["successive_minima", "lattice_point_enumerator"],
+      "known_issues_in_paper": [],
+      "formalization_notes": "Prove this together with the integer-vertex symmetric lower equality case: the same minima computation feeds the closed count prod_i(2m_i+1) and interior count prod_i(2m_i-1)."
+    },
+    {
+      "id": "malikiosis_bound",
+      "label": "Sec. 1, Eq. (1.3)",
+      "name": "Malikiosis's bound on the lattice point enumerator",
+      "kind": "theorem",
+      "kind_note": "Result of another author, quoted as the best known general bound at the time of writing.",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, Eq. (1.3)",
+          "pdf_page_statement": 3,
+          "equations": ["(1.3)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:malikiosis"],
+          "statement_lines": "main.tex L170-176"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n."],
+      "statement_informal": "The lattice point count is at most an exponential factor times the conjectured product.",
+      "statement_formal": "G(K) <= (4/e) (sqrt 3)^{n-1} prod_{i=1}^n (2/lambda_i(K) + 1).",
+      "proof_as_in_paper": "Not proved here; quoted from Malikiosis, Theorem 3.2.1 in the journal numbering. The arXiv v1 source numbers it Theorem 3.1.2 and proves the stronger integer-part form G(K,Lambda) <= (4/e)(sqrt 3)^{n-1} prod_i floor(2/lambda_i(K,Lambda)+1); dropping the floors gives exactly the displayed target-paper inequality. The paper notes this remains the best known upper bound in general dimension and compares it with Corollary 1.2: the bound here is of order n^n while Malikiosis's is of order sqrt(3)^n when all lambda_i(K) equal a fixed 1/c.",
+      "proof_completeness": "relies on external Malikiosis, Adv. Geom. 12 (2012), Theorem 3.2.1 (arXiv v1 Theorem 3.1.2), followed by floor(x) <= x",
+      "external_dependencies": ["Malikiosis, A discrete analogue for Minkowski's second theorem on successive minima, journal Theorem 3.2.1 / arXiv:1001.3729v1 Theorem 3.1.2."],
+      "depends_on": ["successive_minima", "lattice_point_enumerator"],
+      "known_issues_in_paper": [],
+      "formalization_notes": "Formalize the stronger primary-source theorem with q_i = floor(2/lambda_i + 1), then derive the target paper's floor-free Eq. (1.3) by factorwise monotonicity. Do not present the two displays as verbatim identical."
+    },
+    {
+      "id": "product_bound_implies_minkowski",
+      "label": "Sec. 1, Eq. (1.4) and the paragraph following it",
+      "name": "Any bound of the form prod (2/lambda_i + c_i) implies Minkowski's upper bound",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, Eq. (1.4) and the paragraph following it",
+          "pdf_page_statement": 3,
+          "equations": ["(1.4)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:discminkconjweak"],
+          "statement_lines": "main.tex L177-186"
+        }
+      },
+      "background_notation": {"c_i": "constants independent of K, but allowed to depend on n"},
+      "hypotheses": [
+        "The bound G(K) <= prod_{i=1}^n (2/lambda_i(K) + c_i) holds for all K in K^n with constants c_i independent of K."
+      ],
+      "statement_informal": "A bound on the lattice point count of that shape, with constants that do not depend on the body, forces Minkowski's upper bound on the volume, because the volume is approximated by lattice point counts with respect to progressively finer lattices.",
+      "statement_formal": "If G(K) <= prod_{i=1}^n (2/lambda_i(K) + c_i) for all K in K^n, then vol(K) <= prod_{i=1}^n (2/lambda_i(K)) for all K in K^n.",
+      "proof_as_in_paper": "The paper gives the argument in one sentence and attributes it to Betke, Henk and Wills, Proposition 2.2: one approximates the volume of K asymptotically by the lattice point enumerator with respect to progressively finer lattices, using the properties of the Riemann integral, applies the assumed bound to each, and the resulting limit is precisely Minkowski's bound.",
+      "proof_technique": "Refining the lattice, Jordan measurability, and the scaling law of the minima under a refined lattice.",
+      "proof_completeness": "asserted, not derived; the limiting argument is described but not written out",
+      "external_dependencies": ["Betke, Henk and Wills, Proposition 2.2."],
+      "depends_on": ["successive_minima", "lattice_point_enumerator"],
+      "known_issues_in_paper": [
+        "The step that the successive minima scale under lattice refinement, lambda_i(K, rZ^n) = r lambda_i(K, Z^n), is used silently."
+      ]
+    },
+    {
+      "id": "bhw_ratio_conjecture",
+      "label": "Conjecture 2, Eqs. (1.5), (1.6), (1.7)",
+      "name": "Betke-Henk-Wills conjecture relating enumerator, volume and successive minima",
+      "kind": "conjecture",
+      "kind_note": "The paper states this as an open conjecture and does not prove it. Eqs. (1.5) and (1.6) were communicated to the authors by Martin Henk; Eq. (1.7) is Conjecture 2.2 of Betke, Henk and Wills.",
+      "references": {
+        "human": {
+          "statement": "Conjecture 2",
+          "pdf_page_statement": 3,
+          "equations": ["(1.5)", "(1.6)", "(1.7)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["conj:bhw2", "eq:conjupperbound", "eq:conjlowerbound", "eq:conjlowerboundsym"],
+          "statement_lines": "main.tex L187-207"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": [
+        "K is in K^n.",
+        "For Eq. (1.6), lambda_n(K) <= 2/n.",
+        "For Eq. (1.7), K = -K and lambda_n(K) <= 2."
+      ],
+      "statement_informal": "The ratio between the lattice point count and the volume is conjectured to be controlled on both sides by products in the successive minima, weighted by the index.",
+      "statement_formal": "(1.5) G(K) <= vol(K) prod_{i=1}^n (1 + i lambda_i / 2); (1.6) if lambda_n <= 2/n then G(int K) >= vol(K) prod_{i=1}^n (1 - i lambda_i / 2); (1.7) if K = -K and lambda_n <= 2 then G(int K) >= vol(K) prod_{i=1}^n (1 - lambda_i / 2).",
+      "proof_as_in_paper": "No proof. The paper notes that Eq. (1.7) is stated in Betke, Henk and Wills for arbitrary n-dimensional lattices and that restricting to Z^n loses no generality, and that Eqs. (1.5) and (1.6) came from Martin Henk personally.",
+      "proof_completeness": "asserted as an open conjecture; not derived",
+      "external_dependencies": ["Betke, Henk and Wills, Conjecture 2.2, for Eq. (1.7)."],
+      "depends_on": ["successive_minima", "lattice_point_enumerator"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "theorem_1_1_upper_bound",
+      "label": "Theorem 1.1, Eq. (1.8)",
+      "name": "Upper bound on the lattice point enumerator by the volume and the successive minima",
+      "kind": "theorem",
+      "references": {
+        "human": {
+          "statement": "Theorem 1.1, Eq. (1.8)",
+          "proof": "Sec. 4, Proof of Theorem 1.1, first half",
+          "pdf_page_statement": 4,
+          "pdf_page_proof": 13,
+          "equations": ["(1.8)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["thm:dimn", "eq:upperboundn"],
+          "statement_lines": "main.tex L208-215",
+          "proof_lines": "main.tex L564-582"
+        }
+      },
+      "background_notation": {"L_I": "the coordinate subspace spanned by the e_i with i in I"},
+      "hypotheses": ["K is in K^n."],
+      "statement_informal": "The number of lattice points of a convex body is at most its volume times the product of 1 + n lambda_i / 2.",
+      "statement_formal": "G(K) <= vol(K) prod_{i=1}^n (1 + n lambda_i(K) / 2).",
+      "proof_as_in_paper": "By Theorem 3.1 one may assume K anti-blocking, and after renumbering coordinates that |e_i|_cs(K) = lambda_i by Lemma 3.3. For I subseteq [n] put L_I = span{ e_i : i in I }. The Rogers-Shephard inequality (4.1) gives vol_k(K intersect L_I) vol_{n-k}(K|L_I^perp) <= binom(n,k) vol(K) for I of size k. Lemma 3.3 gives (2/lambda_i) e_i in K, so vol_k(K intersect L_I) >= vol_k(conv{ (2/lambda_i) e_i : i in I }), whence vol_{n-k}(K|L_I^perp) <= binom(n,k) vol(K) / vol_k(conv{...}) = k! binom(n,k) vol(K) prod_{i in I} (lambda_i / 2) <= vol(K) prod_{i in I} (n lambda_i / 2). Combining with Davenport's inequality (1.10), G(K) <= vol(K) sum_{I subseteq [n]} prod_{i in I} (n lambda_i / 2) = vol(K) prod_{i=1}^n (1 + n lambda_i / 2).",
+      "proof_technique": "Reduction to an anti-blocking body, Rogers-Shephard section-projection inequality, the simplex spanned by (2/lambda_i) e_i, then Davenport's inequality and the expansion of a product into subset sums.",
+      "proof_completeness": "self-contained given theorem_3_1_anti_blocking_reduction and lemma_3_3_minima_at_standard_basis, relying on external rogers_shephard_section_projection and davenport_inequality",
+      "external_dependencies": [
+        "Rogers and Shephard, Theorem 1, the section-projection inequality, cataloged as rogers_shephard_section_projection.",
+        "Davenport's inequality, cataloged as davenport_inequality; for anti-blocking bodies the paper also re-derives it internally, cataloged as davenport_for_anti_blocking_bodies."
+      ],
+      "depends_on": [
+        "theorem_3_1_anti_blocking_reduction",
+        "lemma_3_3_minima_at_standard_basis",
+        "rogers_shephard_section_projection",
+        "davenport_inequality",
+        "successive_minima"
+      ],
+      "known_issues_in_paper": [
+        "The chain uses k! binom(n,k) <= n^k, which holds for 0 <= k <= n, without stating it.",
+        "The volume of conv{ (2/lambda_i) e_i : i in I } is (1/k!) prod_{i in I} (2/lambda_i), the volume of a k-dimensional simplex with those vertices and the origin; the origin is a vertex because K is anti-blocking, and the paper does not say so explicitly.",
+        "The reduction to an anti-blocking body changes the successive minima, so the final product must be monotone in each lambda_i; this is true for the upper bound because lambda_i(A) <= lambda_i(K), and the step is left implicit."
+      ]
+    },
+    {
+      "id": "theorem_1_1_lower_bound",
+      "label": "Theorem 1.1, Eq. (1.9)",
+      "name": "Lower bound on the interior lattice point enumerator by the volume and the successive minima",
+      "kind": "theorem",
+      "references": {
+        "human": {
+          "statement": "Theorem 1.1, Eq. (1.9)",
+          "proof": "Sec. 4, Proof of Theorem 1.1, second half",
+          "pdf_page_statement": 4,
+          "pdf_page_proof": 13,
+          "equations": ["(1.9)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["thm:dimn", "eq:lowerboundn"],
+          "statement_lines": "main.tex L216-221",
+          "proof_lines": "main.tex L583-604"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n.", "lambda_n(K) <= 2/n."],
+      "statement_informal": "Under a smallness hypothesis on the largest successive minimum, the number of interior lattice points is at least the volume times the product of 1 - n lambda_i / 2.",
+      "statement_formal": "If lambda_n(K) <= 2/n then G(int K) >= vol(K) prod_{i=1}^n (1 - n lambda_i(K) / 2).",
+      "proof_as_in_paper": "Uses the covering-radius lower bound (1.16) together with the relation (4.2), mu(K) <= sum_{i=1}^n lambda_i / 2. Since lambda_n <= 2/n, (4.2) gives mu(K) <= 1, so Proposition 1.6 applies and G(int K) >= vol(K)(1 - mu(K))^n >= vol(K)(1 - sum_i lambda_i / 2)^n = vol(K) ((1/n) sum_i (1 - n lambda_i / 2))^n >= vol(K) prod_{i=1}^n (1 - n lambda_i / 2), the last step by the inequality of arithmetic and geometric means.",
+      "proof_technique": "Covering-radius bound, the covering-radius versus successive-minima inequality, then arithmetic-geometric mean.",
+      "proof_completeness": "self-contained given proposition_1_6_lower_bound, relying on external covering_radius_successive_minima_bound",
+      "external_dependencies": [
+        "Kannan and Lovasz, Covering minima and lattice point free convex bodies, Lemma 2.4, cataloged as covering_radius_successive_minima_bound."
+      ],
+      "depends_on": [
+        "proposition_1_6_lower_bound",
+        "covering_radius_successive_minima_bound",
+        "successive_minima",
+        "covering_radius"
+      ],
+      "known_issues_in_paper": [
+        "The arithmetic-geometric mean step needs each factor 1 - n lambda_i / 2 to be non-negative, which follows from lambda_n <= 2/n and the monotonicity of the minima; the paper does not state it.",
+        "The proof of Eq. (1.9) does not go through the anti-blocking reduction, although the sentence introducing Sec. 3 says the reduction suffices for Eqs. (1.5) and (1.6)."
+      ]
+    },
+    {
+      "id": "corollary_1_2",
+      "label": "Corollary 1.2",
+      "name": "A bound of the Betke-Henk-Wills shape with constant equal to the dimension",
+      "kind": "corollary",
+      "kind_note": "Its display is unnumbered in the version of record. This is the paper's headline consequence.",
+      "references": {
+        "human": {
+          "statement": "Corollary 1.2, with the comparison paragraph that follows",
+          "proof": "The sentence preceding Corollary 1.2",
+          "pdf_page_statement": 4,
+          "pdf_page_proof": 4
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["cor:discrminkn", "eq:discrmink"],
+          "statement_lines": "main.tex L224-233"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n."],
+      "statement_informal": "The number of lattice points of a convex body is at most the product of 2/lambda_i + n.",
+      "statement_formal": "G(K) <= prod_{i=1}^n (2/lambda_i(K) + n).",
+      "proof_as_in_paper": "Deduced immediately by applying the upper bound of Minkowski's second theorem (1.2) to the volume factor of Eq. (1.8): G(K) <= vol(K) prod (1 + n lambda_i / 2) <= prod (2/lambda_i) prod (1 + n lambda_i / 2) = prod (2/lambda_i + n).",
+      "proof_technique": "Substitution of Minkowski's upper bound into Theorem 1.1 and a factorwise regrouping.",
+      "proof_completeness": "self-contained given theorem_1_1_upper_bound and minkowski_second_theorem",
+      "external_dependencies": ["The upper bound of Minkowski's second theorem, cataloged as minkowski_second_theorem."],
+      "depends_on": ["theorem_1_1_upper_bound", "minkowski_second_theorem"],
+      "known_issues_in_paper": [
+        "The comparison paragraph writes 'our bound is tight for convex bodies rK, r to infinity'; tightness here means asymptotic, in the sense that both sides have the same leading behaviour, not that equality is attained."
+      ]
+    },
+    {
+      "id": "davenport_inequality",
+      "label": "Sec. 1, Eq. (1.10)",
+      "name": "Davenport's inequality bounding the enumerator by projection volumes",
+      "kind": "theorem",
+      "kind_note": "Result of another author, used in the proof of Theorem 1.1.",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, Eq. (1.10), with the sentence defining L_I",
+          "pdf_page_statement": 4,
+          "equations": ["(1.10)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:mixvol"],
+          "statement_lines": "main.tex L235-240"
+        }
+      },
+      "background_notation": {
+        "L_I": "span{ e_i : i in I }",
+        "K|L_I^perp": "the orthogonal projection of K onto the orthogonal complement of L_I"
+      },
+      "hypotheses": ["K is in K^n."],
+      "statement_informal": "Davenport's intended inequality bounds the number of lattice points by the sum of the volumes of all coordinate projections, including the body itself for the empty coordinate subset.",
+      "statement_formal": "G(K) <= sum_{k=0}^n sum_{I in binom([n],k)} vol_{n-k}(K|L_I^perp), where L_I = span{ e_i : i in I } and the k = 0 term is vol_n(K).",
+      "proof_as_in_paper": "Not proved here; quoted from Davenport, On a principle of Lipschitz. Davenport's theorem gives |G(K)-vol_n(K)| <= sum_{m=0}^{n-1} V_m for a convex body (his fibre parameter h is 1), where V_m is the sum of all m-dimensional coordinate-projection volumes and V_0 = 1. Keeping the positive side and adding vol_n(K) gives exactly the intended all-subsets formula. For anti-blocking bodies, which is the case actually used, the target paper also gives a direct derivation, cataloged as davenport_for_anti_blocking_bodies.",
+      "proof_completeness": "relies on external Davenport, J. London Math. Soc. 26 (1951), 179-183",
+      "external_dependencies": ["Davenport, On a principle of Lipschitz, J. London Math. Soc. 26 (1951)."],
+      "depends_on": ["lattice_point_enumerator"],
+      "known_issues_in_paper": [
+        "Eq. (1.10) is printed with k = 1, omitting the necessary k = 0 term vol_n(K). The literal formula is false already for n = 1 and K = [0,1], where G(K) = 2 but the printed right-hand side is vol_0({0}) = 1. The cited inequality and the paper's later anti-blocking decomposition both require k = 0."
+      ],
+      "formalization_notes": "Formalize the intended k = 0 through n theorem and retain the printed k = 1 formula only as a documented source discrepancy; do not add a hypothesis to rescue the literal formula. The index bridge is m = n-k: Davenport's V_m becomes the inner sum over |I| = k."
+    },
+    {
+      "id": "schymura_inequality",
+      "label": "Sec. 1, Eq. (1.11)",
+      "name": "Schymura's generalization of Davenport's inequality to an arbitrary independent set",
+      "kind": "theorem",
+      "kind_note": "Result of another author; Theorem 1.3 is its reverse.",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, Eq. (1.11), with the sentence defining L_I and P_I",
+          "pdf_page_statement": 4,
+          "equations": ["(1.11)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:schymura"],
+          "statement_lines": "main.tex L241-246"
+        }
+      },
+      "background_notation": {
+        "P_I": "the zonotope sum over i in I of the segments [0, b_i]"
+      },
+      "hypotheses": ["K is in K^n.", "b_1, ..., b_n is a linearly independent set in Z^n."],
+      "statement_informal": "The same all-subsets bound holds with coordinate directions replaced by an arbitrary independent set of integer vectors, weighted by the volumes of the associated parallelepipeds.",
+      "statement_formal": "G(K) <= sum_{k=0}^n sum_{I in binom([n],k)} vol_{n-k}(K|L_I^perp) vol_k(P_I), where L_I = span{ b_i : i in I }, P_I = sum_{i in I} [0, b_i], and the k = 0 term is vol_n(K).",
+      "proof_as_in_paper": "Not proved here; quoted as Schymura's Lemma 1.1. The cited paper was published under the name Matthias Henze and its Lemma 1.1 explicitly sums from i = 0 to n.",
+      "proof_completeness": "relies on external Henze (cited as Schymura), Lemma 1.1",
+      "external_dependencies": ["Matthias Henze, A Blichfeldt-type inequality for centrally symmetric convex bodies, Lemma 1.1 (arXiv:1203.4075v1; cited in this paper as Schymura)."],
+      "depends_on": ["lattice_point_enumerator"],
+      "known_issues_in_paper": [
+        "Eq. (1.11) is printed with k = 1, but the cited Lemma 1.1 sums from k = 0. The literal formula fails for n = 1, K = [0,1] and b_1 = 1, exactly as Eq. (1.10) does; the omitted empty-subset term is vol_n(K)."
+      ],
+      "formalization_notes": "Formalize the cited k = 0 through n theorem. The target paper's name Schymura and the cited source's publication name Henze refer to the same cited result; expose both names in documentation so the provenance is traceable."
+    },
+    {
+      "id": "theorem_1_3_reverse_schymura",
+      "label": "Theorem 1.3, Eq. (1.12)",
+      "name": "A reverse form of Schymura's inequality: the volume is bounded by projected enumerators",
+      "kind": "theorem",
+      "references": {
+        "human": {
+          "statement": "Theorem 1.3, Eq. (1.12)",
+          "proof": "Sec. 4, Proof of Theorem 1.3",
+          "pdf_page_statement": 4,
+          "pdf_page_proof": 14,
+          "equations": ["(1.12)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["thm:revdavi", "eq:revdavi"],
+          "statement_lines": "main.tex L247-258",
+          "proof_lines": "main.tex L614-666"
+        }
+      },
+      "background_notation": {
+        "G_{Z^n|L_I^perp}": "the lattice point enumerator with respect to the projected lattice Z^n|L_I^perp"
+      },
+      "hypotheses": ["K is in K^n.", "b_1, ..., b_n is a linearly independent set in Z^n."],
+      "statement_informal": "The volume of a convex body is at most the sum, over all coordinate subsets including the empty one, of the numbers of projected lattice points in the corresponding projections of its interior.",
+      "statement_formal": "vol(K) <= sum_{I subseteq [n]} G_{Z^n|L_I^perp}(int K | L_I^perp), where L_I = span{ b_i : i in I }.",
+      "proof_as_in_paper": "The proof proves Claim 3, a bound on the enumerator of a translate, and then applies van der Corput's Theorem 2.1. Claim 3 with Lambda = Z^n, B = { b_1, ..., b_n } and an arbitrary t gives G(int K + t) <= sum_{I subseteq [n]} G_{Z^n|L_I^perp}(int K | L_I^perp), Eq. (4.6) in the source text, valid for every t; van der Corput's theorem supplies a t with vol(int K) <= G(int K + t), and vol(int K) = vol(K).",
+      "proof_technique": "Induction on the support of the translation vector (Claim 3), then van der Corput's averaging theorem to choose the translate.",
+      "proof_completeness": "self-contained given claim_3_translation_projection_bound, relying on external van_der_corput_theorem",
+      "external_dependencies": ["van der Corput's theorem, cataloged as van_der_corput_theorem."],
+      "depends_on": [
+        "claim_3_translation_projection_bound",
+        "van_der_corput_theorem",
+        "projection_of_lattice_is_lattice"
+      ],
+      "known_issues_in_paper": [
+        "Eq. (1.12) is stated for K in K^n, hence compact, while the interior enters on the right; the step vol(K) = vol(int K) is used silently.",
+        "Eq. (1.12) correctly runs over every I subseteq [n], including the empty set. The contrast with the printed k = 1 in Eq. (1.11) is further evidence that Eq. (1.11) omitted its k = 0 term."
+      ]
+    },
+    {
+      "id": "theorem_1_3_tight_for_boxes",
+      "label": "Sec. 4, final display of the Proof of Theorem 1.3",
+      "name": "The reverse inequality is attained by axis-parallel integer boxes",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Theorem 1.3, sentence 'The inequality is tight'",
+          "proof": "Sec. 4, final display of the Proof of Theorem 1.3",
+          "pdf_page_statement": 4,
+          "pdf_page_proof": 15
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L257",
+          "proof_lines": "main.tex L655-665"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K = [0, k_1] x ... x [0, k_n] with positive integers k_i.", "b_i = e_i."],
+      "statement_informal": "For an axis-parallel box with positive integer side lengths and the standard basis, the reverse inequality holds with equality.",
+      "statement_formal": "For K = [0,k_1] x ... x [0,k_n] with k_i in Z_{>0}, vol(K) = prod_i k_i = prod_i ((k_i - 1) + 1) = sum_{I subseteq [n]} prod_{i in I} (k_i - 1) = sum_{I subseteq [n]} G_{Z^n|L_I^perp}(int K | L_I^perp).",
+      "proof_as_in_paper": "The displayed computation expands the product of (k_i - 1) + 1 into a subset sum and then identifies the total with the sum of the interior lattice-point counts of the corresponding projections.",
+      "proof_technique": "Expansion of a product into subset sums.",
+      "proof_completeness": "self-contained",
+      "external_dependencies": [],
+      "depends_on": ["theorem_1_3_reverse_schymura"],
+      "known_issues_in_paper": [
+        "Projection onto L_I^perp retains the coordinates j not in I, so G_{Z^n|L_I^perp}(int K | L_I^perp) = prod_{j notin I}(k_j - 1), not prod_{i in I}(k_i - 1) term by term as the displayed chain suggests. The two total sums agree by the complement bijection I maps to [n] without I. The projected lattice is the standard coordinate lattice Z^{n-|I|}."
+      ],
+      "formalization_notes": "Prove the projected count with the complement indices, then reindex the finite sum by set complement before applying the product expansion."
+    },
+    {
+      "id": "projected_lattice_determinant_bound",
+      "label": "Sec. 1, sentence after Theorem 1.3",
+      "name": "The determinant of the projected lattice absorbs Schymura's zonotope factor",
+      "kind": "remark",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, sentence 'The factor vol_k(P_I) in (1.11) is hidden in the correspondingly higher density'",
+          "pdf_page_statement": 5
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L259-260"
+        }
+      },
+      "background_notation": {"det(Lambda)": "covolume of the lattice Lambda"},
+      "hypotheses": ["b_1, ..., b_n is a linearly independent set in Z^n.", "I is a subset of [n]."],
+      "statement_informal": "The projected lattice is at least as dense as the reciprocal of the volume of the zonotope generated by the chosen vectors.",
+      "statement_formal": "det(Z^n|L_I^perp) >= vol_k(P_I)^{-1}, where k = card(I).",
+      "proof_as_in_paper": "Asserted in one sentence; no proof.",
+      "proof_completeness": "asserted, not derived",
+      "external_dependencies": [],
+      "depends_on": ["projection_of_lattice_is_lattice"],
+      "known_issues_in_paper": [],
+      "formalization_notes": "The direction is correct. If Lambda_I = Z^n intersect L_I is the primitive lattice in L_I, then det(Z^n|L_I^perp) = 1/det(Lambda_I). The lattice generated by the b_i, i in I, is a sublattice of Lambda_I, so vol_k(P_I) is an integer index times det(Lambda_I), giving det(Z^n|L_I^perp) >= 1/vol_k(P_I)."
+    },
+    {
+      "id": "volume_lattice_point_limit",
+      "label": "Sec. 1, unnumbered display after Theorem 1.3",
+      "name": "The ratio of volume to lattice point count of a dilating body tends to one",
+      "kind": "derived-property",
+      "kind_note": "Presented as a consequence of Conjecture 2, not as an independent theorem.",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, unnumbered display 'lim vol(rK)/G(rK) = 1'",
+          "pdf_page_statement": 5
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:vollimit"],
+          "statement_lines": "main.tex L261-265"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n.", "Conjecture 2 holds."],
+      "statement_informal": "As a body is dilated, its volume and its number of lattice points become asymptotically equal.",
+      "statement_formal": "lim_{r to infinity} vol(rK)/G(rK) = 1.",
+      "proof_as_in_paper": "The paper deduces it from Conjecture 2, observing that lambda_i(rK) tends to 0 as r tends to infinity, so both products in the conjecture tend to 1.",
+      "proof_technique": "Scaling of the successive minima under dilation, squeeze between the two conjectured bounds.",
+      "proof_completeness": "self-contained given bhw_ratio_conjecture; the result itself is classical and holds unconditionally, but the paper derives it only as a consequence of the conjecture",
+      "external_dependencies": [],
+      "depends_on": ["bhw_ratio_conjecture", "successive_minima"],
+      "known_issues_in_paper": [
+        "The scaling lambda_i(rK) = lambda_i(K)/r is used without statement."
+      ]
+    },
+    {
+      "id": "universal_bound_from_conjecture_upper",
+      "label": "Sec. 1, unnumbered display 'G(K) <= (n+1)! vol(K)'",
+      "name": "Blichfeldt-type universal upper bound implied by Conjecture 2",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, unnumbered display following the limit formula",
+          "pdf_page_statement": 5
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:blichfeldt"],
+          "statement_lines": "main.tex L266-270"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n with dim(K intersect Z^n) = n.", "Conjecture 2 holds."],
+      "statement_informal": "A body containing a full-dimensional set of lattice points has at most (n+1)! times its volume many lattice points.",
+      "statement_formal": "If dim(K intersect Z^n) = n then G(K) <= (n+1)! vol(K).",
+      "proof_as_in_paper": "The paper observes that dim(K intersect Z^n) = n forces lambda_i(K) <= 2 for all i, substitutes into Eq. (1.5) and notes that prod_{i=1}^n (1 + i) = (n+1)!. It records that this bound essentially corresponds to a classical result of Blichfeldt.",
+      "proof_technique": "Specialization of the conjectured upper bound at lambda_i <= 2.",
+      "proof_completeness": "self-contained given bhw_ratio_conjecture",
+      "external_dependencies": ["Blichfeldt's classical bound, mentioned for comparison only."],
+      "depends_on": ["bhw_ratio_conjecture", "successive_minima"],
+      "known_issues_in_paper": [
+        "The implication dim(K intersect Z^n) = n implies lambda_i(K) <= 2 is asserted in one clause; it comes from the fact that n independent lattice points of K lie in 2 cs(K)."
+      ]
+    },
+    {
+      "id": "universal_bound_from_conjecture_lower",
+      "label": "Sec. 1, unnumbered display 'G(int K) >= 2^{-n} vol(K)'",
+      "name": "van der Corput-type universal lower bound implied by Conjecture 2",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, unnumbered display following the Blichfeldt-type bound",
+          "pdf_page_statement": 5
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:vandercorput"],
+          "statement_lines": "main.tex L271-277"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n, K = -K, dim(K intersect Z^n) = n.", "Conjecture 2 holds."],
+      "statement_informal": "A symmetric body containing a full-dimensional set of lattice points has at least 2^{-n} times its volume many interior lattice points.",
+      "statement_formal": "If K = -K and dim(K intersect Z^n) = n then G(int K) >= 2^{-n} vol(K).",
+      "proof_as_in_paper": "For symmetric K the same observation gives lambda_i(K) <= 1, and Eq. (1.7) then yields the factor prod (1 - lambda_i/2) >= 2^{-n}. The paper records the correspondence with a classical result of van der Corput.",
+      "proof_technique": "Specialization of the conjectured symmetric lower bound at lambda_i <= 1.",
+      "proof_completeness": "self-contained given bhw_ratio_conjecture",
+      "external_dependencies": ["van der Corput, Geometry of Numbers, Ch. 2, Theorem 7.1, mentioned for comparison only."],
+      "depends_on": ["bhw_ratio_conjecture", "successive_minima"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "simplex_equality_cases",
+      "label": "Sec. 1, the two unnumbered Ehrhart displays",
+      "name": "Integer multiples of the standard simplex attain both bounds of Conjecture 2",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, paragraph beginning 'In fact, all inequalities in Conjecture 2 have equality cases', with its two unnumbered displays",
+          "pdf_page_statement": 5
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:ehrhart"],
+          "statement_lines": "main.tex L278-289"
+        }
+      },
+      "background_notation": {"T_n": "the standard simplex conv{0, e_1, ..., e_n}"},
+      "hypotheses": ["m is a positive integer."],
+      "statement_informal": "For integer dilates of the standard simplex both conjectured bounds hold with equality, because the right-hand sides coincide with the Ehrhart polynomial of the simplex and with its interior counterpart.",
+      "statement_formal": "For every i in [n], lambda_i(T_n) = 2 and lambda_i(m T_n) = 2/m. Moreover G(m T_n) = (1/n!) prod_{i=1}^n (m + i) = vol(m T_n) prod_{i=1}^n (1 + i lambda_i(m T_n)/2), while G(int(m T_n)) = (1/n!) prod_{i=1}^n (m - i) = vol(m T_n) prod_{i=1}^n (1 - i lambda_i(m T_n)/2).",
+      "proof_as_in_paper": "The two displayed computations use lambda_i(T_n) = 2, scaling lambda_i(mT_n) = 2/m, vol(mT_n) = m^n/n!, and the closed and interior Ehrhart formulas for the standard simplex from Beck and Robins, Theorem 2.2 (a) and (b). The author-hosted final draft was checked directly: Theorem 2.2(a) states L_Delta(t) = binom(d+t,d), while part (b) identifies the interior count by reciprocity.",
+      "proof_technique": "Ehrhart polynomial of the standard simplex, and the scaling of the successive minima.",
+      "proof_completeness": "self-contained given the Ehrhart polynomial of the standard simplex",
+      "external_dependencies": ["Beck and Robins, Computing the continuum discretely, Theorem 2.2 (a) and (b)."],
+      "depends_on": ["successive_minima"],
+      "known_issues_in_paper": [
+        "The claim lambda_i(T_n) = 2 is stated without proof. It follows because 2 cs(T_n) = T_n - T_n contains the independent points e_i, whereas for lambda < 2 every coordinate of every point of lambda cs(T_n) has absolute value less than 1, so its only integer point is zero.",
+        "For 1 <= m <= n, the interior formula is still correct: both sides vanish because the product contains the factor m - m. This small-scale case is not discussed separately."
+      ],
+      "formalization_notes": "Prove the two lattice-point counts directly by stars and bars and prove lambda_i(T_n) = 2 from coordinate bounds on T_n - T_n. This yields the exact equality case without importing general Ehrhart theory."
+    },
+    {
+      "id": "symmetric_box_equality_case",
+      "label": "Sec. 1, final sentence of the equality-case paragraph",
+      "name": "Origin-symmetric lattice boxes attain the symmetric lower conjectured bound",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, sentence following the two simplex equality displays",
+          "pdf_page_statement": 5
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L287-289"
+        }
+      },
+      "background_notation": {
+        "B": "the origin-symmetric box product_i [-m_i,m_i]"
+      },
+      "hypotheses": [
+        "m_1, ..., m_n are positive integers, reordered so m_1 >= ... >= m_n.",
+        "B = product_{i=1}^n [-m_i,m_i]."
+      ],
+      "statement_informal": "Axis-parallel origin-symmetric lattice boxes attain equality in the symmetric lower bound of Conjecture 2.",
+      "statement_formal": "lambda_i(B) = 1/m_i, G(int B) = prod_{i=1}^n (2m_i - 1), and vol(B) prod_{i=1}^n (1 - lambda_i(B)/2) = prod_{i=1}^n (2m_i - 1) = G(int B).",
+      "proof_as_in_paper": "The paper states the equality class and attributes the observation to Betke, Henk and Wills, without a calculation.",
+      "proof_technique": "Coordinatewise lattice-point counting and the successive minima of an axis-parallel box.",
+      "proof_completeness": "the printed equality class is false literally; the intended integer-vertex subfamily is elementary and not derived in the paper",
+      "external_dependencies": ["Betke, Henk and Wills, Successive-minima-type inequalities, the open axis-parallel boxes motivating Conjecture 2.2."],
+      "depends_on": ["successive_minima", "lattice_point_enumerator"],
+      "known_issues_in_paper": [
+        "The paper says 'boxes parallel to the coordinate axes with integral side lengths'. This is false literally: already in dimension one K = [-1/2,1/2] has integral side length 1 and lambda_1(K) = 2, so the product side is vol(K)(1-lambda_1(K)/2) = 0 while G(int K) = 1. Equality holds for the displayed family with integral vertices, equivalently even integral side lengths. The cited Betke-Henk-Wills paper says that open axis-parallel boxes motivate Conjecture 2.2 but does not state the target paper's broader integral-side-length wording."
+      ],
+      "formalization_notes": "Preserve the literal source defect in documentation and prove the exact intended integer-vertex family B = product_i [-m_i,m_i]. Do not add a parity hypothesis to the paper's printed sentence and pretend it was the original statement."
+    },
+    {
+      "id": "theorem_1_4_upper_bound",
+      "label": "Theorem 1.4, Eq. (1.13)",
+      "name": "The planar case of the conjectured upper bound",
+      "kind": "theorem",
+      "references": {
+        "human": {
+          "statement": "Theorem 1.4, Eq. (1.13)",
+          "proof": "Sec. 5, Proof of Theorem 1.4, first half",
+          "pdf_page_statement": 5,
+          "pdf_page_proof": 18,
+          "equations": ["(1.13)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["thm:dim2", "eq:dim2upper"],
+          "statement_lines": "main.tex L291-298",
+          "proof_lines": "main.tex L784-822"
+        }
+      },
+      "background_notation": {"l_t": "the horizontal line at height t"},
+      "hypotheses": ["K is in K^2."],
+      "statement_informal": "In the plane the conjectured upper bound holds as stated.",
+      "statement_formal": "G(K) <= vol(K) (1 + lambda_1(K)/2)(1 + lambda_2(K)).",
+      "proof_as_in_paper": "By Theorem 3.1 and Lemma 5.1 one may assume K anti-blocking with |e_i|_cs(K) = lambda_i and K contained in the half plane x_1 + x_2 <= 2/lambda_1. Let f(t) = vol_1(K intersect l_t) on [0, 2/lambda_2]; f is concave since K is convex, decreasing since K is anti-blocking, and satisfies Eq. (5.3), f(t) <= f(0) - t = 2/lambda_1 - t. Counting by horizontal lattice lines, G(K) = sum_{i=0}^{floor(2/lambda_2)} G(K intersect l_i) <= sum (f(i) + 1), which regroups as (1/2)(f(0) + f(floor(2/lambda_2))) + sum_{i=1}^{floor(2/lambda_2)} (1/2)(f(i-1) + f(i)) + floor(2/lambda_2) + 1. Applying Eq. (5.3) to f(floor(2/lambda_2)) and the lower bound of Lemma 5.2 to each trapezoid gives G(K) <= 2/lambda_1 - (1/2) floor(2/lambda_2) + integral_0^{floor(2/lambda_2)} f + floor(2/lambda_2) + 1 <= vol(K) + 2/lambda_1 + 1/lambda_2 + 1 <= vol(K)(1 + lambda_2 + lambda_1/2 + lambda_1 lambda_2 / 2) = vol(K)(1 + lambda_1/2)(1 + lambda_2), where the third line uses the lower bound of Minkowski's second theorem applied to each of the summands 2/lambda_1, 1/lambda_2 and 1.",
+      "proof_technique": "Reduction to an anti-blocking body under a diagonal, slicing by horizontal lattice lines, trapezoid estimate for a concave section function, then Minkowski's lower bound to convert additive error terms into multiplicative ones.",
+      "proof_completeness": "self-contained given theorem_3_1_anti_blocking_reduction, lemma_5_1_properties_of_the_planar_reduction, lemma_5_2_concave_integral_bounds, diagonal_section_bound and minkowski_second_theorem",
+      "external_dependencies": ["The lower bound of Minkowski's second theorem, cataloged as minkowski_second_theorem."],
+      "depends_on": [
+        "theorem_3_1_anti_blocking_reduction",
+        "lemma_5_1_properties_of_the_planar_reduction",
+        "lemma_5_2_concave_integral_bounds",
+        "diagonal_section_bound",
+        "support_function",
+        "minkowski_second_theorem",
+        "lemma_3_3_minima_at_standard_basis"
+      ],
+      "known_issues_in_paper": [
+        "The first display of the proof writes the summand as G(K intersect l_t) with t while the summation index is i; the intended reading is l_i.",
+        "The next displayed rearrangement has an unmatched opening parenthesis after the factor 1/2. The following line shows the intended grouping: only f(0) + f(floor(2/lambda_2)) is halved, while the trapezoid sum and floor(2/lambda_2) + 1 remain outside.",
+        "The count over horizontal lattice lines runs from 0 to floor(2/lambda_2), which presumes that the body meets no horizontal lattice line above that height; this uses h(K, e_2) = 2/lambda_2, stated one line earlier for the anti-blocking body.",
+        "The step G(K intersect l_i) <= f(i) + 1 is the one-dimensional count on a segment of length f(i) and is used without comment."
+      ]
+    },
+    {
+      "id": "theorem_1_4_lower_bound",
+      "label": "Theorem 1.4, Eq. (1.14)",
+      "name": "The planar lower bound on the interior enumerator",
+      "kind": "theorem",
+      "references": {
+        "human": {
+          "statement": "Theorem 1.4, Eq. (1.14)",
+          "proof": "Sec. 5, Proof of Theorem 1.4, second half",
+          "pdf_page_statement": 6,
+          "pdf_page_proof": 19,
+          "equations": ["(1.14)", "(5.4)", "(5.5)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["thm:dim2", "eq:dim2lower", "eq:someest", "eq:int01est"],
+          "statement_lines": "main.tex L299-303",
+          "proof_lines": "main.tex L823-856"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^2."],
+      "statement_informal": "In the plane the number of interior lattice points is at least the volume times 1 - lambda_1/2 - lambda_2.",
+      "statement_formal": "G(int K) >= vol(K) (1 - lambda_1(K)/2 - lambda_2(K)).",
+      "proof_as_in_paper": "Same reduction and same section function f, assumed differentiable after an approximation from below by a smooth concave function. The highest horizontal integer line meeting int K is at height ceil(2/lambda_2 - 1), so G(int K) = sum_{i=1}^{ceil(2/lambda_2 -1)} G(int K intersect l_i) >= sum (f(i) - 1). The upper bound of Lemma 5.2 gives f(i) >= integral_i^{i+1} f - (1/2) f'(i) for i < ceil(2/lambda_2 - 1) and a corresponding estimate on the last, shorter interval. Summing gives Eq. (5.4), whose integral part is vol(K) - integral_0^1 f. Eq. (5.5) bounds integral_0^1 f <= 2/lambda_1 - 1/2 using Eq. (5.3). The bracket of derivative terms is bounded below by integral_0^{2/lambda_2 - 1} (-f') = f(0) - f(2/lambda_2 - 1) >= 2/lambda_2 - 1, using that -f' is increasing and non-negative and Eq. (5.3) again. Substituting yields G(int K) >= vol(K) - 2/lambda_1 + 1/2 + (1/2)(2/lambda_2 - 1) - ceil(2/lambda_2 - 1) >= vol(K) - 2/lambda_1 - 1/lambda_2 = vol(K)(1 - (1/vol(K))(2/lambda_1 + 1/lambda_2)) >= vol(K)(1 - lambda_1/2 - lambda_2), the last step using vol(K) >= 2/(lambda_1 lambda_2).",
+      "proof_technique": "Slicing by horizontal lattice lines, tangent estimate for a concave section function, monotonicity of the derivative, and Minkowski's lower bound in the plane.",
+      "proof_completeness": "gap: the smooth concave approximation from below and the limiting transfer to the original section function are described but not proved",
+      "external_dependencies": ["The lower bound of Minkowski's second theorem in the plane, cataloged as minkowski_second_theorem."],
+      "depends_on": [
+        "theorem_3_1_anti_blocking_reduction",
+        "lemma_5_1_properties_of_the_planar_reduction",
+        "lemma_5_2_concave_integral_bounds",
+        "diagonal_section_bound",
+        "support_function",
+        "minkowski_second_theorem"
+      ],
+      "known_issues_in_paper": [
+        "Differentiability of f is assumed and justified by a two-step approximation, first by a linear spline from below and then by rounding corners; the approximating body K' is said to satisfy g(0) = f(0) and to lie under the diagonal, and the passage to the limit is not written out.",
+        "In Eq. (5.4) the upper limit of the last integral is printed as lambda_2/2 where the argument requires 2/lambda_2; the surrounding lines use 2/lambda_2 consistently.",
+        "The estimate f(i) >= integral_i^{i+1} f - (1/2) f'(i) applies Lemma 5.2 on the interval [i, i+1] and uses that -f'(i) >= 0; the sign convention is easy to lose."
+      ],
+      "formalization_notes": "The theorem must remain quantified over every planar convex body. Either formalize the paper's smooth-from-below approximation with all preserved endpoint and containment data, or replace only this analytic substep by an equivalent nonsmooth concavity argument. Do not add differentiability of the section function as a hypothesis."
+    },
+    {
+      "id": "theorem_1_4_lower_bound_product_form",
+      "label": "Sec. 1, unnumbered display after Theorem 1.4",
+      "name": "Product form of the planar lower bound under a smallness hypothesis on the first minimum",
+      "kind": "corollary",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, sentence 'In particular, for any epsilon > 0' and its unnumbered display",
+          "pdf_page_statement": 6
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:dim2lowereps"],
+          "statement_lines": "main.tex L305-310"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^2.", "epsilon > 0.", "lambda_1(K) <= 2 epsilon / (1 + epsilon)."],
+      "statement_informal": "When the first minimum is small enough, the planar lower bound can be written in the product form of the conjecture, at the cost of an epsilon in the second factor.",
+      "statement_formal": "If lambda_1 <= 2 epsilon / (1 + epsilon) then G(int K) >= vol(K) (1 - lambda_1/2)(1 - (1 + epsilon) lambda_2).",
+      "proof_as_in_paper": "Stated as an immediate consequence of Eq. (1.14). The elementary verification, that (1 - lambda_1/2)(1 - (1+epsilon) lambda_2) <= 1 - lambda_1/2 - lambda_2 under the hypothesis on lambda_1, appears only in a commented-out passage of the source and not in the published text.",
+      "proof_technique": "Expanding the product and comparing terms.",
+      "proof_completeness": "asserted, not derived in the published text",
+      "external_dependencies": [],
+      "depends_on": ["theorem_1_4_lower_bound"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "proposition_1_5_symmetric_lattice_polygon",
+      "label": "Proposition 1.5",
+      "name": "The symmetric planar conjecture holds for origin-symmetric lattice polygons",
+      "kind": "proposition",
+      "references": {
+        "human": {
+          "statement": "Proposition 1.5",
+          "proof": "Sec. 5, Proof of Proposition 1.5",
+          "pdf_page_statement": 6,
+          "pdf_page_proof": 16,
+          "equations": ["(5.1)", "(5.2)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["prop:polygons"],
+          "statement_lines": "main.tex L342-350",
+          "proof_lines": "main.tex L687-697"
+        }
+      },
+      "background_notation": {"bd P": "the boundary of P"},
+      "hypotheses": ["P is in K^2.", "P = -P.", "P is the convex hull of finitely many integer points."],
+      "statement_informal": "For an origin-symmetric lattice polygon the symmetric lower bound of Conjecture 2 holds in its product form.",
+      "statement_formal": "G(int P) >= vol(P) (1 - lambda_1(P)/2)(1 - lambda_2(P)/2).",
+      "proof_as_in_paper": "Combining Pick's theorem in the interior form (5.1), G(int P) = vol(P) - G(bd P)/2 + 1, with the boundary bound (5.2) of Henk, Schuermann and Wills, G(bd P)/2 <= vol(P)(lambda_1/2 + lambda_2/2), gives G(int P) >= vol(P) - vol(P)(lambda_1/2 + lambda_2/2) + 1. The upper bound of Minkowski's second theorem gives 1 >= vol(P) lambda_1 lambda_2 / 4, hence G(int P) >= vol(P)(1 - lambda_1/2 - lambda_2/2 + lambda_1 lambda_2/4) = vol(P)(1 - lambda_1/2)(1 - lambda_2/2).",
+      "proof_technique": "Pick's theorem, a boundary lattice point bound, and Minkowski's upper bound to supply the cross term.",
+      "proof_completeness": "self-contained given pick_theorem_interior, henk_schurmann_wills_boundary_bound and minkowski_second_theorem",
+      "external_dependencies": [
+        "Pick's theorem, cataloged as pick_theorem_interior.",
+        "Henk, Schuermann and Wills, Equation 1.6, cataloged as henk_schurmann_wills_boundary_bound.",
+        "The upper bound of Minkowski's second theorem."
+      ],
+      "depends_on": ["pick_theorem_interior", "henk_schurmann_wills_boundary_bound", "minkowski_second_theorem"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "proposition_1_6_upper_bound",
+      "label": "Proposition 1.6, Eq. (1.15)",
+      "name": "Covering-radius upper bound on the lattice point enumerator",
+      "kind": "proposition",
+      "references": {
+        "human": {
+          "statement": "Proposition 1.6, Eq. (1.15)",
+          "proof": "Sec. 4, Proof of Proposition 1.6, first half",
+          "pdf_page_statement": 6,
+          "pdf_page_proof": 12,
+          "equations": ["(1.15)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["prop:covrad", "eq:covradup"],
+          "statement_lines": "main.tex L352-360",
+          "proof_lines": "main.tex L544-556"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n."],
+      "statement_informal": "The number of lattice points of a convex body is at most its volume times (1 + covering radius) to the power n.",
+      "statement_formal": "G(K) <= vol(K) (1 + mu(K))^n.",
+      "proof_as_in_paper": "It suffices to exhibit a measurable S contained in mu K with S + Z^n = R^n and int S disjoint from all its non-zero integer translates, because then G(K) = vol((K intersect Z^n) + S) <= vol(K + mu K) = (1 + mu)^n vol(K). To build S, let P = [0,1]^n and take finitely many translates mu K + x_i, x_i in Z^n, covering P. Set P_1 = P intersect (mu K + x_1) and inductively P_i = (P minus the union of the earlier P_j) intersect (mu K + x_i); let S_i = P_i - x_i, contained in mu K, and S the union of the S_i. The P_i are interiorly disjoint and cover P, so the S_i are interiorly disjoint and vol(S) = vol(P) = 1; and if int S met int S + x for an integer x, two of the P_i would overlap after an integer translation, forcing x = 0.",
+      "proof_technique": "Construction of a measurable fundamental domain inside the dilated body, then a volume comparison for the Minkowski sum of the lattice points with that domain.",
+      "proof_completeness": "self-contained",
+      "external_dependencies": [],
+      "depends_on": ["covering_radius", "lattice_point_enumerator"],
+      "known_issues_in_paper": [
+        "The identity G(K) = vol((K intersect Z^n) + S) uses that the translates of S by distinct lattice points are interiorly disjoint and each has volume 1.",
+        "The paper notes that the same tiling strategy appears in the proof of Blichfeldt's classical variant of Theorem 2.1, and that convex tilings of this kind need not exist."
+      ]
+    },
+    {
+      "id": "proposition_1_6_lower_bound",
+      "label": "Proposition 1.6, Eq. (1.16)",
+      "name": "Covering-radius lower bound on the interior lattice point enumerator",
+      "kind": "proposition",
+      "references": {
+        "human": {
+          "statement": "Proposition 1.6, Eq. (1.16)",
+          "proof": "Sec. 4, Proof of Proposition 1.6, second half",
+          "pdf_page_statement": 6,
+          "pdf_page_proof": 13,
+          "equations": ["(1.16)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["prop:covrad", "eq:covraddown"],
+          "statement_lines": "main.tex L361-367",
+          "proof_lines": "main.tex L557-559"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n.", "mu(K) <= 1, equivalently K + Z^n = R^n."],
+      "statement_informal": "If the body's integer translates cover space, its number of interior lattice points is at least its volume times (1 - covering radius) to the power n.",
+      "statement_formal": "If mu(K) <= 1 then G(int K) >= vol(K) (1 - mu(K))^n.",
+      "proof_as_in_paper": "Apply van der Corput's Theorem 2.1 to K' = (1 - mu) int K to get t with vol(K') <= G(K' + t). Since K + Z^n = R^n one may assume t in mu K. Then vol(K)(1 - mu)^n = vol(K') <= G(K' + t) <= G((1 - mu) int K + mu K) = G(int K).",
+      "proof_technique": "van der Corput's averaging theorem applied to a shrunken copy, and the convexity identity (1 - mu) int K + mu K = int K for mu < 1.",
+      "proof_completeness": "self-contained for mu < 1 given van_der_corput_theorem; the printed proof omits the separate trivial endpoint mu = 1",
+      "external_dependencies": ["van der Corput's theorem, cataloged as van_der_corput_theorem."],
+      "depends_on": ["covering_radius", "van_der_corput_theorem"],
+      "known_issues_in_paper": [
+        "The reduction to t in mu K uses that translating by a lattice vector does not change the count and that mu K + Z^n = R^n; the paper states the correct set mu K but leaves the lattice-translation step implicit.",
+        "The equality (1 - mu) int K + mu K = int K holds for 0 <= mu < 1 by convexity and nonempty interior, but fails at mu = 1 because the left side is K. The proposition remains true at mu = 1 because its right-hand side is zero, so the proof needs a separate endpoint case rather than a stronger hypothesis."
+      ],
+      "formalization_notes": "Split mu = 1, where nonnegativity of G(int K) proves the claim, from mu < 1, where the paper's van der Corput and convex-combination argument applies."
+    },
+    {
+      "id": "proposition_1_6_tight_for_cubes",
+      "label": "Sec. 4, last paragraph of the Proof of Proposition 1.6",
+      "name": "Both covering-radius bounds are attained by integer cubes",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Proposition 1.6, sentence 'Both inequalities are tight'",
+          "proof": "Sec. 4, last paragraph of the Proof of Proposition 1.6",
+          "pdf_page_statement": 6,
+          "pdf_page_proof": 13
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L366",
+          "proof_lines": "main.tex L558-559"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K = [0, m]^n with m a positive integer."],
+      "statement_informal": "For an integer cube both covering-radius bounds hold with equality.",
+      "statement_formal": "For K = [0,m]^n with m in Z_{>0}, vol(K) = m^n, G(K) = (m+1)^n, G(int K) = (m-1)^n and mu(K) = 1/m, so both bounds are equalities.",
+      "proof_as_in_paper": "The four values are listed and the equalities are immediate.",
+      "proof_technique": "Direct computation on a cube.",
+      "proof_completeness": "self-contained",
+      "external_dependencies": [],
+      "depends_on": ["proposition_1_6_upper_bound", "proposition_1_6_lower_bound"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "covering_radius_bound_not_comparable",
+      "label": "Sec. 1, paragraph after Proposition 1.6",
+      "name": "The covering-radius bound cannot profit from largeness in a lattice subspace",
+      "kind": "remark",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, paragraph beginning 'The disadvantage of (1.15) in comparison to the upper bound (1.8)'",
+          "pdf_page_statement": 6
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L370-372"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K = [-r, r]^{n-1} x [-1/2, 1/2] with r large."],
+      "statement_informal": "For a long flat box the covering-radius constant stays at 2^n while the successive-minima constant is of order n + 1, so neither of the two upper bounds implies the other.",
+      "statement_formal": "For K = [-r,r]^{n-1} x [-1/2,1/2], mu(K) = 1, so the constant in Eq. (1.15) is 2^n, while lambda_i(K) tends to 0 for i < n as r tends to infinity, so the constant in Eq. (1.8) is of order n + 1.",
+      "proof_as_in_paper": "The example and the two constants are given; the computation of mu(K) = 1 and of the limiting minima is not written out.",
+      "proof_technique": "A single example.",
+      "proof_completeness": "asserted, not derived",
+      "external_dependencies": [],
+      "depends_on": ["proposition_1_6_upper_bound", "theorem_1_1_upper_bound", "covering_radius"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "lattice_tile_sandwich",
+      "label": "Sec. 1, unnumbered display before the organization paragraph",
+      "name": "Two-sided count for dilates of a convex lattice tile",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Sec. 1, paragraph 'Applied to the special class of convex lattice tiles' and its unnumbered display",
+          "pdf_page_statement": 6
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L374-379"
+        }
+      },
+      "background_notation": {"convex lattice tile": "a convex body K with K + Z^n = R^n whose open integer translates are pairwise disjoint"},
+      "hypotheses": ["K is a convex lattice tile.", "r >= 1."],
+      "statement_informal": "For dilates of a convex body that tiles space by integer translates, the lattice point count is squeezed between the two obvious cubes.",
+      "statement_formal": "(r-1)^n <= G(int(rK)) <= G(rK) <= (r+1)^n for r >= 1, sharp for K = [0,1]^n and integer r.",
+      "proof_as_in_paper": "From Proposition 1.6 together with vol(K) = mu(K) = 1 for a tile and mu(rK) = mu(K)/r.",
+      "proof_technique": "Specialization of Proposition 1.6 with the scaling law of the covering radius.",
+      "proof_completeness": "self-contained given proposition_1_6_upper_bound and proposition_1_6_lower_bound",
+      "external_dependencies": [],
+      "depends_on": ["proposition_1_6_upper_bound", "proposition_1_6_lower_bound", "covering_radius"],
+      "known_issues_in_paper": [
+        "vol(K) = 1 and mu(K) = 1 for a convex lattice tile are stated without proof; the first is the tiling property and the second follows from it."
+      ]
+    },
+
+    {
+      "id": "van_der_corput_theorem",
+      "label": "Theorem 2.1, Eq. (2.1)",
+      "name": "van der Corput's theorem on translating a Jordan-measurable set",
+      "kind": "theorem",
+      "kind_note": "Classical result quoted from Gruber and Lekkerkerker; used in the proofs of Theorem 1.3 and Proposition 1.6.",
+      "references": {
+        "human": {
+          "statement": "Theorem 2.1, Eq. (2.1)",
+          "pdf_page_statement": 8,
+          "equations": ["(2.1)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["t:vdc", "eq:vdc"],
+          "statement_lines": "main.tex L403-410"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["M is a Jordan-measurable subset of R^n."],
+      "statement_informal": "Every Jordan-measurable set has a translate containing at least as many lattice points as its volume.",
+      "statement_formal": "There exists t in R^n with vol(M) <= G(M + t).",
+      "proof_as_in_paper": "Not proved here; quoted from Gruber and Lekkerkerker, Geometry of Numbers, Ch. 2, Theorem 6.1. The exact cited book page was not present in the legally accessible publisher preview; the full target statement is explicit and its standard fundamental-domain averaging proof establishes it without an additional premise.",
+      "proof_technique": "Averaging the count over translates by a fundamental domain.",
+      "proof_completeness": "relies on external Gruber and Lekkerkerker, Geometry of Numbers, Ch. 2, Theorem 6.1",
+      "external_dependencies": ["Gruber and Lekkerkerker, Geometry of Numbers, Ch. 2, Theorem 6.1."],
+      "depends_on": ["lattice_point_enumerator"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "rogers_shephard_section_projection",
+      "label": "Sec. 4, Eq. (4.1)",
+      "name": "The Rogers-Shephard section-projection inequality",
+      "kind": "theorem",
+      "kind_note": "Classical result quoted from Rogers and Shephard, Theorem 1; used only inside the proof of Theorem 1.1 and only for an anti-blocking body.",
+      "references": {
+        "human": {
+          "statement": "Sec. 4, Eq. (4.1), inside the Proof of Theorem 1.1",
+          "pdf_page_statement": 13,
+          "equations": ["(4.1)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:rogers-shephard"],
+          "statement_lines": "main.tex L566-572"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is a convex body in R^n.", "I is a subset of [n] of size k."],
+      "statement_informal": "The product of the volume of a section through the origin and the volume of the complementary projection is at most a binomial factor times the volume of the body.",
+      "statement_formal": "vol_k(K intersect L_I) vol_{n-k}(K|L_I^perp) <= binom(n,k) vol(K).",
+      "proof_as_in_paper": "Not proved here; deduced from Rogers and Shephard, Convex bodies associated with a given convex body, Theorem 1. The cited projection-section theorem has the stronger left factor max_x vol_k(K intersect (x + L_I)); taking the section at x = 0 gives the target display.",
+      "proof_completeness": "relies on the immediate origin-section specialization of external Rogers and Shephard, J. London Math. Soc. 33 (1958), Theorem 1",
+      "external_dependencies": ["Rogers and Shephard, Convex bodies associated with a given convex body, Theorem 1."],
+      "depends_on": [],
+      "known_issues_in_paper": [
+        "The cited theorem is stronger than the displayed consequence: it uses the maximum volume over all translates of the section, whereas Eq. (4.1) keeps only the section through the origin. No assumption that the origin section is maximal is needed."
+      ]
+    },
+    {
+      "id": "covering_radius_successive_minima_bound",
+      "label": "Sec. 4, Eq. (4.2)",
+      "name": "The covering radius is at most half the sum of the successive minima",
+      "kind": "theorem",
+      "kind_note": "Classical result quoted from Kannan and Lovasz, Lemma 2.4; used in the proof of the lower bound of Theorem 1.1.",
+      "references": {
+        "human": {
+          "statement": "Sec. 4, Eq. (4.2), inside the Proof of Theorem 1.1",
+          "pdf_page_statement": 14,
+          "equations": ["(4.2)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:lambdamu"],
+          "statement_lines": "main.tex L583-587"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n."],
+      "statement_informal": "The covering radius of a convex body is at most half the sum of its successive minima.",
+      "statement_formal": "mu(K) <= sum_{i=1}^n lambda_i(K) / 2.",
+      "proof_as_in_paper": "Not proved here; quoted from Kannan and Lovasz, Covering minima and lattice point free convex bodies, Lemma 2.4. In the primary text their lambda_i are the successive minima of K-K and their mu_n is the ordinary covering radius; Lemma 2.4 states lambda_n <= mu_n <= sum_i lambda_i. Since the target paper defines lambda_i(K) using (K-K)/2, scaling turns the primary upper bound into mu(K) <= sum_i lambda_i(K)/2.",
+      "proof_completeness": "relies on external Kannan and Lovasz, Lemma 2.4",
+      "external_dependencies": ["Kannan and Lovasz, Covering minima and lattice point free convex bodies, Lemma 2.4."],
+      "depends_on": ["covering_radius", "successive_minima"],
+      "known_issues_in_paper": [],
+      "formalization_notes": "Expose the notation bridge explicitly: primary lambda_i(K-K) = lambda_i((K-K)/2)/2, and primary mu_n(K,Lambda) is the target covering radius."
+    },
+    {
+      "id": "pick_theorem_interior",
+      "label": "Sec. 5, Eq. (5.1)",
+      "name": "Pick's theorem in interior form",
+      "kind": "theorem",
+      "kind_note": "Classical result quoted from Beck and Robins, Theorem 2.8.",
+      "references": {
+        "human": {
+          "statement": "Sec. 5, Eq. (5.1)",
+          "pdf_page_statement": 16,
+          "equations": ["(5.1)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:pickinter"],
+          "statement_lines": "main.tex L670-680"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["P is a lattice polygon in the plane."],
+      "statement_informal": "The number of interior lattice points of a lattice polygon equals its area minus half its boundary lattice points plus one.",
+      "statement_formal": "G(int P) = vol(P) - G(bd P)/2 + 1.",
+      "proof_as_in_paper": "Not proved here; quoted from Beck and Robins, Computing the Continuum Discretely, Theorem 2.8. The author-hosted final draft was checked directly: it states A = I + B/2 - 1 for an integral convex polygon, which rearranges to the displayed interior form.",
+      "proof_completeness": "relies on external Beck and Robins, Theorem 2.8",
+      "external_dependencies": ["Beck and Robins, Computing the continuum discretely, Theorem 2.8."],
+      "depends_on": ["lattice_point_enumerator"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "henk_schurmann_wills_boundary_bound",
+      "label": "Sec. 5, Eq. (5.2)",
+      "name": "A bound on boundary lattice points of a symmetric lattice polygon",
+      "kind": "theorem",
+      "kind_note": "Result of other authors, quoted from Henk, Schuermann and Wills, Equation 1.6.",
+      "references": {
+        "human": {
+          "statement": "Sec. 5, Eq. (5.2)",
+          "pdf_page_statement": 16,
+          "equations": ["(5.2)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:hsw"],
+          "statement_lines": "main.tex L681-686"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["P is a lattice polygon in the plane with P = -P."],
+      "statement_informal": "Half the number of boundary lattice points of a symmetric lattice polygon is at most its area times half the sum of its two successive minima.",
+      "statement_formal": "G(bd P)/2 <= vol(P) (lambda_1(P)/2 + lambda_2(P)/2).",
+      "proof_as_in_paper": "Not proved here; quoted from Henk, Schuermann and Wills, Equation 1.6.",
+      "proof_completeness": "relies on external Henk, Schuermann and Wills, Equation 1.6",
+      "external_dependencies": ["Henk, Schuermann and Wills, Equation 1.6."],
+      "depends_on": ["lattice_point_enumerator", "successive_minima"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "shaking_preserves_convexity",
+      "label": "Sec. 3, sentence before Lemma 3.2",
+      "name": "The Blaschke shaking of a convex body is convex",
+      "kind": "lemma",
+      "kind_note": "Quoted from Campi, Colesanti and Gronchi, Lemma 1.1, for the orthogonal shaking; the paper proves the corresponding statement for the general shaking of Sec. 5 inside the proof of Lemma 5.1 (i).",
+      "references": {
+        "human": {
+          "statement": "Sec. 3, sentence 'The operator sh_u is known to preserve convexity'",
+          "proof": "Sec. 5, Proof of Lemma 5.1, part i), for the general shaking",
+          "pdf_page_statement": 8,
+          "pdf_page_proof": 21
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L447",
+          "proof_lines": "main.tex L872-877"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n.", "u is a non-zero vector."],
+      "statement_informal": "Shaking a convex body leaves it convex.",
+      "statement_formal": "sh_u(K) is convex whenever K is convex; and in the plane sh_{u,l}(K) is convex for every admissible u and l.",
+      "proof_as_in_paper": "For the orthogonal shaking the paper cites Campi, Colesanti and Gronchi, Lemma 1.1(ii), checked in the primary article: shaking maps every convex body to a convex body. For the general planar shaking it argues: given x, y in sh_{u,l}(K), let x-bar and y-bar be the points of K on the lines x + Ru and y + Ru minimizing the inner product with u, and set z-tilde = z-bar + |z - pi_{u,l}(z)| u/|u| for z in {x, y}, which lies in K. Monotonicity of the shaking (Lemma 5.3) then gives conv{ pi(x), pi(y), x, y } = sh_{u,l}(conv{ x-bar, x-tilde, y-bar, y-tilde }) contained in sh_{u,l}(K), so the segment [x, y] is contained in sh_{u,l}(K).",
+      "proof_technique": "Reduction to the shaking of a quadrilateral, then monotonicity of the shaking under inclusion.",
+      "proof_completeness": "relies on external Campi, Colesanti and Gronchi, Lemma 1.1, for the orthogonal case; self-contained given lemma_5_3_shaking_is_monotone for the planar general case",
+      "external_dependencies": ["Campi, Colesanti and Gronchi, Shaking compact sets, Lemma 1.1."],
+      "depends_on": ["blaschke_shaking", "general_blaschke_shaking", "lemma_5_3_shaking_is_monotone"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "lemma_3_2_shaking_properties",
+      "label": "Lemma 3.2",
+      "name": "Six properties of the Blaschke shaking",
+      "kind": "lemma",
+      "references": {
+        "human": {
+          "statement": "Lemma 3.2, items i) to vi)",
+          "proof": "Sec. 3, Proof of Lemma 3.2",
+          "pdf_page_statement": 8,
+          "pdf_page_proof": 9
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["lemma:blaschke"],
+          "statement_lines": "main.tex L448-468",
+          "proof_lines": "main.tex L469-484"
+        }
+      },
+      "background_notation": {
+        "d_z": "the signed Euclidean distance from u^perp to the fibre of K over z"
+      },
+      "hypotheses": ["K is in K^n.", "u is a non-zero vector.", "For items v) and vi), u = e_i for some i in [n]."],
+      "statement_informal": "Shaking contains the projection, preserves volume, preserves the gauge in the shaking direction, does not increase the gauge of a projected point, and, when the direction is a coordinate vector, does not decrease the lattice point count nor increase the interior lattice point count.",
+      "statement_formal": "i) K|u^perp is contained in sh_u(K); ii) vol(K) = vol(sh_u(K)); iii) |u|_cs(K) = |u|_cs(sh_u(K)); iv) |x|_cs(K) >= |(x|u^perp)|_cs(sh_u(K)) for all x in R^n; and for u = e_i, v) G(K) <= G(sh_{e_i}(K)); vi) G(int K) >= G(int sh_{e_i}(K)).",
+      "proof_as_in_paper": "i) and ii) follow directly from the definition. For iii), writing u = (r/2)(x - y) and projecting onto u^perp gives x|u^perp = y|u^perp; with l_z = z + Ru for z in K|u^perp and d_z the signed distance from u^perp to l_z intersect K, one has d_x = d_y and z in K iff z - d_z u in sh_u(K), so from r(x-y)/2 = r((x - d_x u) - (y - d_x u))/2 one gets u in r cs(K) iff u in r cs(sh_u(K)). For iv), let r = |x|_cs(K)^{-1}; there are a, b in K with r x = (a - b)/2, and by i) r (x|u^perp) = (a|u^perp - b|u^perp)/2 lies in cs(sh_u(K)), so |r x|u^perp|_cs(sh_u(K)) <= 1. For v), the number of integer points in an interval [a,b] is maximized when a is an integer: with delta = a - floor(a), card((I - delta) intersect Z) = floor(b - delta) - ceil(a - delta) + 1 = floor(b - delta) - floor(a) + 1 >= floor(b) - floor(a) = floor(b) - ceil(a) + 1 = card(I intersect Z); the lattice points of K and of sh_{e_i}(K) lie in intervals of the same lengths, and in the shaken body those intervals start at a lattice point. vi) is the same argument with open intervals, where translating to start at a lattice point can only lose points.",
+      "proof_technique": "Fibrewise translation, Fubini for the volume, an explicit floor and ceiling count for the one-dimensional lattice statements.",
+      "proof_completeness": "self-contained",
+      "external_dependencies": [],
+      "depends_on": ["blaschke_shaking", "gauge_function"],
+      "known_issues_in_paper": [
+        "In the chain for v) the identity floor(b - delta) - ceil(a - delta) + 1 = floor(b - delta) - floor(a) + 1 holds because a - delta = floor(a) is an integer, so its ceiling is itself.",
+        "Item vi) as printed has an unbalanced parenthesis: G(int K) >= G(int(sh_{e_i}(K)).",
+        "Item ii) is stated for all u, and its proof 'follows directly from the definition'; the underlying fact is that the fibres keep their length, which is Fubini in coordinates adapted to u."
+      ]
+    },
+    {
+      "id": "unimodular_invariance_of_paper_functionals",
+      "label": "Sec. 3, first sentence of the Proof of Theorem 3.1",
+      "name": "The paper's four functionals are invariant under unimodular transformations",
+      "kind": "lemma",
+      "kind_note": "An asserted notation bridge used to justify the Hermite-normal-form reduction; the paper does not prove it separately.",
+      "references": {
+        "human": {
+          "statement": "Sec. 3, first sentence of the Proof of Theorem 3.1",
+          "pdf_page_statement": 10
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L485-486"
+        }
+      },
+      "background_notation": {
+        "U": "a unimodular integer linear transformation of R^n"
+      },
+      "hypotheses": ["K is in K^n.", "U belongs to GL(n,Z)."],
+      "statement_informal": "A unimodular change of coordinates preserves volume, the closed and interior lattice-point enumerators, and every successive minimum.",
+      "statement_formal": "vol(U K) = vol(K), G(U K) = G(K), G(int(U K)) = G(int K), and lambda_i(U K) = lambda_i(K) for every i in [n].",
+      "proof_as_in_paper": "Asserted in one sentence. The bridge expands as follows: |det U| = 1 gives volume invariance; U is a bijection of Z^n and maps interiors to interiors, giving both enumerator identities; cs(U K) = U(cs(K)), and U preserves linear independence over R, giving invariance of all successive minima.",
+      "proof_technique": "Change of variables, the lattice automorphism U : Z^n equivalently Z^n, and transport of the central symmetral and independent lattice vectors.",
+      "proof_completeness": "paper assertion; the catalog records every constituent that Lean must prove",
+      "external_dependencies": [],
+      "depends_on": ["central_symmetral", "lattice_point_enumerator", "successive_minima"],
+      "known_issues_in_paper": []
+    },
+    {
+      "id": "hermite_normal_form_adapted_basis",
+      "label": "Sec. 3, first sentence of the Proof of Theorem 3.1",
+      "name": "A unimodular ambient transformation makes independent integer vectors triangular",
+      "kind": "theorem",
+      "kind_note": "The exact consequence of Schrijver, Section 4.1, used by the paper; cataloged separately from Theorem 3.1 so the external algebraic input is not hidden in proof prose.",
+      "references": {
+        "human": {
+          "statement": "Sec. 3, first sentence of the Proof of Theorem 3.1, citation to Schrijver Section 4.1",
+          "pdf_page_statement": 10
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L485-486"
+        }
+      },
+      "background_notation": {
+        "A": "the nonsingular integer matrix [v_1, ..., v_n] whose columns are the chosen vectors"
+      },
+      "hypotheses": ["v_1, ..., v_n are linearly independent vectors in Z^n."],
+      "statement_informal": "One unimodular change of ambient integer coordinates sends the chosen independent vectors to the columns of an upper-triangular matrix.",
+      "statement_formal": "There exists U in GL(n,Z) such that the matrix [U v_1, ..., U v_n] is upper triangular.",
+      "proof_as_in_paper": "The paper cites Hermite normal form. Schrijver's Theorem 4.1 says that a rational full-row-rank matrix can be brought to [B 0], with B lower triangular, by elementary column operations. Apply it to A^T: there is a unimodular V with A^T V = B lower triangular. Transposing gives V^T A = B^T upper triangular, so U = V^T is the required unimodular ambient transformation. This transpose bridge is essential: applying column operations directly to A would replace the individual vectors and would not preserve their separately assigned gauges.",
+      "proof_technique": "Hermite normal form applied to the transpose, then transpose the matrix identity.",
+      "proof_completeness": "relies on external Schrijver, Theory of Linear and Integer Programming, Theorem 4.1",
+      "external_dependencies": ["Schrijver, Theory of Linear and Integer Programming, Section 4.1, Theorem 4.1."],
+      "depends_on": [],
+      "known_issues_in_paper": [
+        "Schrijver's convention is lower triangular and uses column operations. The paper's upper-triangular ambient-coordinate conclusion follows only after applying the theorem to the transpose, as made explicit here."
+      ]
+    },
+    {
+      "id": "theorem_3_1_anti_blocking_reduction",
+      "label": "Theorem 3.1",
+      "name": "Every convex body has an anti-blocking companion with the same volume and no worse parameters",
+      "kind": "theorem",
+      "references": {
+        "human": {
+          "statement": "Theorem 3.1, items i) to iv)",
+          "proof": "Sec. 3, Proof of Theorem 3.1, with Claims 1 and 2",
+          "pdf_page_statement": 8,
+          "pdf_page_proof": 10
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["prop:anti-blocking"],
+          "statement_lines": "main.tex L421-433",
+          "proof_lines": "main.tex L486-524"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n."],
+      "statement_informal": "For every convex body there is an anti-blocking body with the same volume, at least as many lattice points, at most as many interior lattice points, and successive minima that are no larger.",
+      "statement_formal": "There is an anti-blocking convex body A contained in the non-negative orthant with i) vol(K) = vol(A); ii) G(K) <= G(A); iii) G(int K) >= G(int A); iv) lambda_i(K) >= lambda_i(A) for all i in [n].",
+      "proof_as_in_paper": "Choose linearly independent v_1, ..., v_n in Z^n with |v_i|_cs(K) = lambda_i(K). All functionals involved are invariant under unimodular transformations, so one may assume the matrix [v_1, ..., v_n] upper triangular, for instance in Hermite normal form. Put K_0 = K and K_j = sh_{e_j}(K_{j-1}); the claim is that A := K_n works. Claim 1, proved by induction on j, produces at each stage independent integer vectors u_1, ..., u_n with |u_i|_{cs(K_j)} <= lambda_i(K) whose matrix is block diagonal with a j by j diagonal block and an (n-j) by (n-j) upper triangular block; the induction step replaces u_i by its projection on e_{j+1}^perp for i not equal to j+1 and uses Lemma 3.2 iv) and iii). Hence lambda_i(A) <= lambda_i(K). Properties i) to iii) follow from repeated application of Lemma 3.2 ii), v) and vi). Claim 2, again by induction, shows that x in K_j implies x|e_i^perp in K_j for all i <= j, which at j = n says that A is anti-blocking.",
+      "proof_technique": "Successive coordinate shakings, an induction that keeps a block-triangular basis of near-minimal gauge, and a second induction for the anti-blocking property.",
+      "proof_completeness": "self-contained given unimodular_invariance_of_paper_functionals, hermite_normal_form_adapted_basis, lemma_3_2_shaking_properties, claim_1_block_triangular_basis and claim_2_coordinate_projection_stability",
+      "external_dependencies": [],
+      "depends_on": [
+        "anti_blocking_body",
+        "blaschke_shaking",
+        "unimodular_invariance_of_paper_functionals",
+        "hermite_normal_form_adapted_basis",
+        "lemma_3_2_shaking_properties",
+        "claim_1_block_triangular_basis",
+        "claim_2_coordinate_projection_stability"
+      ],
+      "known_issues_in_paper": [
+        "Invariance of all four functionals under unimodular transformations is asserted rather than proved; it is what allows the reduction to a triangular basis.",
+        "The shaken bodies K_j are convex by the cited result of Campi, Colesanti and Gronchi, and compact; compactness is needed for the minima of the shaken body to be attained and is not discussed."
+      ]
+    },
+    {
+      "id": "claim_1_block_triangular_basis",
+      "label": "Claim 1",
+      "name": "A block-triangular basis of near-minimal gauge survives each shaking",
+      "kind": "lemma",
+      "references": {
+        "human": {
+          "statement": "Claim 1, with its unnumbered matrix display",
+          "proof": "Sec. 3, paragraph following Claim 1",
+          "pdf_page_statement": 10,
+          "pdf_page_proof": 10
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["claim:1", "eq:matrix"],
+          "statement_lines": "main.tex L489-505"
+        }
+      },
+      "background_notation": {
+        "K_j": "the body obtained from K by shaking successively in the directions e_1, ..., e_j",
+        "D_j": "a j by j diagonal block",
+        "T_{n-j}": "an (n-j) by (n-j) upper triangular block"
+      },
+      "hypotheses": ["K is in K^n.", "The matrix of the vectors realizing the minima of K is upper triangular.", "j is in {0, ..., n}."],
+      "statement_informal": "After the first j shakings there is still an independent integer basis whose gauges are bounded by the original successive minima and whose matrix has a diagonal block on the already-shaken coordinates.",
+      "statement_formal": "For j in {0, ..., n} there are linearly independent u_1, ..., u_n in Z^n with |u_i|_{cs(K_j)} <= lambda_i(K) whose matrix [u_1, ..., u_n] has the block form with a j by j diagonal block D_j and an (n-j) by (n-j) upper triangular block T_{n-j}.",
+      "proof_as_in_paper": "For j = 0 take u_i = v_i. Assuming the claim for j < n, set u_i' = u_i|e_{j+1}^perp for i not equal to j+1 and u_{j+1}' = u_{j+1}. Since K_{j+1} = sh_{e_{j+1}}(K_j), Lemma 3.2 iv) and the induction hypothesis give |u_i'|_{cs(K_{j+1})} = ||u_i|e_{j+1}^perp|_{cs(K_{j+1})} <= |u_i|_{cs(K_j)} <= lambda_i(K) for i not equal to j+1, and Lemma 3.2 iii) gives |u_{j+1}'|_{cs(K_{j+1})} = |u_{j+1}|_{cs(K_j)} <= lambda_{j+1}(K). The new matrix differs from the old only by zeros in the (j+1)-th row after the diagonal entry, so the system is still linearly independent and has the required shape.",
+      "proof_technique": "Induction on the number of shakings, projecting the basis vectors and using the two gauge properties of Lemma 3.2.",
+      "proof_completeness": "self-contained given lemma_3_2_shaking_properties",
+      "external_dependencies": [],
+      "depends_on": ["lemma_3_2_shaking_properties", "blaschke_shaking", "gauge_function"],
+      "known_issues_in_paper": [
+        "The projections u_i|e_{j+1}^perp are integer vectors because the coordinates are the standard ones; this is used silently.",
+        "Linear independence after the projection is argued from the shape of the matrix, which requires the diagonal entries to remain non-zero."
+      ]
+    },
+    {
+      "id": "claim_2_coordinate_projection_stability",
+      "label": "Claim 2",
+      "name": "The shaken body is closed under projection onto the already-shaken coordinate hyperplanes",
+      "kind": "lemma",
+      "references": {
+        "human": {
+          "statement": "Claim 2, with Fig. 2",
+          "proof": "Sec. 3, paragraph following Claim 2",
+          "pdf_page_statement": 11,
+          "pdf_page_proof": 11
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["claim:2"],
+          "statement_lines": "main.tex L506-519"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n and K_j is obtained by shaking K successively in directions e_1, ..., e_j.", "j is in {0, ..., n}.", "x is in K_j."],
+      "statement_informal": "After the first j shakings, projecting any point of the body onto any of the first j coordinate hyperplanes stays inside the body; at j = n this is exactly the anti-blocking property.",
+      "statement_formal": "For j in {0, ..., n} and x in K_j, x|e_i^perp is in K_j for all 1 <= i <= j.",
+      "proof_as_in_paper": "For j = 0 the statement is empty. Assume it for j and let x be in K_{j+1}. Lemma 3.2 i) gives x|e_{j+1}^perp in K_{j+1}. For i <= j, let x_{j+1} be the (j+1)-th entry of x and let y in K_j be the lowest point, with respect to e_{j+1}, of the fibre of K_j over x|e_{j+1}^perp. Then [y, y + x_{j+1} e_{j+1}] is contained in K_j, and by induction so is [y|e_i^perp, y|e_i^perp + x_{j+1} e_{j+1}]. Since (y|e_i^perp)|e_{j+1}^perp = (x|e_i^perp)|e_{j+1}^perp, the segment from (x|e_i^perp)|e_{j+1}^perp of length x_{j+1} in direction e_{j+1} lies in K_{j+1}, and its endpoint is x|e_i^perp.",
+      "proof_technique": "Induction on the number of shakings, using the lowest point of a fibre and the definition of the shaking.",
+      "proof_completeness": "self-contained given lemma_3_2_shaking_properties",
+      "external_dependencies": ["Campi, Colesanti and Gronchi, proof of Lemma 1.2, which the paper says this argument essentially reproduces."],
+      "depends_on": ["lemma_3_2_shaking_properties", "blaschke_shaking", "anti_blocking_body"],
+      "known_issues_in_paper": [
+        "The induction is stated for j in {0, ..., n} but the step assumes the claim 'for some j in [n]' and proves it for j+1, so the base case j = 0 and the range of the step do not line up exactly as printed.",
+        "That the segment [y|e_i^perp, y|e_i^perp + x_{j+1} e_{j+1}] lies in K_j uses the induction hypothesis applied to every point of the segment, not only to its endpoints."
+      ]
+    },
+    {
+      "id": "lemma_3_3_minima_at_standard_basis",
+      "label": "Lemma 3.3",
+      "name": "An anti-blocking body realizes its successive minima at the standard basis",
+      "kind": "lemma",
+      "references": {
+        "human": {
+          "statement": "Lemma 3.3",
+          "proof": "Sec. 3, Proof of Lemma 3.3",
+          "pdf_page_statement": 11,
+          "pdf_page_proof": 12
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["lemma:succminantiblocking"],
+          "statement_lines": "main.tex L528-539"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n and anti-blocking."],
+      "statement_informal": "For an anti-blocking body the coordinates can be permuted so that the gauge of the i-th standard basis vector is the i-th successive minimum, and then the point (2/lambda_i) e_i lies in the body.",
+      "statement_formal": "After a permutation of coordinates, |e_i|_cs(K) = lambda_i(K) for all i, and then (2/lambda_i(K)) e_i is in K for all i.",
+      "proof_as_in_paper": "Let v_1, ..., v_n be independent with |v_i|_cs(K) = lambda_i(K). There is a permutation sigma with the sigma_i-th entry of v_i non-zero, since otherwise the determinant of [v_1, ..., v_n] would vanish; take sigma to be the identity. Since K is anti-blocking, the projection w_i of v_i onto span{e_i} is in K, and repeated use of Lemma 3.2 iv) gives |w_i|_cs(K) <= |v_i|_cs(K) = lambda_i(K). Minimality of the minima and w_i in span{e_i} intersect Z^n force w_i = e_i and |e_i|_cs(K) = lambda_i(K). For the second part, |e_i|_cs(K) = lambda_i(K) gives (1/lambda_i(K)) e_i = (a - b)/2 for some a, b in K; since 1/lambda_i(K) is the largest r with r e_i in cs(K), the i-th coordinate of b must vanish, so b lies in e_i^perp, and anti-blocking gives (2/lambda_i(K)) e_i = ((2/lambda_i(K)) e_i + b)|span{e_i} = a|span{e_i} in K.",
+      "proof_technique": "A permutation argument from the non-vanishing determinant, projection onto coordinate axes, and the definition of the gauge.",
+      "proof_completeness": "gap: the stated projection membership is false and the one-line minimality argument must be replaced by a multiplicity-safe ordering argument",
+      "external_dependencies": [],
+      "depends_on": ["anti_blocking_body", "successive_minima", "gauge_function"],
+      "known_issues_in_paper": [
+        "The sentence that the coordinate-axis projection w_i of v_i is contained in K is false in general: for a sufficiently small anti-blocking box, v_i = e_i realizes a successive minimum while e_i is not in K. What is true and needed is |w_i|_cs(K) <= |v_i|_cs(K), obtained directly from closure of an anti-blocking body under coordinate projections; Lemma 3.2 iv) is stated for a shaking and is not the right justification here.",
+        "The projection is initially w_i = m_i e_i for a nonzero signed integer m_i, not necessarily e_i. Gauge monotonicity gives |e_i|_cs(K) <= lambda_i/|m_i|, but for i > 1 this does not by itself invoke the defining minimality of lambda_i. One must compare the ordered gauges of all coordinate axes with the dimension thresholds, including blocks of repeated minima, and choose signs separately."
+      ],
+      "formalization_notes": "Orient each matched lattice vector so its selected coordinate is positive, project to obtain a nonzero integer multiple of a coordinate axis, and derive an upper bound for that axis gauge. Sort the n axis gauges and use the definition of successive minima in both directions: the first i axes give lambda_i <= the i-th ordered axis gauge, while the matching bounds and a counting/order-statistics argument give the reverse inequality even across repeated-minimum blocks. Then show the positive point (2/lambda_i)e_i lies in K by the paper's extremal central-symmetral argument."
+    },
+    {
+      "id": "claim_3_translation_projection_bound",
+      "label": "Claim 3, Eqs. (4.3), (4.4), (4.5)",
+      "name": "The enumerator of a translate is bounded by projected enumerators over subsets of the support",
+      "kind": "lemma",
+      "references": {
+        "human": {
+          "statement": "Claim 3, Eq. (4.3)",
+          "proof": "Sec. 4, Proof of Theorem 1.3, the induction following Claim 3",
+          "pdf_page_statement": 14,
+          "pdf_page_proof": 15,
+          "equations": ["(4.3)", "(4.4)", "(4.5)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["claim:3", "eq:davinduction", "eq:davinduction1.5", "eq:davinduction2"],
+          "statement_lines": "main.tex L614-626",
+          "proof_lines": "main.tex L627-654"
+        }
+      },
+      "background_notation": {
+        "supp_B(x)": "the set of indices with non-zero coefficient in the expansion of x in the ordered independent set B"
+      },
+      "hypotheses": [
+        "Lambda is an n-dimensional lattice.",
+        "B = { b_1, ..., b_n } is a linearly independent subset of Lambda.",
+        "K is a convex bounded, not necessarily closed, subset of span(Lambda).",
+        "t is in span(Lambda)."
+      ],
+      "statement_informal": "Translating a convex set can add at most the projected counts over the subsets of the support of the translation vector.",
+      "statement_formal": "G_Lambda(K + t) <= sum_{I subseteq supp_B(t)} G_{Lambda|L_I^perp}(K|L_I^perp), where L_I = span{ b_i : i in I }.",
+      "proof_as_in_paper": "For t = 0 the only summand is I empty and the inequality is a tautology. For n = 1 and non-zero t, Eq. (4.3) reads Eq. (4.4), G_Lambda(K + t) <= G_Lambda(K) + 1, which holds because a convex body in R^1 is an interval. For n > 1 the proof is by induction on the size of the support. If supp_B(t) = {1}, so t = alpha_1 b_1 with alpha_1 non-zero, then G_Lambda(K + t) = sum over x in K|b_1^perp intersect Lambda|b_1^perp of G_Lambda((K + t) intersect (x + R b_1)); the summands are segments parallel to t, so Eq. (4.4) applies and gives Eq. (4.5), G_Lambda(K + t) <= sum (G_Lambda(K intersect (x + R b_1)) + 1) = G_Lambda(K) + G_{Lambda|b_1^perp}(K|b_1^perp). For a general t, pick j in supp_B(t), set t' = t - alpha_j b_j, t'' = t'|b_j^perp, B' = B minus b_j and B'' = B'|b_j^perp, so that supp_B(t') = supp_{B''}(t'') = supp_B(t) minus j. Then G_Lambda(K + t) = G_Lambda(K + t' + alpha_j b_j) <= G_Lambda(K + t') + G_{Lambda|b_j^perp}((K + t')|b_j^perp) = G_Lambda(K + t') + G_{Lambda|b_j^perp}(K|b_j^perp + t''), and applying the induction hypothesis to both terms and recombining the two families of subsets gives the sum over all I contained in supp_B(t).",
+      "proof_technique": "Induction on the size of the support of the translation vector, with the one-dimensional interval count as the base and a fibrewise decomposition along b_j.",
+      "proof_completeness": "self-contained",
+      "external_dependencies": [],
+      "depends_on": ["lattice_point_enumerator", "projection_of_lattice_is_lattice"],
+      "known_issues_in_paper": [
+        "The recombination step writes sum over I contained in supp(t) minus j of the two terms and identifies the second family with the subsets containing j; this uses (Lambda|b_j^perp)|L-tilde_I^perp = Lambda|L_{I union j}^perp, which is stated as an equality of enumerators without comment.",
+        "The base case is stated for n = 1 and then used inside the induction for arbitrary n on one-dimensional fibres; the fibres are segments in a translate of R b_1, so the reduction is legitimate but the quantifier over n moves.",
+        "K is allowed to be non-closed here, which is what lets the final application take K = int K."
+      ]
+    },
+    {
+      "id": "davenport_for_anti_blocking_bodies",
+      "label": "Sec. 4, display after the Proof of Theorem 1.1",
+      "name": "Davenport's inequality for anti-blocking bodies, by a prism decomposition",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Sec. 4, paragraph 'Since K is anti-blocking in our case, (1.10) can also be derived directly'",
+          "proof": "Same paragraph, with its two unnumbered displays",
+          "pdf_page_statement": 14,
+          "pdf_page_proof": 14
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_lines": "main.tex L606-613"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K is in K^n and anti-blocking."],
+      "statement_informal": "For an anti-blocking body Davenport's inequality follows in three lines: the lattice points thickened by a unit cube fit inside the body thickened by the same cube, and that Minkowski sum splits into disjoint prisms indexed by coordinate subsets.",
+      "statement_formal": "G(K) = vol((K intersect Z^n) + [-1,0]^n) <= vol(K + [-1,0]^n) = sum_{k=0}^n sum_{I in binom([n],k)} vol_{n-k}(K|L_I^perp), using K + [-1,0]^n = union over I subseteq [n] of { x in R^n : x|L_I^perp in K|L_I^perp and x_i in [-1,0] for all i in I }.",
+      "proof_as_in_paper": "The two displays: the first is the chain of equalities and the inequality; the second is the prism decomposition, which the paper says holds because K is anti-blocking.",
+      "proof_technique": "Thickening the lattice points by a unit cube and decomposing the Minkowski sum of an anti-blocking body with the cube into disjoint prisms.",
+      "proof_completeness": "self-contained",
+      "external_dependencies": [],
+      "depends_on": ["anti_blocking_body", "lattice_point_enumerator"],
+      "known_issues_in_paper": [
+        "The decomposition is correctly indexed by all I subseteq [n], but the following sum is printed from k = 1. The empty-set prism is K itself and contributes vol_n(K), so the intended sum must start at k = 0; excluding the empty prism would make the displayed volume equality false.",
+        "Disjointness of the prisms is asserted; it follows from the anti-blocking property but is not argued."
+      ],
+      "formalization_notes": "Prove the corrected k = 0 identity directly from the all-subsets prism decomposition. This is an internal proof of the anti-blocking specialization and does not depend on the separately quoted Davenport theorem."
+    },
+    {
+      "id": "diagonal_section_bound",
+      "label": "Sec. 5, Eq. (5.3)",
+      "name": "The section length function of the reduced planar body decreases at least linearly",
+      "kind": "derived-property",
+      "references": {
+        "human": {
+          "statement": "Sec. 5, Eq. (5.3), inside the Proof of Theorem 1.4",
+          "pdf_page_statement": 18,
+          "equations": ["(5.3)"]
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["eq:diagest"],
+          "statement_lines": "main.tex L784-791"
+        }
+      },
+      "background_notation": {"f(t)": "vol_1(K intersect l_t), the length of the horizontal section at height t"},
+      "hypotheses": [
+        "K is in K^2, anti-blocking, with |e_i|_cs(K) = lambda_i and contained in the half plane x_1 + x_2 <= 2/lambda_1."
+      ],
+      "statement_informal": "For the reduced planar body, the length of the horizontal section at height t drops at least as fast as t.",
+      "statement_formal": "f(t) <= f(0) - t = 2/lambda_1 - t for all t in [0, 2/lambda_2].",
+      "proof_as_in_paper": "Immediate from the inclusion of K in the half plane x_1 + x_2 <= 2/lambda_1, together with f(0) = 2/lambda_1.",
+      "proof_technique": "The diagonal constraint produced by the planar reduction.",
+      "proof_completeness": "self-contained given lemma_5_1_properties_of_the_planar_reduction",
+      "external_dependencies": [],
+      "depends_on": ["lemma_5_1_properties_of_the_planar_reduction", "anti_blocking_body", "support_function"],
+      "known_issues_in_paper": [
+        "f(0) = 2/lambda_1 uses that the reduced body meets the horizontal axis in a segment of exactly that length, which comes from Lemma 3.3 and the diagonal containment."
+      ]
+    },
+    {
+      "id": "lemma_5_1_properties_of_the_planar_reduction",
+      "label": "Lemma 5.1",
+      "name": "Eight properties of the planar reduction under the diagonal",
+      "kind": "lemma",
+      "references": {
+        "human": {
+          "statement": "Lemma 5.1, items i) to viii)",
+          "proof": "Sec. 5, Proof of Lemma 5.1",
+          "pdf_page_statement": 17,
+          "pdf_page_proof": 21
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["lemma:A"],
+          "statement_lines": "main.tex L740-756",
+          "proof_lines": "main.tex L872-916"
+        }
+      },
+      "background_notation": {
+        "T": "the composite shaking sh_{e_2} after sh_{-e_1, D} after sh_{-e_2, D}",
+        "D": "a lattice diagonal { x : x_1 + x_2 = m } with m an integer"
+      },
+      "hypotheses": [
+        "K is in K^2, anti-blocking, with |e_i|_cs(K) = lambda_i(K).",
+        "A = T(K)."
+      ],
+      "statement_informal": "Shaking the planar body first up against a lattice diagonal, then sideways against it, then back down, produces a body that is convex, anti-blocking, of the same volume, with no fewer lattice points, no more interior lattice points, a first minimum that has not increased, an unchanged second minimum, and which lies under the diagonal determined by its own first minimum.",
+      "statement_formal": "A is i) convex, ii) anti-blocking, iii) of volume vol(K), iv) with G(A) >= G(K), v) with G(int A) <= G(int K), vi) with lambda_1(A) <= lambda_1(K), vii) with lambda_2(A) = lambda_2(K), and viii) contained in { x in R^2 : x_1 + x_2 <= 2/lambda_1(A) }.",
+      "proof_as_in_paper": "i) The general shaking preserves convexity, proved through Lemma 5.3 as in shaking_preserves_convexity. ii), vi) and vii): with B = [0, 2/lambda_1(K)] x [0, 2/lambda_2(K)], one has K contained in B and by Lemma 5.3 A contained in T(B); the vertical segments of T(B) have length at most 2/lambda_2(K), while the triangle Delta = conv{0, (2/lambda_1(K)) e_1, (2/lambda_2(K)) e_2} is contained in K and satisfies T(Delta) = Delta because lambda_1(K) <= lambda_2(K), so the segment over the origin in A has length exactly 2/lambda_2(K); since A intersect e_2^perp = A|e_2^perp by construction, one gets A intersect e_1^perp = A|e_1^perp as well, so A is anti-blocking with |e_2|_cs(A) = lambda_2(K) and |e_1|_cs(A) <= |e_1|_cs(Delta) = lambda_1. iii) follows from Fubini applied in the directions span{u} and u^perp, since for any shaking sh_{u,l}(K)|u^perp = K|u^perp and the fibre lengths are unchanged. iv) and v) are proved as Lemma 3.2 v) and vi), because pi_{-e_i, D}(Z^2) = Z^2 intersect D, so every shaken lattice segment has a lattice point on D as an endpoint. viii) Let p be the lowest point of the diagonal lying in sh_{-e_1,D}(sh_{-e_2,D}(K)); then that body is contained in conv{ m e_2, p|e_1^perp, p } where m is the integer with m e_2 in D, and applying sh_{e_2} to both sides gives A contained in conv{0, (2/lambda_1(A)) e_1, (2/lambda_1(A)) e_2}, which lies in the stated half plane.",
+      "proof_technique": "Monotonicity of the shaking under inclusion, a box and a triangle as comparison bodies, Fubini in the shaking direction, and the lattice-diagonal version of the one-dimensional counting argument.",
+      "proof_completeness": "self-contained given lemma_5_3_shaking_is_monotone and lemma_3_2_shaking_properties",
+      "external_dependencies": [],
+      "depends_on": [
+        "general_blaschke_shaking",
+        "lemma_5_3_shaking_is_monotone",
+        "lemma_3_2_shaking_properties",
+        "lemma_3_3_minima_at_standard_basis",
+        "anti_blocking_body"
+      ],
+      "known_issues_in_paper": [
+        "The value m of the lattice diagonal is said to be arbitrary because lattice translations do not change the parameters involved; the choice is fixed only implicitly.",
+        "In the proof of ii), vi) and vii), after establishing K subseteq B and hence T(K) subseteq T(B), the paper says the vertical segments of sh_{-e_1,D}(sh_{-e_2,D}(B)) are no longer than those of sh_{-e_2,D}(K). That comparison has the wrong body: monotonicity from K subseteq B points in the opposite direction. The box estimate only needs comparison with the vertical fibres of sh_{-e_2,D}(B), all of length 2/lambda_2(K).",
+        "In the proof of viii) the final containment is written with 2/lambda_1(A) on both axes, while the intermediate triangle is stated with 2/lambda_1(K) on the first axis and 2/lambda_2(K) on the second; the passage between the two uses vi) and vii).",
+        "Item iii) invokes Fubini for the oblique shaking, where the product decomposition is along span{u} and a line l not orthogonal to u; the paper removed the justifying sentence to a comment in the source."
+      ]
+    },
+    {
+      "id": "lemma_5_2_concave_integral_bounds",
+      "label": "Lemma 5.2",
+      "name": "Trapezoid and tangent bounds for the integral of a concave function",
+      "kind": "lemma",
+      "references": {
+        "human": {
+          "statement": "Lemma 5.2",
+          "proof": "Sec. 5, Proof of Lemma 5.2",
+          "pdf_page_statement": 18,
+          "pdf_page_proof": 18
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["lemma:concavefunc"],
+          "statement_lines": "main.tex L757-770",
+          "proof_lines": "main.tex L771-783"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["f is concave on [a, b].", "For the second inequality, f is differentiable at a."],
+      "statement_informal": "The integral of a concave function is at least the trapezoid through its endpoints and at most the integral of its tangent at the left endpoint.",
+      "statement_formal": "(1/2)(f(a) + f(b))(b - a) <= integral_a^b f(t) dt, and if f'(a) exists, integral_a^b f(t) dt <= (b - a)(f(a) + (b - a) f'(a)/2).",
+      "proof_as_in_paper": "For the first, let g be the affine function agreeing with f at a and b; concavity gives f >= g and integrating g gives the trapezoid. For the second, let h be the tangent at a; concavity gives h >= f and integrating h gives the stated bound.",
+      "proof_technique": "Comparison with the chord and with the tangent.",
+      "proof_completeness": "self-contained",
+      "external_dependencies": [],
+      "depends_on": [],
+      "known_issues_in_paper": [
+        "The proof labels both parts 'For the upper bound'; the first paragraph proves the lower bound on the integral.",
+        "The second inequality is written with an intermediate step that is an equality for the tangent, so the displayed chain contains a redundant inequality sign."
+      ]
+    },
+    {
+      "id": "lemma_5_3_shaking_is_monotone",
+      "label": "Lemma 5.3",
+      "name": "The general planar shaking is monotone under inclusion",
+      "kind": "lemma",
+      "references": {
+        "human": {
+          "statement": "Lemma 5.3",
+          "proof": "Sec. 5, Proof of Lemma 5.3",
+          "pdf_page_statement": 21,
+          "pdf_page_proof": 21
+        },
+        "machine": {
+          "source_files": ["main.tex"],
+          "statement_labels": ["lemma:inclusion"],
+          "statement_lines": "main.tex L860-870"
+        }
+      },
+      "background_notation": {},
+      "hypotheses": ["K and L are in K^2 with K contained in L.", "l is a line in R^2.", "u is a non-zero vector not parallel to l."],
+      "statement_informal": "Shaking preserves inclusion.",
+      "statement_formal": "sh_{u,l}(K) is contained in sh_{u,l}(L).",
+      "proof_as_in_paper": "Let x be in sh_{u,l}(K). Then x is in pi(K), which is contained in pi(L), and vol_1(K intersect (x + Ru)) <= vol_1(L intersect (x + Ru)); since x lies in the segment from pi(x) of the first length, it lies in the segment of the second, which is contained in sh_{u,l}(L).",
+      "proof_technique": "Comparing fibre lengths and the segments they generate.",
+      "proof_completeness": "self-contained",
+      "external_dependencies": ["Campi, Colesanti and Gronchi, Lemma 1.1 (iii), where the paper says this is widely known for classical shakings."],
+      "depends_on": ["general_blaschke_shaking"],
+      "known_issues_in_paper": [
+        "The hypothesis is written as u in R^n minus {0} inside a planar statement; the intended space is R^2."
+      ]
+    }
+  ]
+}
