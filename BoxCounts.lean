@@ -10,9 +10,9 @@ Catalog items: `integer_box_equality_for_bhw_lattice_conjecture` and
 
 For nonnegative integer half-side lengths `m i`, the integral points in the closed
 coordinate box are the functions whose `i`-th coordinate lies in `[-m i, m i]`.  This
-file proves their product count directly.  The later geometric bridge identifies this
-finite set with the lattice points of the corresponding real box and computes its
-successive minima.
+file proves their product count directly.  `CoordinateLattice.lean` identifies the finite sets
+with lattice points of the corresponding real boxes; their successive minima are a separate
+remaining obligation.
 -/
 
 open scoped BigOperators
