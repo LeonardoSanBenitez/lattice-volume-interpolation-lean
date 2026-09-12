@@ -600,7 +600,14 @@
       "external_dependencies": [],
       "depends_on": ["successive_minima", "lattice_point_enumerator"],
       "known_issues_in_paper": [],
-      "formalization_notes": "Prove this together with the integer-vertex symmetric lower equality case: the same minima computation feeds the closed count prod_i(2m_i+1) and interior count prod_i(2m_i-1)."
+      "formalization_notes": "Prove this together with the integer-vertex symmetric lower equality case: the same minima computation feeds the closed count prod_i(2m_i+1) and interior count prod_i(2m_i-1).",
+      "lean": {
+        "status": "planned",
+        "files": ["BoxCounts.lean"],
+        "declarations": ["LatticeVolumeInterpolation.card_integerBox"],
+        "added_hypotheses": [],
+        "route_note": "This begins the paper's coordinatewise proof with the exact integral count; the geometric identification and successive-minimum calculation remain in the same item."
+      }
     },
     {
       "id": "malikiosis_bound",
@@ -1126,7 +1133,14 @@
       "known_issues_in_paper": [
         "The paper says 'boxes parallel to the coordinate axes with integral side lengths'. This is false literally: already in dimension one K = [-1/2,1/2] has integral side length 1 and lambda_1(K) = 2, so the product side is vol(K)(1-lambda_1(K)/2) = 0 while G(int K) = 1. Equality holds for the displayed family with integral vertices, equivalently even integral side lengths. The cited Betke-Henk-Wills paper says that open axis-parallel boxes motivate Conjecture 2.2 but does not state the target paper's broader integral-side-length wording."
       ],
-      "formalization_notes": "Preserve the literal source defect in documentation and prove the exact intended integer-vertex family B = product_i [-m_i,m_i]. Do not add a parity hypothesis to the paper's printed sentence and pretend it was the original statement."
+      "formalization_notes": "Preserve the literal source defect in documentation and prove the exact intended integer-vertex family B = product_i [-m_i,m_i]. Do not add a parity hypothesis to the paper's printed sentence and pretend it was the original statement.",
+      "lean": {
+        "status": "planned",
+        "files": ["BoxCounts.lean"],
+        "declarations": ["LatticeVolumeInterpolation.card_integerBox", "LatticeVolumeInterpolation.card_integerInteriorBox"],
+        "added_hypotheses": [],
+        "route_note": "The shared closed-box count is formalized first; the intended integer-vertex family and its interior count are the remaining steps."
+      }
     },
     {
       "id": "theorem_1_4_upper_bound",
