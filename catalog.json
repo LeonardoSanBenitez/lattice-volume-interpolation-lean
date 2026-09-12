@@ -135,8 +135,8 @@
       "formalization_notes": "Bridge cs(K) to the half difference body already used by the preceding discrete-Minkowski formalization. Prove cs(U K) = U(cs(K)) for the unimodular-invariance lemma.",
       "lean": {
         "status": "stated",
-        "files": ["SuccessiveMinimaBridge.lean"],
-        "declarations": ["LatticeVolumeInterpolation.centralSymmetral_eq_halfDifferenceBody"],
+        "files": ["SuccessiveMinimaBridge.lean", "CoordinateLattice.lean"],
+        "declarations": ["LatticeVolumeInterpolation.centralSymmetral_eq_halfDifferenceBody", "LatticeVolumeInterpolation.halfDifferenceBody_realCoordinateBox"],
         "added_hypotheses": [],
         "route_note": "This is the paper's defining equality in the same half-difference-body notation used throughout the development."
       }
@@ -178,10 +178,10 @@
       ],
       "lean": {
         "status": "stated",
-        "files": ["SuccessiveMinimaBridge.lean"],
-        "declarations": ["LatticeVolumeInterpolation.paper_successiveMinimum_of_originSymmetric"],
+        "files": ["SuccessiveMinimaBridge.lean", "CoordinateLattice.lean"],
+        "declarations": ["LatticeVolumeInterpolation.paper_successiveMinimum_of_originSymmetric", "LatticeVolumeInterpolation.paper_successiveMinimum_realCoordinateBox"],
         "added_hypotheses": [],
-        "route_note": "The source's symmetric-body formula is restated in its dilation notation; the formal definition uses the corresponding infimum until its attainment is proved."
+        "route_note": "The source's symmetric-body formula is restated in its dilation notation and instantiated for the coordinate-box equality family; the formal definition uses the corresponding infimum until its attainment is proved."
       }
     },
     {

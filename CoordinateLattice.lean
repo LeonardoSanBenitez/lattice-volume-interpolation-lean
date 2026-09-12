@@ -14,7 +14,7 @@ real coordinate box.  It deliberately proves only the counting component of the 
 claims: the successive-minima calculation remains a separate obligation.
 -/
 
-open scoped BigOperators
+open scoped BigOperators Pointwise
 
 namespace LatticeVolumeInterpolation
 
@@ -111,6 +111,48 @@ theorem coordinateLatticePoints_coe_eq_latticePoints (m : Fin n → ℕ) :
       DiscreteMinkowski.latticePoints (realCoordinateBox m) (standardIntegerLattice n) := by
   rw [DiscreteMinkowski.latticePoints_apply]
   exact coordinateLatticePoints_coe m
+
+/-- The closed coordinate box is convex. -/
+theorem realCoordinateBox_convex (m : Fin n → ℕ) :
+    Convex ℝ (realCoordinateBox m) := by
+  exact convex_Icc _ _
+
+/-- The closed coordinate box is origin-symmetric. -/
+theorem realCoordinateBox_originSymmetric (m : Fin n → ℕ) :
+    DiscreteMinkowski.IsOriginSymmetric (realCoordinateBox m) := by
+  change -realCoordinateBox m = realCoordinateBox m
+  ext x
+  rw [Set.mem_neg]
+  change ((fun i => -(m i : ℝ)) ≤ -x ∧ -x ≤ fun i => (m i : ℝ)) ↔
+    ((fun i => -(m i : ℝ)) ≤ x ∧ x ≤ fun i => (m i : ℝ))
+  constructor
+  · intro hx
+    constructor
+    · intro i
+      simpa using neg_le_neg (hx.2 i)
+    · intro i
+      simpa using neg_le_neg (hx.1 i)
+  · intro hx
+    constructor
+    · intro i
+      simpa using neg_le_neg (hx.2 i)
+    · intro i
+      simpa using neg_le_neg (hx.1 i)
+
+/-- The central symmetral of the closed coordinate box is the box itself. -/
+theorem halfDifferenceBody_realCoordinateBox (m : Fin n → ℕ) :
+    DiscreteMinkowski.halfDifferenceBody (realCoordinateBox m) = realCoordinateBox m :=
+  DiscreteMinkowski.halfDifferenceBody_eq_self (realCoordinateBox_convex m)
+    (realCoordinateBox_originSymmetric m)
+
+/-- The paper's successive-minimum formula specialized to the closed coordinate box. -/
+theorem paper_successiveMinimum_realCoordinateBox (m : Fin n → ℕ) (i : ℕ) :
+    DiscreteMinkowski.successiveMinimum (realCoordinateBox m) (standardIntegerLattice n) i =
+      sInf {r : ℝ | 0 < r ∧ i ≤ Module.finrank ℝ
+        (Submodule.span ℝ ((r • realCoordinateBox m) ∩
+          (standardIntegerLattice n : Set (Fin n → ℝ))))} :=
+  paper_successiveMinimum_of_originSymmetric (realCoordinateBox_convex m)
+    (realCoordinateBox_originSymmetric m) (standardIntegerLattice n) i
 
 /-- The real open coordinate box with integral half-side lengths `m`. -/
 noncomputable def realInteriorCoordinateBox (m : Fin n → ℕ) : Set (Fin n → ℝ) :=
