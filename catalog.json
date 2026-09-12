@@ -97,7 +97,14 @@
       "known_issues_in_paper": [
         "At x = 0, every r > 0 is admissible, so min { r > 0 : 0 in rK } does not exist; the gauge is 0 as an infimum. For x nonzero, compactness and the fact that an origin-symmetric full-dimensional convex body contains 0 in its interior give a positive attained minimum."
       ],
-      "formalization_notes": "Use Mathlib's gauge/Minkowski functional or an infimum-based definition with |0|_K = 0, then prove the attained-minimum characterization only for x nonzero."
+      "formalization_notes": "Use Mathlib's gauge/Minkowski functional or an infimum-based definition with |0|_K = 0, then prove the attained-minimum characterization only for x nonzero.",
+      "lean": {
+        "status": "stated",
+        "files": ["SuccessiveMinimaBridge.lean"],
+        "declarations": ["LatticeVolumeInterpolation.gauge_zero_correction", "LatticeVolumeInterpolation.latticePoint_mem_dilate_of_gauge_lt", "LatticeVolumeInterpolation.gauge_le_of_latticePoint_mem_dilate"],
+        "added_hypotheses": [],
+        "route_note": "The two gauge--dilation implications make the paper's use of the gauge explicit; the zero-vector endpoint is recorded separately."
+      }
     },
     {
       "id": "central_symmetral",
@@ -125,7 +132,14 @@
       "external_dependencies": [],
       "depends_on": ["convex_body_class"],
       "known_issues_in_paper": [],
-      "formalization_notes": "Bridge cs(K) to the half difference body already used by the preceding discrete-Minkowski formalization. Prove cs(U K) = U(cs(K)) for the unimodular-invariance lemma."
+      "formalization_notes": "Bridge cs(K) to the half difference body already used by the preceding discrete-Minkowski formalization. Prove cs(U K) = U(cs(K)) for the unimodular-invariance lemma.",
+      "lean": {
+        "status": "stated",
+        "files": ["SuccessiveMinimaBridge.lean"],
+        "declarations": ["LatticeVolumeInterpolation.centralSymmetral_eq_halfDifferenceBody"],
+        "added_hypotheses": [],
+        "route_note": "This is the paper's defining equality in the same half-difference-body notation used throughout the development."
+      }
     },
     {
       "id": "successive_minima",
@@ -161,7 +175,14 @@
       "depends_on": ["convex_body_class"],
       "known_issues_in_paper": [
         "Eq. (1.1) writes min rather than inf; attainment holds because the set of admissible dilation factors is closed under the compactness of K, but the paper does not say so."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": ["SuccessiveMinimaBridge.lean"],
+        "declarations": ["LatticeVolumeInterpolation.paper_successiveMinimum_of_originSymmetric"],
+        "added_hypotheses": [],
+        "route_note": "The source's symmetric-body formula is restated in its dilation notation; the formal definition uses the corresponding infimum until its attainment is proved."
+      }
     },
     {
       "id": "successive_minima_via_gauge",
