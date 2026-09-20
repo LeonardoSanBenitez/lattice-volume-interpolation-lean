@@ -602,11 +602,11 @@
       "known_issues_in_paper": [],
       "formalization_notes": "Prove this together with the integer-vertex symmetric lower equality case: the same minima computation feeds the closed count prod_i(2m_i+1) and interior count prod_i(2m_i-1).",
       "lean": {
-        "status": "planned",
-        "files": ["BoxCounts.lean", "CoordinateLattice.lean", "CoordinateMinima.lean"],
-        "declarations": ["LatticeVolumeInterpolation.card_integerBox", "LatticeVolumeInterpolation.card_coordinateLatticePoints", "LatticeVolumeInterpolation.coordinateLatticePoints_coe_eq_latticePoints", "LatticeVolumeInterpolation.coordinateUnitVector_mem_reciprocal_smul_realCoordinateBox", "LatticeVolumeInterpolation.lattice_coordinate_eq_zero_of_mem_smul_realCoordinateBox", "LatticeVolumeInterpolation.successiveMinimum_le_reciprocal_of_antitone", "LatticeVolumeInterpolation.finrank_scaledLatticeSpan_le_of_lt_reciprocal", "LatticeVolumeInterpolation.successiveMinimum_realCoordinateBox_eq_reciprocal_of_antitone"],
+        "status": "stated",
+        "files": ["BoxCounts.lean", "CoordinateLattice.lean", "CoordinateMinima.lean", "BoxEquality.lean"],
+        "declarations": ["LatticeVolumeInterpolation.card_integerBox", "LatticeVolumeInterpolation.card_coordinateLatticePoints", "LatticeVolumeInterpolation.coordinateLatticePoints_coe_eq_latticePoints", "LatticeVolumeInterpolation.coordinateUnitVector_mem_reciprocal_smul_realCoordinateBox", "LatticeVolumeInterpolation.lattice_coordinate_eq_zero_of_mem_smul_realCoordinateBox", "LatticeVolumeInterpolation.successiveMinimum_le_reciprocal_of_antitone", "LatticeVolumeInterpolation.finrank_scaledLatticeSpan_le_of_lt_reciprocal", "LatticeVolumeInterpolation.successiveMinimum_realCoordinateBox_eq_reciprocal_of_antitone", "LatticeVolumeInterpolation.floor_two_div_reciprocal_nat_add_one", "LatticeVolumeInterpolation.integerBox_attains_bhw_lattice_conjecture"],
         "added_hypotheses": [],
-        "route_note": "The exact closed-box count, its identification with `DiscreteMinkowski.latticePoints`, and the ordered-box formula lambda_(i+1) = 1/m_i are proved. The floor-product calculation required for the full paper equality remains in this item."
+        "route_note": "The exact closed-box count, its identification with `DiscreteMinkowski.latticePoints`, the ordered-box formula lambda_(i+1) = 1/m_i, and the conjectured floor-product equality are proved in the paper's coordinate-box notation."
       }
     },
     {
@@ -1135,11 +1135,11 @@
       ],
       "formalization_notes": "Preserve the literal source defect in documentation and prove the exact intended integer-vertex family B = product_i [-m_i,m_i]. Do not add a parity hypothesis to the paper's printed sentence and pretend it was the original statement.",
       "lean": {
-        "status": "planned",
-        "files": ["BoxCounts.lean", "CoordinateLattice.lean", "CoordinateMinima.lean"],
-        "declarations": ["LatticeVolumeInterpolation.card_integerBox", "LatticeVolumeInterpolation.card_integerInteriorBox", "LatticeVolumeInterpolation.card_coordinateInteriorLatticePoints", "LatticeVolumeInterpolation.coordinateInteriorLatticePoints_coe_eq_latticePoints", "LatticeVolumeInterpolation.coordinateUnitVector_mem_reciprocal_smul_realCoordinateBox", "LatticeVolumeInterpolation.lattice_coordinate_eq_zero_of_mem_smul_realCoordinateBox", "LatticeVolumeInterpolation.successiveMinimum_le_reciprocal_of_antitone", "LatticeVolumeInterpolation.finrank_scaledLatticeSpan_le_of_lt_reciprocal", "LatticeVolumeInterpolation.successiveMinimum_realCoordinateBox_eq_reciprocal_of_antitone"],
+        "status": "stated",
+        "files": ["BoxCounts.lean", "CoordinateLattice.lean", "CoordinateMinima.lean", "BoxEquality.lean"],
+        "declarations": ["LatticeVolumeInterpolation.card_integerBox", "LatticeVolumeInterpolation.card_integerInteriorBox", "LatticeVolumeInterpolation.card_coordinateInteriorLatticePoints", "LatticeVolumeInterpolation.coordinateInteriorLatticePoints_coe_eq_latticePoints", "LatticeVolumeInterpolation.coordinateUnitVector_mem_reciprocal_smul_realCoordinateBox", "LatticeVolumeInterpolation.lattice_coordinate_eq_zero_of_mem_smul_realCoordinateBox", "LatticeVolumeInterpolation.successiveMinimum_le_reciprocal_of_antitone", "LatticeVolumeInterpolation.finrank_scaledLatticeSpan_le_of_lt_reciprocal", "LatticeVolumeInterpolation.successiveMinimum_realCoordinateBox_eq_reciprocal_of_antitone", "LatticeVolumeInterpolation.volume_realCoordinateBox_toReal", "LatticeVolumeInterpolation.two_mul_one_sub_reciprocal_div_two", "LatticeVolumeInterpolation.symmetricIntegerBox_attains_lower_conjectured_bound"],
         "added_hypotheses": [],
-        "route_note": "For the intended integer-vertex family, the exact open-box count, its identification with `DiscreteMinkowski.latticePoints`, and the ordered-box formula lambda_(i+1) = 1/m_i are proved. The volume-product calculation required for the full equality remains."
+        "route_note": "For the intended integer-vertex family, the exact open-box count, its identification with `DiscreteMinkowski.latticePoints`, the ordered-box formula lambda_(i+1) = 1/m_i, the Euclidean box volume, and the full symmetric lower equality are proved. The literal integral-side-length wording remains false as documented above."
       }
     },
     {
