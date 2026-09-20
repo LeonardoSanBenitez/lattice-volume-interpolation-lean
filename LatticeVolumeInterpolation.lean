@@ -8,5 +8,6 @@ import SimplexCounts
 import SimplexLattice
 import SimplexInteriorCounts
 import SimplexInteriorLattice
+import SimplexMinima
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
