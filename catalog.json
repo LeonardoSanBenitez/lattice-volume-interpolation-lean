@@ -603,10 +603,10 @@
       "formalization_notes": "Prove this together with the integer-vertex symmetric lower equality case: the same minima computation feeds the closed count prod_i(2m_i+1) and interior count prod_i(2m_i-1).",
       "lean": {
         "status": "planned",
-        "files": ["BoxCounts.lean", "CoordinateLattice.lean"],
-        "declarations": ["LatticeVolumeInterpolation.card_integerBox", "LatticeVolumeInterpolation.card_coordinateLatticePoints", "LatticeVolumeInterpolation.coordinateLatticePoints_coe_eq_latticePoints"],
+        "files": ["BoxCounts.lean", "CoordinateLattice.lean", "CoordinateMinima.lean"],
+        "declarations": ["LatticeVolumeInterpolation.card_integerBox", "LatticeVolumeInterpolation.card_coordinateLatticePoints", "LatticeVolumeInterpolation.coordinateLatticePoints_coe_eq_latticePoints", "LatticeVolumeInterpolation.coordinateUnitVector_mem_reciprocal_smul_realCoordinateBox", "LatticeVolumeInterpolation.lattice_coordinate_eq_zero_of_mem_smul_realCoordinateBox", "LatticeVolumeInterpolation.successiveMinimum_le_reciprocal_of_antitone", "LatticeVolumeInterpolation.finrank_scaledLatticeSpan_le_of_lt_reciprocal", "LatticeVolumeInterpolation.successiveMinimum_realCoordinateBox_eq_reciprocal_of_antitone"],
         "added_hypotheses": [],
-        "route_note": "The exact closed-box count and its identification with `DiscreteMinkowski.latticePoints` are proved. The successive-minimum and floor-product calculations required for the full paper equality remain in this item."
+        "route_note": "The exact closed-box count, its identification with `DiscreteMinkowski.latticePoints`, and the ordered-box formula lambda_(i+1) = 1/m_i are proved. The floor-product calculation required for the full paper equality remains in this item."
       }
     },
     {
@@ -1136,10 +1136,10 @@
       "formalization_notes": "Preserve the literal source defect in documentation and prove the exact intended integer-vertex family B = product_i [-m_i,m_i]. Do not add a parity hypothesis to the paper's printed sentence and pretend it was the original statement.",
       "lean": {
         "status": "planned",
-        "files": ["BoxCounts.lean", "CoordinateLattice.lean"],
-        "declarations": ["LatticeVolumeInterpolation.card_integerBox", "LatticeVolumeInterpolation.card_integerInteriorBox", "LatticeVolumeInterpolation.card_coordinateInteriorLatticePoints", "LatticeVolumeInterpolation.coordinateInteriorLatticePoints_coe_eq_latticePoints"],
+        "files": ["BoxCounts.lean", "CoordinateLattice.lean", "CoordinateMinima.lean"],
+        "declarations": ["LatticeVolumeInterpolation.card_integerBox", "LatticeVolumeInterpolation.card_integerInteriorBox", "LatticeVolumeInterpolation.card_coordinateInteriorLatticePoints", "LatticeVolumeInterpolation.coordinateInteriorLatticePoints_coe_eq_latticePoints", "LatticeVolumeInterpolation.coordinateUnitVector_mem_reciprocal_smul_realCoordinateBox", "LatticeVolumeInterpolation.lattice_coordinate_eq_zero_of_mem_smul_realCoordinateBox", "LatticeVolumeInterpolation.successiveMinimum_le_reciprocal_of_antitone", "LatticeVolumeInterpolation.finrank_scaledLatticeSpan_le_of_lt_reciprocal", "LatticeVolumeInterpolation.successiveMinimum_realCoordinateBox_eq_reciprocal_of_antitone"],
         "added_hypotheses": [],
-        "route_note": "For the intended integer-vertex family, the exact open-box count and its identification with `DiscreteMinkowski.latticePoints` are proved. The successive-minimum and volume-product calculations required for the full equality remain."
+        "route_note": "For the intended integer-vertex family, the exact open-box count, its identification with `DiscreteMinkowski.latticePoints`, and the ordered-box formula lambda_(i+1) = 1/m_i are proved. The volume-product calculation required for the full equality remains."
       }
     },
     {
