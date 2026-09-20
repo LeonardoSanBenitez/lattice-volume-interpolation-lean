@@ -5,5 +5,6 @@ import CoordinateLattice
 import CoordinateMinima
 import BoxEquality
 import SimplexCounts
+import SimplexLattice
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
