@@ -16,5 +16,7 @@ import BetaIntegral
 import JoinVolume
 import AntiBlocking
 import Davenport
+import WeightedSimplex
+import AntiBlockingUpperBound
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/

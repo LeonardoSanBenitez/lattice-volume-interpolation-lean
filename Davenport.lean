@@ -118,7 +118,7 @@ theorem mem_coordPrism_of_mem_vadd_cube {K : Set (Fin n → ℝ)} (hK : IsAntiBl
     linarith [hzi i, (hci i).1]
   · change z i + c i ≤ 0
     exact (hiI i).le
-  · show (coordSplit I).symm (0, (coordSplit I (z +ᵥ c)).2) ∈ K
+  · change (coordSplit I).symm (0, (coordSplit I (z +ᵥ c)).2) ∈ K
     refine hK.2 z hz _ (fun i => ?_) (fun i => ?_)
     · rw [coordSplit_symm_apply']
       split_ifs with h
@@ -130,7 +130,7 @@ theorem mem_coordPrism_of_mem_vadd_cube {K : Set (Fin n → ℝ)} (hK : IsAntiBl
       · exact hzi i
       · simp only [vadd_eq_add, coordSplit, MeasurableEquiv.piEquivPiSubtypeProd,
           Equiv.piEquivPiSubtypeProd]
-        show z i + c i ≤ z i
+        change z i + c i ≤ z i
         linarith [(hci i).2]
 
 /-- **Davenport's inequality for anti-blocking bodies**, with the `I = ∅` term. -/
