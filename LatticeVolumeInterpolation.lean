@@ -12,5 +12,7 @@ import SimplexMinima
 import SimplexVolume
 import SimplexEquality
 import ConcaveIntegralBounds
+import BetaIntegral
+import JoinVolume
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
