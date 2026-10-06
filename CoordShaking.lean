@@ -312,6 +312,124 @@ theorem gauge_coordShaking_smul_single_le {K : Set (Fin n → ℝ)} (hK : IsComp
   rw [h1, h2]
   exact mul_le_mul_of_nonneg_left (gauge_coordShaking_single_le hK hKb j) (abs_nonneg c)
 
+/-- A non-empty fibre of a compact convex set is the interval between its extremes. -/
+theorem fibre_eq_Icc {K : Set (Fin n → ℝ)} (hK : IsCompact K) (hKc : Convex ℝ K) {j : Fin n}
+    {y : Fin n → ℝ} (hne : (fibre K j y).Nonempty) :
+    fibre K j y = Icc (sInf (fibre K j y)) (sSup (fibre K j y)) := by
+  have hc := isCompact_fibre hK j y
+  refine Subset.antisymm (fun t ht => ⟨csInf_le hc.bddBelow ht, le_csSup hc.bddAbove ht⟩) ?_
+  have hord := (convex_iff_ordConnected.1 (convex_fibre hKc j y))
+  exact hord.out (hc.sInf_mem hne) (hc.sSup_mem hne)
+
+open Classical in
+/-- The fibre of the shaking: `[0, l(y)]` over a non-empty fibre of `K`, empty otherwise. -/
+theorem fibre_coordShaking (K : Set (Fin n → ℝ)) (j : Fin n) (y : Fin n → ℝ) :
+    fibre (coordShaking K j) j y =
+      if (fibre K j y).Nonempty then Icc 0 (fibreLength K j y) else ∅ := by
+  ext t
+  change Function.update y j t ∈ coordShaking K j ↔ _
+  simp only [coordShaking, mem_setOf_eq, fibre_update, fibreLength_update,
+    Function.update_self]
+  split_ifs with h
+  · simp [h]
+  · simp [h]
+
+open Classical in
+/-- The measure of a fibre of a compact convex set is its length, or `0` when it is empty. -/
+theorem volume_fibre {K : Set (Fin n → ℝ)} (hK : IsCompact K) (hKc : Convex ℝ K) (j : Fin n)
+    (y : Fin n → ℝ) :
+    MeasureTheory.volume (fibre K j y) =
+      if (fibre K j y).Nonempty then ENNReal.ofReal (fibreLength K j y) else 0 := by
+  split_ifs with h
+  · rw [fibre_eq_Icc hK hKc h, Real.volume_Icc]
+    rfl
+  · rw [not_nonempty_iff_eq_empty.1 h, MeasureTheory.measure_empty]
+
+/-- **Lemma 3.2 ii)** for `u = e_j`: shaking preserves volume. Both bodies have, over every
+point of the hyperplane, a fibre of the same length, so Fubini gives the same volume. -/
+theorem volume_coordShaking {K : Set (Fin n → ℝ)} (hK : IsCompact K) (hKc : Convex ℝ K)
+    (j : Fin n) : MeasureTheory.volume (coordShaking K j) = MeasureTheory.volume K := by
+  obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by have := j.2; omega⟩
+  set e := MeasurableEquiv.piFinSuccAbove (fun _ : Fin (m + 1) => ℝ) j with he
+  have hpres : MeasureTheory.MeasurePreserving e MeasureTheory.volume
+      (MeasureTheory.volume.prod MeasureTheory.volume) :=
+    MeasureTheory.measurePreserving_piFinSuccAbove
+      (fun _ : Fin (m + 1) => (MeasureTheory.volume : MeasureTheory.Measure ℝ)) j
+  have hsymm : ∀ (t : ℝ) (y : Fin m → ℝ), e.symm (t, y) = Fin.insertNth j t y := fun _ _ => rfl
+  have hvol : ∀ S : Set (Fin (m + 1) → ℝ), MeasurableSet S →
+      MeasureTheory.volume S =
+        ∫⁻ y, MeasureTheory.volume (fibre S j (Fin.insertNth j 0 y)) := by
+    intro S hS
+    have hS' : MeasurableSet (e.symm ⁻¹' S) := hS.preimage e.symm.measurable
+    have hpre : e ⁻¹' (e.symm ⁻¹' S) = S := by
+      ext x; simp
+    conv_lhs => rw [← hpre]
+    rw [hpres.measure_preimage hS'.nullMeasurableSet,
+      MeasureTheory.Measure.prod_apply_symm hS']
+    refine MeasureTheory.lintegral_congr fun y => ?_
+    congr 1
+    ext t
+    simp only [mem_preimage, mem_setOf_eq, fibre, hsymm, Fin.update_insertNth]
+  rw [hvol _ (isCompact_coordShaking hK j).isClosed.measurableSet,
+    hvol _ hK.isClosed.measurableSet]
+  refine MeasureTheory.lintegral_congr fun y => ?_
+  classical
+  rw [fibre_coordShaking, volume_fibre hK hKc]
+  split_ifs with h
+  · rw [Real.volume_Icc, sub_zero]
+  · exact MeasureTheory.measure_empty
+
+/-- **Lemma 3.2 v)** for `u = e_j`: `G(K) ≤ G(sh_{e_j}(K))`. Each lattice point is moved down
+its line by the integer `⌈inf F⌉`, which lands it in the shaken fibre `[0, l]`; the move is
+injective because it does not change the line. -/
+theorem ncard_latticePoints_le_coordShaking {K : Set (Fin n → ℝ)} (hK : IsCompact K)
+    (j : Fin n) :
+    (DiscreteMinkowski.latticePoints K (standardIntegerLattice n)).ncard ≤
+      (DiscreteMinkowski.latticePoints (coordShaking K j) (standardIntegerLattice n)).ncard := by
+  set Φ : (Fin n → ℝ) → (Fin n → ℝ) := fun z =>
+    Function.update z j (z j - ⌈sInf (fibre K j z)⌉) with hΦ
+  have hfin : (DiscreteMinkowski.latticePoints (coordShaking K j)
+      (standardIntegerLattice n)).Finite :=
+    DiscreteMinkowski.finite_inter_lattice (isCompact_coordShaking hK j).isBounded _
+  refine Set.ncard_le_ncard_of_injOn Φ ?_ ?_ hfin
+  · rintro z ⟨hzK, hzΛ⟩
+    obtain ⟨w, hw⟩ := (mem_standardIntegerLattice_iff n z).1 hzΛ
+    have hc := isCompact_fibre hK j z
+    have hzf : z j ∈ fibre K j z := self_mem_fibre j hzK
+    have hinf : sInf (fibre K j z) ≤ z j := csInf_le hc.bddBelow hzf
+    have hsup : z j ≤ sSup (fibre K j z) := le_csSup hc.bddAbove hzf
+    have hceil : (⌈sInf (fibre K j z)⌉ : ℝ) ≤ z j := by
+      rw [hw j]; exact_mod_cast Int.ceil_le.2 (by rw [← hw j]; exact hinf)
+    refine ⟨⟨?_, ?_, ?_⟩, ?_⟩
+    · rw [hΦ, fibre_update]; exact ⟨_, hzf⟩
+    · simp only [hΦ, Function.update_self]; linarith
+    · simp only [hΦ, Function.update_self, fibreLength_update]
+      unfold fibreLength
+      linarith [Int.le_ceil (sInf (fibre K j z))]
+    · refine (mem_standardIntegerLattice_iff n _).2
+        ⟨Function.update w j (w j - ⌈sInf (fibre K j z)⌉), fun i => ?_⟩
+      by_cases h : i = j
+      · subst h; simp [hΦ, hw i]
+      · simp [hΦ, Function.update_of_ne h, hw i]
+  · intro z₁ _ z₂ _ hz
+    have hoff : ∀ i, i ≠ j → z₁ i = z₂ i := by
+      intro i hi
+      have := congrFun hz i
+      simpa [hΦ, Function.update_of_ne hi] using this
+    have hf : fibre K j z₁ = fibre K j z₂ := by
+      have : Function.update z₁ j 0 = Function.update z₂ j 0 := by
+        funext i
+        by_cases h : i = j
+        · subst h; simp
+        · simp [Function.update_of_ne h, hoff i h]
+      rw [← fibre_update K j z₁ 0, this, fibre_update]
+    have hj := congrFun hz j
+    simp only [hΦ, Function.update_self, hf] at hj
+    funext i
+    by_cases h : i = j
+    · subst h; linarith
+    · exact hoff i h
+
 end
 
 end LatticeVolumeInterpolation
