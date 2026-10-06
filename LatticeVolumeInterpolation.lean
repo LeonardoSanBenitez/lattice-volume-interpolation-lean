@@ -26,5 +26,6 @@ import ClaimOne
 import Triangularize
 import Unimodular
 import TheoremThreeOne
+import UpperBound
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
