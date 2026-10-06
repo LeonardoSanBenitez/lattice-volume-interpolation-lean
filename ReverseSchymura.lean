@@ -1,6 +1,8 @@
 import PropOneSix
 import Mathlib.Topology.Algebra.Order.Archimedean
 import Mathlib.Data.Set.Card.Arithmetic
+import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 
 /-!
 # Theorem 1.3 and Claim 3: a reverse of Schymura's inequality
@@ -505,6 +507,62 @@ theorem theorem_1_3 {K : Set (Fin n → ℝ)} (hKc : IsCompact K)
   rw [ENat.toENNReal_coe] at this
   refine this.trans (le_of_eq ?_)
   exact map_sum ENat.toENNRealRingHom _ _
+
+section Bridge
+
+/-- **Counting through any linear map with kernel `L` is counting classes mod `L`.** -/
+theorem encard_image_inter_eq_classCount {E F : Type*} [AddCommGroup E] [Module ℝ E]
+    [AddCommGroup F] [Module ℝ F] (P : E →ₗ[ℝ] F) (L : Submodule ℝ E)
+    (hP : LinearMap.ker P = L) (Λ : AddSubgroup E) (S : Set E) :
+    (P '' S ∩ P '' (Λ : Set E)).encard = classCount L Λ S := by
+  set φ := L.liftQ P (le_of_eq hP.symm)
+  have hφinj : Function.Injective φ :=
+    LinearMap.ker_eq_bot.1 (L.ker_liftQ_eq_bot P _ (le_of_eq hP))
+  have himg : ∀ T : Set E, P '' T = φ '' (L.mkQ '' T) := by
+    intro T; rw [Set.image_image]; rfl
+  rw [himg, himg, ← Set.image_inter hφinj, hφinj.injOn.encard_image]
+  rfl
+
+/-- The orthogonal projection of `ℝ^n` onto `L^⊥`, for the standard Euclidean structure. -/
+def projMap (L : Submodule ℝ (Fin n → ℝ)) :
+    (Fin n → ℝ) →ₗ[ℝ] (L.map (EuclideanSpace.equiv (Fin n) ℝ).symm.toLinearEquiv.toLinearMap)ᗮ :=
+  (L.map (EuclideanSpace.equiv (Fin n) ℝ).symm.toLinearEquiv.toLinearMap)ᗮ.orthogonalProjectionOnto.toLinearMap
+    ∘ₗ (EuclideanSpace.equiv (Fin n) ℝ).symm.toLinearEquiv.toLinearMap
+
+/-- The paper's projected count `G_{ℤ^n | L^⊥}(S | L^⊥)`: the number of points of the orthogonal
+projection of `S` onto `L^⊥` that lie in the orthogonal projection of `ℤ^n`. -/
+def projCount (L : Submodule ℝ (Fin n → ℝ)) (S : Set (Fin n → ℝ)) : ℕ∞ :=
+  (projMap L '' S ∩ projMap L '' (standardIntegerLattice n : Set (Fin n → ℝ))).encard
+
+theorem ker_projMap (L : Submodule ℝ (Fin n → ℝ)) : LinearMap.ker (projMap L) = L := by
+  ext x
+  simp only [LinearMap.mem_ker, projMap, LinearMap.coe_comp, Function.comp_apply,
+    ContinuousLinearMap.coe_coe, Submodule.orthogonalProjectionOnto_eq_zero_iff,
+    Submodule.orthogonal_orthogonal]
+  rw [Submodule.mem_map_equiv]
+  exact Iff.rfl
+
+/-- **Notation bridge**: the paper's projected count is the class count mod `L`. -/
+theorem projCount_eq_classCount (L : Submodule ℝ (Fin n → ℝ)) (S : Set (Fin n → ℝ)) :
+    projCount L S = classCount L (standardIntegerLattice n).toAddSubgroup S := by
+  have hco : ((standardIntegerLattice n).toAddSubgroup : Set (Fin n → ℝ)) =
+      (standardIntegerLattice n : Set (Fin n → ℝ)) := rfl
+  have h := encard_image_inter_eq_classCount (projMap L) L (ker_projMap L)
+    (standardIntegerLattice n).toAddSubgroup S
+  rw [hco] at h
+  rw [projCount, h]
+
+/-- **Theorem 1.3, Eq. (1.12), in the paper's notation**:
+`vol(K) ≤ ∑_{I ⊆ [n]} G_{ℤ^n | L_I^⊥}(int K | L_I^⊥)`. -/
+theorem theorem_1_3_paper {K : Set (Fin n → ℝ)} (hKc : IsCompact K)
+    (hKb : DiscreteMinkowski.IsPaperConvexBody K) (b : Fin n → (Fin n → ℝ))
+    (hb : LinearIndependent ℝ b) :
+    volume K ≤ ∑ I : Finset (Fin n),
+      ((projCount (Submodule.span ℝ (b '' ↑I)) (interior K) : ℕ∞) : ℝ≥0∞) := by
+  simp_rw [projCount_eq_classCount]
+  exact theorem_1_3 hKc hKb b hb
+
+end Bridge
 
 end
 
