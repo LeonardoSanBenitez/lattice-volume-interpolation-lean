@@ -37,5 +37,6 @@ import ReverseSchymura
 import TheoremOneThreeTight
 import ProjectedLattice
 import MinkowskiLower
+import PlanarSections
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
