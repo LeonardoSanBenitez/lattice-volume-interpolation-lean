@@ -33,5 +33,6 @@ import PropOneSix
 import CoveringTile
 import Tiles
 import ShakingInterior
+import ReverseSchymura
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
