@@ -163,6 +163,138 @@ theorem volume_ge_of_unit_segments :
           mul_le_mul_left hIH _
       _ ≤ volume C := hjoin
 
+variable {n : ℕ}
+
+/-- Independent integer vectors have determinant at least `1` in absolute value. -/
+theorem one_le_abs_det_of_lattice {v : Fin n → (Fin n → ℝ)} (hv : LinearIndependent ℝ v)
+    (hvΛ : ∀ i, v i ∈ standardIntegerLattice n) : 1 ≤ |(Matrix.of v).det| := by
+  choose z hz using fun i => (mem_standardIntegerLattice_iff n (v i)).1 (hvΛ i)
+  have hV : Matrix.of v = (Matrix.of z).map (Int.castRingHom ℝ) := by
+    ext i j; simp [hz i j]
+  have hunit : IsUnit (Matrix.of v) := Matrix.linearIndependent_rows_iff_isUnit.1 hv
+  have hdet0 : (Matrix.of v).det ≠ 0 := (Matrix.isUnit_iff_isUnit_det _).1 hunit |>.ne_zero
+  have hdz : (Matrix.of v).det = ((Matrix.of z).det : ℝ) := by
+    rw [hV]
+    have := (RingHom.map_det (Int.castRingHom ℝ) (Matrix.of z)).symm
+    simpa using this
+  rw [hdz] at hdet0 ⊢
+  have hz0 : (Matrix.of z).det ≠ 0 := fun h => hdet0 (by rw [h, Int.cast_zero])
+  rw [← Int.cast_abs]
+  exact_mod_cast Int.one_le_abs hz0
+
+/-- **Minkowski's second theorem, lower bound** (Eq. (1.2)):
+`vol(K) ≥ (1/n!) ∏_{i=1}^n 2/λ_i(K)`. -/
+theorem minkowski_second_theorem_lower {K : Set (Fin n → ℝ)} (hKcpt : IsCompact K)
+    (hKb : DiscreteMinkowski.IsPaperConvexBody K) :
+    ENNReal.ofReal ((1 / (n.factorial : ℝ)) * ∏ i : Fin n,
+        2 / DiscreteMinkowski.successiveMinimum K (standardIntegerLattice n) (i.1 + 1)) ≤
+      volume K := by
+  classical
+  have hdim : finrank ℝ (Fin n → ℝ) = n := Module.finrank_fin_fun ℝ
+  have hKne : K.Nonempty := hKb.2.2.mono interior_subset
+  rcases Nat.eq_zero_or_pos n with rfl | hn
+  · simpa using volume_ge_of_unit_segments 0 K hKcpt hKb.2.1 hKne (fun i => i.elim0)
+  set lam : Fin n → ℝ := fun i =>
+    DiscreteMinkowski.successiveMinimum K (standardIntegerLattice n) (i.1 + 1) with hlam
+  have hpos : ∀ i, 0 < lam i := fun i =>
+    DiscreteMinkowski.successiveMinimum_pos hKb (by omega) (by rw [hdim]; exact i.2)
+  set v : Fin n → (Fin n → ℝ) := fun k =>
+    DiscreteMinkowski.flagVector K (standardIntegerLattice n) k.1 with hv
+  have hvΛ : ∀ k, v k ∈ standardIntegerLattice n := fun k =>
+    DiscreteMinkowski.flagVector_mem k.1
+      (DiscreteMinkowski.greedyChoice_flagSpan hKb (by rw [hdim]; exact k.2))
+  have hvind : LinearIndependent ℝ v := linearIndependent_flagVector hKb
+  -- the segments realizing the minima
+  have hDc : IsCompact (DiscreteMinkowski.halfDifferenceBody K) := by
+    rw [DiscreteMinkowski.halfDifferenceBody_apply]
+    have hsub : K - K = (fun p : (Fin n → ℝ) × (Fin n → ℝ) => p.1 - p.2) '' (K ×ˢ K) := by
+      rw [Set.image_prod]; rfl
+    rw [hsub]
+    exact ((hKcpt.prod hKcpt).image (by fun_prop)).smul _
+  have hab : ∀ k, ∃ a ∈ K, ∃ b ∈ K, v k = lam k • ((2 : ℝ)⁻¹ • (a - b)) := by
+    intro k
+    have hg := gauge_flagVector_le_successiveMinimum (Λ := standardIntegerLattice n) hKb
+      (by rw [hdim]; exact k.2)
+    have hcl : v k ∈ closure (lam k • DiscreteMinkowski.halfDifferenceBody K) :=
+      (DiscreteMinkowski.mem_closure_smul_iff_gauge_le hKb (hpos k) (v k)).2 hg
+    rw [(hDc.smul (lam k)).isClosed.closure_eq] at hcl
+    obtain ⟨d, hd, hdv⟩ := mem_smul_set.1 hcl
+    rw [DiscreteMinkowski.halfDifferenceBody_apply] at hd
+    obtain ⟨w, ⟨a, ha, b, hb, rfl⟩, rfl⟩ := mem_smul_set.1 hd
+    exact ⟨a, ha, b, hb, hdv.symm⟩
+  choose a ha b hb hvab using hab
+  set d : Fin n → (Fin n → ℝ) := fun k => a k - b k with hd
+  have hdv : ∀ k, d k = (2 / lam k) • v k := by
+    intro k
+    rw [hvab k, smul_smul, smul_smul, hd]
+    have := (hpos k).ne'
+    field_simp
+    simp
+  have hdind : LinearIndependent ℝ d := by
+    have := hvind.units_smul (fun k => Units.mk0 (2 / lam k) (div_ne_zero two_ne_zero
+      (hpos k).ne'))
+    convert this using 1
+    funext k; rw [hdv k]; rfl
+  -- map the segments to the unit axis segments
+  haveI : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
+  set Bd := basisOfLinearIndependentOfCardEqFinrank hdind (by rw [Fintype.card_fin, hdim])
+  have hBd : ∀ k, Bd k = d k := fun k => by simp [Bd]
+  set φ := Bd.equivFun
+  have hφd : ∀ k, φ (d k) = Pi.single k 1 := by
+    intro k; rw [← hBd, Basis.equivFun_apply, Basis.repr_self, Finsupp.single_eq_pi_single]
+  set C := φ '' K
+  have hC := volume_ge_of_unit_segments n C (hKcpt.image φ.toContinuousLinearEquiv.continuous)
+    (hKb.2.1.linear_image φ.toLinearMap) (hKne.image _) (fun i => ⟨φ (b i), fun t ht => ?seg⟩)
+  case seg =>
+    refine ⟨b i + t • d i, hKb.2.1 (ha i) (hb i) ht.1 (show (0 : ℝ) ≤ 1 - t by
+      linarith [ht.2]) (by ring) |> fun h => ?_, ?_⟩
+    · convert h using 1; simp only [hd]; module
+    · rw [map_add, map_smul, hφd]
+  -- volumes
+  have hvolC : volume C = ENNReal.ofReal |LinearMap.det (φ : (Fin n → ℝ) →ₗ[ℝ] _)| * volume K :=
+    Measure.addHaar_image_linearMap volume _ K
+  -- `|det φ| ⋅ |det d| = 1` and `|det d| = ∏ (2/λ) |det v|`
+  set Md := Matrix.of d
+  have hdetsymm : LinearMap.det (φ.symm : (Fin n → ℝ) →ₗ[ℝ] _) = Md.det := by
+    rw [← LinearMap.det_toMatrix' (φ.symm : (Fin n → ℝ) →ₗ[ℝ] _), ← Matrix.det_transpose]
+    congr 1
+    ext i j
+    simp only [Matrix.transpose_apply, LinearMap.toMatrix'_apply, LinearEquiv.coe_coe]
+    rw [show (Pi.single i 1 : Fin n → ℝ) = φ (d i) from (hφd i).symm,
+      LinearEquiv.symm_apply_apply]
+    rfl
+  have hprod := LinearEquiv.det_mul_det_symm φ
+  rw [hdetsymm] at hprod
+  have hMd : Md = Matrix.diagonal (fun k => 2 / lam k) * Matrix.of v := by
+    ext i j
+    simp [Md, hdv i, Matrix.diagonal_mul]
+  have hdetMd : Md.det = (∏ k, 2 / lam k) * (Matrix.of v).det := by
+    rw [hMd, Matrix.det_mul, Matrix.det_diagonal]
+  have hv1 := one_le_abs_det_of_lattice hvind hvΛ
+  have hP : 0 < ∏ k, 2 / lam k := Finset.prod_pos fun k _ => div_pos two_pos (hpos k)
+  have habsd : ∏ k, 2 / lam k ≤ |Md.det| := by
+    rw [hdetMd, abs_mul, abs_of_pos hP]
+    exact le_mul_of_one_le_right hP.le hv1
+  have hdetφ : |LinearMap.det (φ : (Fin n → ℝ) →ₗ[ℝ] _)| = |Md.det|⁻¹ := by
+    have h := congrArg abs hprod
+    rw [abs_mul, abs_one] at h
+    exact eq_inv_of_mul_eq_one_left h
+  -- combine
+  rw [hvolC, hdetφ] at hC
+  have hdetpos : 0 < |Md.det| := hP.trans_le habsd
+  have hKtop : volume K ≠ ⊤ := hKcpt.measure_lt_top.ne
+  have hreal := ENNReal.toReal_mono (ENNReal.mul_ne_top ENNReal.ofReal_ne_top hKtop) hC
+  rw [ENNReal.toReal_mul, ENNReal.toReal_ofReal (by positivity),
+    ENNReal.toReal_ofReal (by positivity)] at hreal
+  rw [← ENNReal.ofReal_toReal hKtop]
+  refine ENNReal.ofReal_le_ofReal ?_
+  have hK0 : 0 ≤ (volume K).toReal := ENNReal.toReal_nonneg
+  calc 1 / (n.factorial : ℝ) * ∏ k, 2 / lam k ≤ 1 / (n.factorial : ℝ) * |Md.det| :=
+        mul_le_mul_of_nonneg_left habsd (by positivity)
+    _ ≤ |Md.det|⁻¹ * (volume K).toReal * |Md.det| :=
+        mul_le_mul_of_nonneg_right hreal hdetpos.le
+    _ = (volume K).toReal := by field_simp
+
 end
 
 end LatticeVolumeInterpolation
