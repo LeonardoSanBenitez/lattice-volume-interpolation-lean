@@ -56,7 +56,7 @@ theorem ker_restrictOff (I : Finset (Fin n)) :
       Submodule.smul_mem _ _ (Submodule.subset_span ⟨i, hi, rfl⟩)
   · rw [Submodule.span_le]
     rintro _ ⟨i, hi, rfl⟩
-    show restrictOff I _ = 0
+    change restrictOff I _ = 0
     funext j
     have : (j : Fin n) ≠ i := fun h => j.2 (h ▸ hi)
     simp [restrictOff, Pi.single_eq_of_ne this]
