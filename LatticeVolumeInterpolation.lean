@@ -22,5 +22,6 @@ import MinimaAntiBlocking
 import TheoremOneOne
 import CoordShaking
 import ShakingIterate
+import ClaimOne
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
