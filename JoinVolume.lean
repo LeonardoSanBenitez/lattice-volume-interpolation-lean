@@ -83,6 +83,7 @@ theorem integral_joinWeight {k : ℕ} (hk : 1 ≤ k) {s₀ : ℝ} (hs₀ : s₀ 
   have hk0 : (k : ℝ) ≠ 0 := by exact_mod_cast (by omega : k ≠ 0)
   field_simp
 
+omit [MeasurableSpace V] [BorelSpace V] [FiniteDimensional ℝ V] in
 /-- **The fibre estimate.** For each `v`, the fibre of `C` over `v` has measure at least
 `μ(A) ∫_0^1 1[v ∈ sB] k (1 - s)^(k-1) ds`. -/
 theorem fibre_lower_bound (μ : Measure U) [μ.IsAddHaarMeasure] {k : ℕ}
