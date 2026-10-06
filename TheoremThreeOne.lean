@@ -1,5 +1,6 @@
 import ClaimOne
 import Unimodular
+import ShakingInterior
 
 /-!
 # Theorem 3.1: the anti-blocking companion of a convex body
@@ -12,8 +13,8 @@ anti-blocking convex body `A ⊆ ℝ^n_{≥0}` with
 3. `G(int K) ≥ G(int A)` and
 4. `λ_i(K) ≥ λ_i(A)` for all `i ∈ [n]`.
 
-`theorem_3_1` proves conclusions 1, 2 and 4, which are the ones Theorem 1.1's upper bound uses;
-conclusion 3 needs Lemma 3.2 vi) and is a separate obligation.
+`theorem_3_1` proves all four conclusions; conclusion 3 uses Lemma 3.2 vi)
+(`ShakingInterior.lean`).
 
 The proof is the paper's. Take independent lattice vectors `v_i` with `|v_i|_{cs(K)} = λ_i(K)`:
 the minimal flag of the dependency, whose vectors attain the minima
@@ -74,13 +75,41 @@ theorem linearIndependent_flagVector {K : Set (Fin n → ℝ)}
     (S := Set.range fun k : Fin n => DiscreteMinkowski.flagVector K (standardIntegerLattice n) k.1)
     n fun m hm => ⟨⟨m, hm⟩, rfl⟩
 
-/-- **Theorem 3.1, conclusions 1, 2 and 4.** -/
+/-- Lemma 3.2 vi) along the successive shakings: `G(int K_k) ≤ G(int K)`. -/
+theorem ncard_latticePoints_interior_shakeUpTo_le {K : Set (Fin n → ℝ)} (hKc : IsCompact K)
+    (hKb : DiscreteMinkowski.IsPaperConvexBody K) :
+    ∀ k, (DiscreteMinkowski.latticePoints (interior (shakeUpTo K k))
+      (standardIntegerLattice n)).ncard ≤
+      (DiscreteMinkowski.latticePoints (interior K) (standardIntegerLattice n)).ncard
+  | 0 => le_rfl
+  | k + 1 => by
+    by_cases h : k < n
+    · rw [shakeUpTo_succ_of_lt K h]
+      have hb := isPaperConvexBody_shakeUpTo hKc hKb k
+      exact (ncard_latticePoints_interior_coordShaking_le (isCompact_shakeUpTo hKc k) hb.2.1
+        hb.2.2 _).trans (ncard_latticePoints_interior_shakeUpTo_le hKc hKb k)
+    · rw [shakeUpTo_succ_of_le K (not_lt.1 h)]
+      exact ncard_latticePoints_interior_shakeUpTo_le hKc hKb k
+
+/-- A linear automorphism carries interiors along. -/
+theorem interior_image_linearEquiv (V : (Fin n → ℝ) ≃ₗ[ℝ] (Fin n → ℝ)) (K : Set (Fin n → ℝ)) :
+    interior (V '' K) = V '' interior K := by
+  set W := LinearEquiv.toContinuousLinearEquiv V
+  have h := W.toHomeomorph.image_interior K
+  have hW : ∀ S : Set (Fin n → ℝ), (W.toHomeomorph : (Fin n → ℝ) → (Fin n → ℝ)) '' S = V '' S :=
+    fun S => rfl
+  rw [hW, hW] at h
+  exact h.symm
+
+/-- **Theorem 3.1.** -/
 theorem theorem_3_1 {K : Set (Fin n → ℝ)} (hKc : IsCompact K)
     (hKb : DiscreteMinkowski.IsPaperConvexBody K) :
     ∃ A : Set (Fin n → ℝ), IsCompact A ∧ DiscreteMinkowski.IsPaperConvexBody A ∧
       IsAntiBlocking A ∧ volume A = volume K ∧
       (DiscreteMinkowski.latticePoints K (standardIntegerLattice n)).ncard ≤
         (DiscreteMinkowski.latticePoints A (standardIntegerLattice n)).ncard ∧
+      (DiscreteMinkowski.latticePoints (interior A) (standardIntegerLattice n)).ncard ≤
+        (DiscreteMinkowski.latticePoints (interior K) (standardIntegerLattice n)).ncard ∧
       ∀ i : Fin n,
         DiscreteMinkowski.successiveMinimum A (standardIntegerLattice n) (i.1 + 1) ≤
           DiscreteMinkowski.successiveMinimum K (standardIntegerLattice n) (i.1 + 1) := by
@@ -129,10 +158,12 @@ theorem theorem_3_1 {K : Set (Fin n → ℝ)} (hKc : IsCompact K)
       gauge_image_apply]
     exact hvg k
   refine ⟨shakeUpTo K' n, isCompact_shakeUpTo hK'c n, isPaperConvexBody_shakeUpTo hK'c hK'b n,
-    isAntiBlocking_shakeUpTo hK'c hK'b.2.1, ?_, ?_, ?_⟩
+    isAntiBlocking_shakeUpTo hK'c hK'b.2.1, ?_, ?_, ?_, ?_⟩
   · rw [volume_shakeUpTo hK'c hK'b.2.1, hK', volume_image_of_det V hdet]
   · rw [← ncard_latticePoints_image V hΛ K]
     exact ncard_latticePoints_le_shakeUpTo hK'c n
+  · rw [← ncard_latticePoints_image V hΛ (interior K), ← interior_image_linearEquiv V K]
+    exact ncard_latticePoints_interior_shakeUpTo_le hK'c hK'b n
   · intro i
     rw [← successiveMinimum_image V hΛ K]
     exact successiveMinimum_shakeUpTo_le hK'c hK'b u huΛ htri hdiag hug i

@@ -32,5 +32,6 @@ import CoveringRadius
 import PropOneSix
 import CoveringTile
 import Tiles
+import ShakingInterior
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/

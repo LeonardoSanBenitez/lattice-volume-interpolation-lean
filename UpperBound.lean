@@ -33,7 +33,7 @@ theorem theorem_1_1_upper {K : Set (Fin n → ℝ)} (hKc : IsCompact K)
     ((DiscreteMinkowski.latticePoints K (standardIntegerLattice n)).ncard : ℝ≥0∞) ≤
       volume K * ENNReal.ofReal (∏ i : Fin n, (1 + (n : ℝ) *
         DiscreteMinkowski.successiveMinimum K (standardIntegerLattice n) (i.1 + 1) / 2)) := by
-  obtain ⟨A, hAc, hAb, hAab, hvol, hcount, hmin⟩ := theorem_3_1 hKc hKb
+  obtain ⟨A, hAc, hAb, hAab, hvol, hcount, -, hmin⟩ := theorem_3_1 hKc hKb
   have hA := theorem_1_1_upper_antiBlocking hAc hAb hAab
   rw [hvol] at hA
   have hprod : ∏ i : Fin n, (1 + (n : ℝ) *
