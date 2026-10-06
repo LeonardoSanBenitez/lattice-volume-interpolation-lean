@@ -24,5 +24,6 @@ import CoordShaking
 import ShakingIterate
 import ClaimOne
 import Triangularize
+import Unimodular
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
