@@ -25,5 +25,6 @@ import ShakingIterate
 import ClaimOne
 import Triangularize
 import Unimodular
+import TheoremThreeOne
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/

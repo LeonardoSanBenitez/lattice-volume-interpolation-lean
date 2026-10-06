@@ -93,7 +93,8 @@ variable (V : (Fin n → ℝ) ≃ₗ[ℝ] (Fin n → ℝ))
 
 /-- A real map that is integral on integer points in both directions maps `ℤ^n` onto itself. -/
 theorem mem_lattice_iff_of_realize {U : (Fin n → ℤ) ≃ₗ[ℤ] (Fin n → ℤ)}
-    (hV : ∀ z, V (castCoords z) = castCoords (U z)) (hVs : ∀ z, V.symm (castCoords z) = castCoords (U.symm z))
+    (hV : ∀ z, V (castCoords z) = castCoords (U z))
+    (hVs : ∀ z, V.symm (castCoords z) = castCoords (U.symm z))
     (x : Fin n → ℝ) : V x ∈ standardIntegerLattice n ↔ x ∈ standardIntegerLattice n := by
   simp only [mem_standardIntegerLattice_iff_castCoords]
   constructor
@@ -125,7 +126,8 @@ theorem ncard_latticePoints_image (K : Set (Fin n → ℝ)) :
 
 omit hΛ in
 theorem halfDifferenceBody_image (K : Set (Fin n → ℝ)) :
-    DiscreteMinkowski.halfDifferenceBody (V '' K) = V '' DiscreteMinkowski.halfDifferenceBody K := by
+    DiscreteMinkowski.halfDifferenceBody (V '' K) =
+      V '' DiscreteMinkowski.halfDifferenceBody K := by
   simp only [DiscreteMinkowski.halfDifferenceBody_apply]
   rw [image_smul_set]
   congr 1
