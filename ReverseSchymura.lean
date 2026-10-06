@@ -174,6 +174,70 @@ theorem encard_shift_coset_le {J : Set ℝ} (hJ : Convex ℝ J) (H : AddSubgroup
       _ ≤ 1 + (J ∩ P).encard := add_le_add h2 h1
       _ = (J ∩ P).encard + 1 := add_comm _ _
 
+section Quotient
+
+variable {E : Type*} [AddCommGroup E] [Module ℝ E]
+
+/-- The number of classes mod `M` that contain a point of `K` and a point of `Λ`: the count
+`G_{Λ|M^⊥}(K|M^⊥)` of the paper, written with the quotient by `M`. -/
+def classCount (M : Submodule ℝ E) (Λ : AddSubgroup E) (K : Set E) : ℕ∞ :=
+  (M.mkQ '' K ∩ M.mkQ '' (Λ : Set E)).encard
+
+/-- On a line `c₀ + ℝ v` of `E / M`, a translate of a convex set adds at most one class. -/
+theorem encard_line_shift_le {Q : Type*} [AddCommGroup Q] [Module ℝ Q] {C : Set Q}
+    (hC : Convex ℝ C) (L : AddSubgroup Q) (c₀ v : Q) (hv : v ≠ 0) (α : ℝ) :
+    ((fun s : ℝ => c₀ + s • v) '' {s | c₀ + s • v ∈ α • {v} + C ∧ c₀ + s • v ∈ L}).encard ≤
+      ((fun s : ℝ => c₀ + s • v) '' {s | c₀ + s • v ∈ C ∧ c₀ + s • v ∈ L}).encard + 1 := by
+  have hinj : Function.Injective fun s : ℝ => c₀ + s • v := by
+    intro s t h
+    simpa using smul_left_injective ℝ hv (add_left_cancel h)
+  rw [hinj.injOn.encard_image, hinj.injOn.encard_image]
+  set J := {s : ℝ | c₀ + s • v ∈ C}
+  have hJ : Convex ℝ J := by
+    intro s hs t ht a b ha hb hab
+    have := hC hs ht ha hb hab
+    simp only [J, mem_setOf_eq] at this ⊢
+    convert this using 1
+    rw [smul_add, smul_add, smul_smul, smul_smul, ← add_add_add_comm, ← add_smul, hab, one_smul,
+      ← add_smul]
+    simp [smul_eq_mul]
+  rcases ({s : ℝ | c₀ + s • v ∈ L}).eq_empty_or_nonempty with hemp | ⟨s₁, hs₁⟩
+  · have h0 : ∀ s : ℝ, c₀ + s • v ∉ L := fun s hs => (Set.eq_empty_iff_forall_notMem.1 hemp) s hs
+    simp [h0]
+  set H : AddSubgroup ℝ := L.comap (LinearMap.toSpanSingleton ℝ Q v).toAddMonoidHom
+  have hcoset : ∀ s : ℝ, c₀ + s • v ∈ L ↔ s - s₁ ∈ H := by
+    intro s
+    simp only [H, AddSubgroup.mem_comap, LinearMap.toAddMonoidHom_coe,
+      LinearMap.toSpanSingleton_apply]
+    constructor
+    · intro hs
+      have := L.sub_mem hs hs₁
+      convert this using 1; rw [sub_smul]; abel
+    · intro hs
+      have := L.add_mem hs₁ hs
+      convert this using 1; rw [sub_smul]; abel
+  have hshift : ∀ s : ℝ, c₀ + s • v ∈ α • ({v} : Set Q) + C ↔ s - α ∈ J := by
+    intro s
+    simp only [J, mem_setOf_eq, Set.smul_set_singleton, Set.singleton_add]
+    constructor
+    · rintro ⟨w, hw, hws⟩
+      have hws' : α • v + w = c₀ + s • v := hws
+      have hweq : w = c₀ + s • v - α • v := by rw [← hws']; abel
+      have : c₀ + (s - α) • v = w := by rw [hweq, sub_smul]; abel
+      rw [this]; exact hw
+    · intro h
+      exact ⟨_, h, by rw [sub_smul]; abel_nf⟩
+  have h := encard_shift_coset_le hJ H s₁ α
+  have e1 : {s : ℝ | c₀ + s • v ∈ α • ({v} : Set Q) + C ∧ c₀ + s • v ∈ L} =
+      {x | x - α ∈ J} ∩ {x | x - s₁ ∈ H} := by
+    ext s; simp only [mem_setOf_eq, mem_inter_iff, hcoset, hshift]
+  have e2 : {s : ℝ | c₀ + s • v ∈ C ∧ c₀ + s • v ∈ L} = J ∩ {x | x - s₁ ∈ H} := by
+    ext s; simp only [mem_setOf_eq, mem_inter_iff, hcoset, J]
+  rw [e1, e2]
+  exact h
+
+end Quotient
+
 end
 
 end LatticeVolumeInterpolation
