@@ -35,5 +35,6 @@ import Tiles
 import ShakingInterior
 import ReverseSchymura
 import TheoremOneThreeTight
+import ProjectedLattice
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
