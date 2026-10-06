@@ -238,6 +238,135 @@ theorem encard_line_shift_le {Q : Type*} [AddCommGroup Q] [Module ℝ Q] {C : Se
 
 end Quotient
 
+section Step
+
+variable {E : Type*} [AddCommGroup E] [Module ℝ E]
+
+/-- Two classes mod `M` lie over the same class mod `M ⊔ ℝ b` exactly when they differ by a
+multiple of the class of `b`. -/
+theorem factor_eq_iff (M : Submodule ℝ E) (b : E) (c c₀ : E ⧸ M) :
+    Submodule.factor (le_sup_left : M ≤ M ⊔ Submodule.span ℝ {b}) c =
+        Submodule.factor (le_sup_left : M ≤ M ⊔ Submodule.span ℝ {b}) c₀ ↔
+      ∃ s : ℝ, c = c₀ + s • M.mkQ b := by
+  obtain ⟨x, rfl⟩ := M.mkQ_surjective c
+  obtain ⟨x₀, rfl⟩ := M.mkQ_surjective c₀
+  rw [Submodule.factor_mk, Submodule.factor_mk]
+  simp only [Submodule.mkQ_apply]
+  rw [Submodule.Quotient.eq]
+  constructor
+  · intro h
+    obtain ⟨m, hm, w, hw, hmw⟩ := Submodule.mem_sup.1 h
+    obtain ⟨s, rfl⟩ := Submodule.mem_span_singleton.1 hw
+    refine ⟨s, ?_⟩
+    rw [← Submodule.Quotient.mk_smul, ← Submodule.Quotient.mk_add, Submodule.Quotient.eq]
+    have : x - (x₀ + s • b) = m := by
+      rw [show x - (x₀ + s • b) = (x - x₀) - s • b by abel, ← hmw]; abel
+    rw [this]; exact hm
+  · rintro ⟨s, hs⟩
+    rw [← Submodule.Quotient.mk_smul, ← Submodule.Quotient.mk_add, Submodule.Quotient.eq] at hs
+    have : x - x₀ = (x - (x₀ + s • b)) + s • b := by abel
+    rw [this]
+    exact Submodule.add_mem_sup hs (Submodule.mem_span_singleton.2 ⟨s, rfl⟩)
+
+/-- **The one-direction step of Claim 3**, the paper's (4.4):
+`G(K + α b) ≤ G(K) + G(K | b^⊥)`, relative to an already quotiented subspace `M`. -/
+theorem classCount_translate_le (M : Submodule ℝ E) (Λ : AddSubgroup E) {K : Set E}
+    (hK : Convex ℝ K) (b : E) (α : ℝ) :
+    classCount M Λ ((fun x => x + α • b) '' K) ≤
+      classCount M Λ K + classCount (M ⊔ Submodule.span ℝ {b}) Λ K := by
+  classical
+  set π := M.mkQ
+  set N := M ⊔ Submodule.span ℝ {b}
+  set ρ := Submodule.factor (le_sup_left : M ≤ N)
+  have hρπ : ∀ x, ρ (π x) = N.mkQ x := fun x => Submodule.factor_mk _ x
+  set v := π b
+  set C := π '' K
+  set L : AddSubgroup (E ⧸ M) := Λ.map π.toAddMonoidHom
+  have hLmem : ∀ c, c ∈ (L : Set (E ⧸ M)) ↔ c ∈ π '' (Λ : Set E) := by
+    intro c; simp [L]
+  have hC : Convex ℝ C := hK.linear_image π
+  set S1 := π '' ((fun x => x + α • b) '' K) ∩ π '' (Λ : Set E)
+  set S0 := π '' K ∩ π '' (Λ : Set E)
+  set T := N.mkQ '' K ∩ N.mkQ '' (Λ : Set E)
+  have hS1 : π '' ((fun x => x + α • b) '' K) = α • ({v} : Set (E ⧸ M)) + C := by
+    ext c
+    simp only [mem_image, Set.smul_set_singleton, Set.singleton_add, C, v]
+    constructor
+    · rintro ⟨_, ⟨k, hk, rfl⟩, rfl⟩
+      exact ⟨π k, ⟨k, hk, rfl⟩, by rw [map_add, map_smul, add_comm]⟩
+    · rintro ⟨_, ⟨k, hk, rfl⟩, rfl⟩
+      exact ⟨k + α • b, ⟨k, hk, rfl⟩, by rw [map_add, map_smul, add_comm]⟩
+  change S1.encard ≤ S0.encard + T.encard
+  by_cases hT : T.Finite
+  swap
+  · rw [Set.Infinite.encard_eq hT]; simp
+  set Tf := hT.toFinset
+  -- every class of `S1` lies over a class of `T`
+  have hcover : S1 ⊆ ⋃ d ∈ Tf, S1 ∩ ρ ⁻¹' {d} := by
+    intro c hc
+    refine mem_iUnion₂.2 ⟨ρ c, (hT.mem_toFinset).2 ⟨?_, ?_⟩, hc, rfl⟩
+    · obtain ⟨_, ⟨k, hk, rfl⟩, rfl⟩ := hc.1
+      refine ⟨k, hk, ?_⟩
+      rw [hρπ, Submodule.mkQ_apply, Submodule.mkQ_apply, Submodule.Quotient.eq]
+      have : k - (k + α • b) = -(α • b) := by abel
+      rw [this, neg_mem_iff]
+      exact Submodule.mem_sup_right (Submodule.smul_mem _ _ (Submodule.mem_span_singleton_self b))
+    · obtain ⟨l, hl, rfl⟩ := hc.2
+      exact ⟨l, hl, (hρπ l).symm⟩
+  -- the per-fibre bound
+  have hfibre : ∀ d, (S1 ∩ ρ ⁻¹' {d}).encard ≤ (S0 ∩ ρ ⁻¹' {d}).encard + 1 := by
+    intro d
+    rcases (S1 ∩ ρ ⁻¹' {d}).eq_empty_or_nonempty with he | ⟨c₀, hc₀⟩
+    · rw [he, Set.encard_empty]; exact zero_le
+    have hd : d = ρ c₀ := hc₀.2.symm
+    subst hd
+    have hfib : ∀ c, c ∈ ρ ⁻¹' {ρ c₀} ↔ ∃ s : ℝ, c = c₀ + s • v := fun c =>
+      factor_eq_iff M b c c₀
+    by_cases hv : v = 0
+    · -- the fibre is a single class
+      have hsub : (S1 ∩ ρ ⁻¹' {ρ c₀}).Subsingleton := by
+        intro c hc c' hc'
+        obtain ⟨s, hs⟩ := (hfib c).1 hc.2
+        obtain ⟨s', hs'⟩ := (hfib c').1 hc'.2
+        rw [hs, hs', hv, smul_zero, smul_zero]
+      exact (Set.encard_le_one_iff_subsingleton.2 hsub).trans le_add_self
+    · have e1 : S1 ∩ ρ ⁻¹' {ρ c₀} = (fun s : ℝ => c₀ + s • v) ''
+          {s | c₀ + s • v ∈ α • ({v} : Set (E ⧸ M)) + C ∧ c₀ + s • v ∈ L} := by
+        ext c
+        simp only [mem_inter_iff, mem_image, mem_setOf_eq, hfib, S1, hS1]
+        constructor
+        · rintro ⟨⟨h1, h2⟩, s, rfl⟩; exact ⟨s, ⟨h1, h2⟩, rfl⟩
+        · rintro ⟨s, ⟨h1, h2⟩, rfl⟩; exact ⟨⟨h1, h2⟩, s, rfl⟩
+      have e0 : S0 ∩ ρ ⁻¹' {ρ c₀} = (fun s : ℝ => c₀ + s • v) ''
+          {s | c₀ + s • v ∈ C ∧ c₀ + s • v ∈ L} := by
+        ext c
+        simp only [mem_inter_iff, mem_image, mem_setOf_eq, hfib, S0, C]
+        constructor
+        · rintro ⟨⟨h1, h2⟩, s, rfl⟩; exact ⟨s, ⟨h1, h2⟩, rfl⟩
+        · rintro ⟨s, ⟨h1, h2⟩, rfl⟩; exact ⟨⟨h1, h2⟩, s, rfl⟩
+      rw [e1, e0]
+      exact encard_line_shift_le hC L c₀ v hv α
+  -- sum over the finitely many fibres
+  have hdisj : (Tf : Set (E ⧸ N)).PairwiseDisjoint fun d => S0 ∩ ρ ⁻¹' {d} := by
+    intro d _ d' _ hdd'
+    refine Set.disjoint_left.2 fun c hc hc' => hdd' ?_
+    rw [← hc.2, ← hc'.2]
+  have hsum0 : ∑ d ∈ Tf, (S0 ∩ ρ ⁻¹' {d}).encard ≤ S0.encard := by
+    have h := (Tf.finite_toSet).encard_biUnion hdisj
+    rw [finsum_mem_coe_finset] at h
+    rw [← h]
+    exact Set.encard_le_encard (iUnion₂_subset fun d _ => inter_subset_left)
+  calc S1.encard ≤ (⋃ d ∈ Tf, S1 ∩ ρ ⁻¹' {d}).encard := Set.encard_le_encard hcover
+    _ ≤ ∑ d ∈ Tf, (S1 ∩ ρ ⁻¹' {d}).encard := Finset.set_encard_biUnion_le Tf _
+    _ ≤ ∑ d ∈ Tf, ((S0 ∩ ρ ⁻¹' {d}).encard + 1) := Finset.sum_le_sum fun d _ => hfibre d
+    _ = ∑ d ∈ Tf, (S0 ∩ ρ ⁻¹' {d}).encard + Tf.card := by
+        rw [Finset.sum_add_distrib, Finset.sum_const, nsmul_eq_mul, mul_one]
+    _ ≤ S0.encard + T.encard := by
+        refine add_le_add hsum0 (le_of_eq ?_)
+        rw [← Set.encard_coe_eq_coe_finsetCard, hT.coe_toFinset]
+
+end Step
+
 end
 
 end LatticeVolumeInterpolation
