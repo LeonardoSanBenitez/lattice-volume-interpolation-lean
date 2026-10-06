@@ -11,5 +11,6 @@ import SimplexInteriorLattice
 import SimplexMinima
 import SimplexVolume
 import SimplexEquality
+import ConcaveIntegralBounds
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
