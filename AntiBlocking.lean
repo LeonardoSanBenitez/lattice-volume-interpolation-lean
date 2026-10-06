@@ -117,7 +117,7 @@ theorem rogers_shephard_antiBlocking {K : Set (Fin n → ℝ)} (hKc : IsCompact 
     simp [hC]
   have hCconv : Convex ℝ C := by
     intro p hp q hq a b ha hb hab
-    show e.symm (a • p + b • q) ∈ K
+    change e.symm (a • p + b • q) ∈ K
     rw [coordSplit_symm_add_smul]
     exact hKconv hp hq ha hb hab
   have hBcpt : IsCompact (sectionOff I K) := by

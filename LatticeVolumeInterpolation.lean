@@ -15,5 +15,6 @@ import ConcaveIntegralBounds
 import BetaIntegral
 import JoinVolume
 import AntiBlocking
+import Davenport
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
