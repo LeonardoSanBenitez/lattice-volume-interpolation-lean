@@ -42,5 +42,6 @@ import TheoremOneFourCore
 import TheoremOneFourLower
 import GeneralShaking
 import LemmaFiveOne
+import TheoremOneFour
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/

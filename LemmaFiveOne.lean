@@ -292,7 +292,9 @@ theorem lam2_eq_axisGauge {S : Set (Fin 2 → ℝ)} (hSc : IsCompact S)
 /-- **Lemma 5.1.** For a planar anti-blocking body `K` with `|e_i|_{cs(K)} = λ_i(K)`, the body
 `A = T(K)` is i) convex (and a compact convex body), ii) anti-blocking, iii) of volume `vol(K)`,
 iv) `G(A) ≥ G(K)`, v) `G(int A) ≤ G(int K)`, vi) `λ_1(A) ≤ λ_1(K)`, vii) `λ_2(A) = λ_2(K)`, and
-viii) `A ⊆ {x_1 + x_2 ≤ 2/λ_1(A)}`. -/
+viii) `A ⊆ {x_1 + x_2 ≤ 2/λ_1(A)}`. The last two conclusions, `|e_i|_{cs(A)} = λ_i(A)`, are
+established inside the paper's proof (it shows `|e_2|_{cs(A)} = λ_2(K)` and the triangle bound) and
+are what the proof of Theorem 1.4 uses when it assumes them of the reduced body. -/
 theorem lemma_5_1 {K : Set (Fin 2 → ℝ)} (hKc : IsCompact K)
     (hKb : DiscreteMinkowski.IsPaperConvexBody K) (hK : IsAntiBlocking K)
     (h1 : axisGauge K 0 = lam2 K 1) (h2 : axisGauge K 1 = lam2 K 2) :
@@ -300,7 +302,9 @@ theorem lemma_5_1 {K : Set (Fin 2 → ℝ)} (hKc : IsCompact K)
       IsAntiBlocking (planarReduction K) ∧ volume (planarReduction K) = volume K ∧
       G2 K ≤ G2 (planarReduction K) ∧ G2 (interior (planarReduction K)) ≤ G2 (interior K) ∧
       lam2 (planarReduction K) 1 ≤ lam2 K 1 ∧ lam2 (planarReduction K) 2 = lam2 K 2 ∧
-      ∀ x ∈ planarReduction K, x 0 + x 1 ≤ 2 / lam2 (planarReduction K) 1 := by
+      (∀ x ∈ planarReduction K, x 0 + x 1 ≤ 2 / lam2 (planarReduction K) 1) ∧
+      axisGauge (planarReduction K) 0 = lam2 (planarReduction K) 1 ∧
+      axisGauge (planarReduction K) 1 = lam2 (planarReduction K) 2 := by
   classical
   -- the body `K` and its box `[0, a] × [0, b]`
   set g0 := axisGauge K 0 with hg0def
@@ -498,7 +502,7 @@ theorem lemma_5_1 {K : Set (Fin 2 → ℝ)} (hKc : IsCompact K)
   have hgle : axisGauge A 0 ≤ axisGauge A 1 := by
     rw [hgA0, hgA1]; exact div_le_div_of_nonneg_left (by norm_num) hb (hba.trans hYa)
   obtain ⟨hlA1, hlA2⟩ := lam2_eq_axisGauge hAc hAb hAab hgle
-  refine ⟨hAc, hAb, hAab, hAvol, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨hAc, hAb, hAab, hAvol, ?_, ?_, ?_, ?_, ?_, hlA1.symm, hlA2.symm⟩
   · exact (ncard_latticePoints_le_diagShaking 1 hKc).trans
       ((ncard_latticePoints_le_diagShaking 0 hB1c).trans
         (ncard_latticePoints_le_coordShaking hB2c 1))
