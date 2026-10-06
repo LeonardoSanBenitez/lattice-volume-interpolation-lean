@@ -58,9 +58,10 @@ def weightedSimplex (s : ι → ℝ) : Set (ι → ℝ) :=
   {x | (∀ i, 0 ≤ x i) ∧ ∑ i, x i / s i ≤ 1}
 
 /-- **`vol(conv{0, s_i e_i}) = (∏ s_i) / k!`.** -/
-theorem volume_weightedSimplex [DecidableEq ι] {s : ι → ℝ} (hs : ∀ i, 0 < s i) :
+theorem volume_weightedSimplex {s : ι → ℝ} (hs : ∀ i, 0 < s i) :
     volume (weightedSimplex s) =
       ENNReal.ofReal ((∏ i, s i) / ((Fintype.card ι).factorial : ℝ)) := by
+  classical
   set f : (ι → ℝ) →ₗ[ℝ] (ι → ℝ) := Matrix.toLin' (Matrix.diagonal fun i => (s i)⁻¹) with hf
   have hfapply : ∀ x i, f x i = x i / s i := by
     intro x i
