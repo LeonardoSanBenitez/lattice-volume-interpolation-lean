@@ -211,6 +211,107 @@ theorem convex_coordShaking {K : Set (Fin n → ℝ)} (hK : IsCompact K) (hKc : 
   · simp only [hy, Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hlen ⊢
     nlinarith
 
+theorem update_smul_sub (x a b : Fin n → ℝ) (j : Fin n) (r : ℝ)
+    (hx : x = r • ((2 : ℝ)⁻¹ • (a - b))) :
+    Function.update x j 0 =
+      r • ((2 : ℝ)⁻¹ • (Function.update a j 0 - Function.update b j 0)) := by
+  subst hx
+  funext i
+  by_cases h : i = j
+  · subst h; simp
+  · simp [Function.update_of_ne h]
+
+/-- **Lemma 3.2 iv)** for `u = e_j`: `|x|_{cs(K)} ≥ |x | e_j^⊥|_{cs(sh K)}`. -/
+theorem gauge_coordShaking_update_le {K : Set (Fin n → ℝ)} (hK : IsCompact K)
+    (hKb : DiscreteMinkowski.IsPaperConvexBody K) (j : Fin n) (x : Fin n → ℝ) :
+    gauge (DiscreteMinkowski.halfDifferenceBody (coordShaking K j)) (Function.update x j 0) ≤
+      gauge (DiscreteMinkowski.halfDifferenceBody K) x := by
+  refine le_of_forall_gt_imp_ge_of_dense fun r hr => ?_
+  have hr0 : 0 < r := lt_of_le_of_lt (gauge_nonneg _) hr
+  have hx : x ∈ r • DiscreteMinkowski.halfDifferenceBody K :=
+    DiscreteMinkowski.mem_smul_of_gauge_lt hKb hr
+  obtain ⟨d, hd, rfl⟩ := mem_smul_set.1 hx
+  rw [DiscreteMinkowski.halfDifferenceBody_apply] at hd
+  obtain ⟨w, ⟨a, ha, b, hb, rfl⟩, rfl⟩ := mem_smul_set.1 hd
+  have hmem : Function.update (r • ((2 : ℝ)⁻¹ • (a - b))) j 0 ∈
+      r • DiscreteMinkowski.halfDifferenceBody (coordShaking K j) := by
+    rw [update_smul_sub _ a b j r rfl, DiscreteMinkowski.halfDifferenceBody_apply]
+    exact smul_mem_smul_set (smul_mem_smul_set (sub_mem_sub
+      (update_zero_mem_coordShaking hK j ha) (update_zero_mem_coordShaking hK j hb)))
+  exact DiscreteMinkowski.gauge_le_of_mem_smul hr0.le hmem
+
+/-- **Lemma 3.2 iii)** for `u = e_j`, in the direction used by Claim 1:
+`|e_j|_{cs(sh K)} ≤ |e_j|_{cs(K)}`. -/
+theorem gauge_coordShaking_single_le {K : Set (Fin n → ℝ)} (hK : IsCompact K)
+    (hKb : DiscreteMinkowski.IsPaperConvexBody K) (j : Fin n) :
+    gauge (DiscreteMinkowski.halfDifferenceBody (coordShaking K j))
+        (Pi.single j (1 : ℝ) : Fin n → ℝ) ≤
+      gauge (DiscreteMinkowski.halfDifferenceBody K) (Pi.single j (1 : ℝ) : Fin n → ℝ) := by
+  refine le_of_forall_gt_imp_ge_of_dense fun r hr => ?_
+  have hr0 : 0 < r := lt_of_le_of_lt (gauge_nonneg _) hr
+  have hx : (Pi.single j (1 : ℝ) : Fin n → ℝ) ∈ r • DiscreteMinkowski.halfDifferenceBody K :=
+    DiscreteMinkowski.mem_smul_of_gauge_lt hKb hr
+  obtain ⟨d, hd, hdx⟩ := mem_smul_set.1 hx
+  rw [DiscreteMinkowski.halfDifferenceBody_apply] at hd
+  obtain ⟨w, ⟨a, ha, b, hb, rfl⟩, rfl⟩ := mem_smul_set.1 hd
+  -- coordinates of `e_j = (r/2)(a - b)`
+  have hcoord : ∀ i, (Pi.single j (1 : ℝ) : Fin n → ℝ) i = r * (2⁻¹ * (a i - b i)) := by
+    intro i
+    rw [← hdx]
+    simp [smul_eq_mul]
+  have hoff : ∀ i, i ≠ j → b i = a i := by
+    intro i hi
+    have := hcoord i
+    rw [Pi.single_eq_of_ne hi] at this
+    have hr2 : r * 2⁻¹ ≠ 0 := by positivity
+    have : r * 2⁻¹ * (a i - b i) = 0 := by linarith
+    rcases mul_eq_zero.1 this with h | h
+    · exact absurd h hr2
+    · linarith
+  have hon : a j - b j = 2 / r := by
+    have := hcoord j
+    rw [Pi.single_eq_same] at this
+    field_simp
+    linarith
+  have hbf : b j ∈ fibre K j a := by
+    have : Function.update a j (b j) = b := by
+      funext i
+      by_cases h : i = j
+      · subst h; simp
+      · rw [Function.update_of_ne h]; exact (hoff i h).symm
+    simp only [fibre, mem_setOf_eq, this, hb]
+  have hlen : 2 / r ≤ fibreLength K j a := by
+    have := sub_le_fibreLength hK hbf (self_mem_fibre j ha)
+    linarith
+  have hp : Function.update a j 0 ∈ coordShaking K j := update_zero_mem_coordShaking hK j ha
+  have hq : Function.update a j (2 / r) ∈ coordShaking K j := by
+    refine ⟨?_, ?_, ?_⟩
+    · rw [fibre_update]; exact ⟨a j, self_mem_fibre j ha⟩
+    · simp only [Function.update_self]; positivity
+    · rw [fibreLength_update]; simpa using hlen
+  have hdiff : (Pi.single j (1 : ℝ) : Fin n → ℝ) =
+      r • ((2 : ℝ)⁻¹ • (Function.update a j (2 / r) - Function.update a j 0)) := by
+    funext i
+    by_cases h : i = j
+    · subst h; simp; field_simp
+    · simp [Function.update_of_ne h, Pi.single_eq_of_ne h]
+  have hmem : (Pi.single j (1 : ℝ) : Fin n → ℝ) ∈
+      r • DiscreteMinkowski.halfDifferenceBody (coordShaking K j) := by
+    rw [hdiff, DiscreteMinkowski.halfDifferenceBody_apply]
+    exact smul_mem_smul_set (smul_mem_smul_set (sub_mem_sub hq hp))
+  exact DiscreteMinkowski.gauge_le_of_mem_smul hr0.le hmem
+
+/-- Lemma 3.2 iii) for every multiple `c e_j` of the shaking direction. -/
+theorem gauge_coordShaking_smul_single_le {K : Set (Fin n → ℝ)} (hK : IsCompact K)
+    (hKb : DiscreteMinkowski.IsPaperConvexBody K) (j : Fin n) (c : ℝ) :
+    gauge (DiscreteMinkowski.halfDifferenceBody (coordShaking K j))
+        (c • (Pi.single j (1 : ℝ) : Fin n → ℝ)) ≤
+      gauge (DiscreteMinkowski.halfDifferenceBody K) (c • (Pi.single j (1 : ℝ) : Fin n → ℝ)) := by
+  have h1 := gauge_halfDifferenceBody_smul (coordShaking K j) c (Pi.single j (1 : ℝ))
+  have h2 := gauge_halfDifferenceBody_smul K c (Pi.single j (1 : ℝ))
+  rw [h1, h2]
+  exact mul_le_mul_of_nonneg_left (gauge_coordShaking_single_le hK hKb j) (abs_nonneg c)
+
 end
 
 end LatticeVolumeInterpolation
