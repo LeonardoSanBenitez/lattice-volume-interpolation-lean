@@ -238,8 +238,9 @@ theorem ncard_le_volume_dim_zero {K : Set (Fin 0 → ℝ)}
   rw [hvol, ENNReal.toReal_one]
   exact_mod_cast hle
 
-/-- **Proposition 1.6, Eq. (1.15).** `G(K) ≤ vol(K)(1 + μ(K))^n`. -/
-theorem proposition_1_6_upper {K : Set (Fin n → ℝ)} (hKcpt : IsCompact K)
+/-- Eq. (1.15) by the translate count, a supplemental route: the paper's route is the tile of
+`CoveringTile.lean`, which proves `proposition_1_6_upper`. -/
+theorem proposition_1_6_upper_by_translate_count {K : Set (Fin n → ℝ)} (hKcpt : IsCompact K)
     (hKb : DiscreteMinkowski.IsPaperConvexBody K) :
     ((DiscreteMinkowski.latticePoints K (standardIntegerLattice n)).ncard : ℝ) ≤
       (volume K).toReal * (1 + coveringRadius K) ^ n := by
