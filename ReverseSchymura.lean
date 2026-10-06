@@ -367,6 +367,145 @@ theorem classCount_translate_le (M : Submodule ℝ E) (Λ : AddSubgroup E) {K : 
 
 end Step
 
+section ClaimThree
+
+variable {E : Type*} [AddCommGroup E] [Module ℝ E]
+
+theorem convex_image_add {K : Set E} (hK : Convex ℝ K) (t : E) :
+    Convex ℝ ((fun x => x + t) '' K) := by
+  have : (fun x => x + t) '' K = t +ᵥ K := by
+    rw [← Set.image_vadd]; congr 1; funext x; rw [vadd_eq_add, add_comm]
+  rw [this]; exact hK.vadd t
+
+theorem span_image_insert {m : ℕ} (b : Fin m → E) (j : Fin m) (I : Finset (Fin m)) :
+    Submodule.span ℝ (b '' ↑(insert j I)) =
+      Submodule.span ℝ {b j} ⊔ Submodule.span ℝ (b '' ↑I) := by
+  rw [Finset.coe_insert, Set.image_insert_eq, Submodule.span_insert]
+
+/-- **Claim 3**, relative to an already quotiented subspace `M`: for a convex `K`, any
+`b_1, ..., b_m`, and `t = ∑ α_i b_i` with `α` supported on `s`,
+`G_M(K + t) ≤ ∑_{I ⊆ s} G_{M ⊔ L_I}(K)`. The induction on `s` is the paper's induction on
+`|supp(t)|`; applying the hypothesis "to `K|b_j^⊥, Λ|b_j^⊥`" is applying it at `M ⊔ ℝ b_j`. -/
+theorem claim_3_relative (Λ : AddSubgroup E) {K : Set E} (hK : Convex ℝ K) {m : ℕ}
+    (b : Fin m → E) (s : Finset (Fin m)) :
+    ∀ (M : Submodule ℝ E) (α : Fin m → ℝ), (∀ i, i ∉ s → α i = 0) →
+      classCount M Λ ((fun x => x + ∑ i, α i • b i) '' K) ≤
+        ∑ I ∈ s.powerset, classCount (M ⊔ Submodule.span ℝ (b '' ↑I)) Λ K := by
+  classical
+  induction s using Finset.induction_on with
+  | empty =>
+    intro M α hα
+    have h0 : ∑ i, α i • b i = 0 :=
+      Finset.sum_eq_zero fun i _ => by rw [hα i (Finset.notMem_empty i), zero_smul]
+    simp only [h0, add_zero, Set.image_id', Finset.powerset_empty, Finset.sum_singleton,
+      Finset.coe_empty, Set.image_empty, Submodule.span_empty, sup_bot_eq]
+    exact le_rfl
+  | insert j s hj ih =>
+    intro M α hα
+    set α' := Function.update α j 0 with hα'
+    have hα's : ∀ i, i ∉ s → α' i = 0 := by
+      intro i hi
+      by_cases h : i = j
+      · subst h; simp [hα']
+      · rw [hα', Function.update_of_ne h]; exact hα i (by simp [h, hi])
+    have ht : ∑ i, α i • b i = ∑ i, α' i • b i + α j • b j := by
+      have : ∀ i, α i • b i = α' i • b i + (if i = j then α j • b j else 0) := by
+        intro i
+        by_cases h : i = j
+        · subst h; simp [hα']
+        · simp [hα', h]
+      rw [Finset.sum_congr rfl fun i _ => this i, Finset.sum_add_distrib, Finset.sum_ite_eq']
+      simp
+    set K' := (fun x => x + ∑ i, α' i • b i) '' K
+    have hK' : Convex ℝ K' := convex_image_add hK _
+    have himg : (fun x => x + ∑ i, α i • b i) '' K = (fun x => x + α j • b j) '' K' := by
+      rw [Set.image_image, ht]
+      congr 1; funext x; abel
+    rw [himg]
+    have hstep := classCount_translate_le M Λ hK' (b j) (α j)
+    have ih1 := ih M α' hα's
+    have ih2 := ih (M ⊔ Submodule.span ℝ {b j}) α' hα's
+    rw [Finset.sum_powerset_insert hj]
+    calc classCount M Λ ((fun x => x + α j • b j) '' K')
+        ≤ classCount M Λ K' + classCount (M ⊔ Submodule.span ℝ {b j}) Λ K' := hstep
+      _ ≤ ∑ I ∈ s.powerset, classCount (M ⊔ Submodule.span ℝ (b '' ↑I)) Λ K +
+          ∑ I ∈ s.powerset, classCount (M ⊔ Submodule.span ℝ (b '' ↑(insert j I))) Λ K := by
+        refine add_le_add ih1 (ih2.trans (le_of_eq (Finset.sum_congr rfl fun I _ => ?_)))
+        rw [span_image_insert, ← sup_assoc]
+
+/-- Classes mod `⊥` are points: `G_⊥(K) = #(K ∩ Λ)`. -/
+theorem classCount_bot (Λ : AddSubgroup E) (K : Set E) :
+    classCount (⊥ : Submodule ℝ E) Λ K = (K ∩ (Λ : Set E)).encard := by
+  have hinj : Function.Injective (⊥ : Submodule ℝ E).mkQ := by
+    rw [← LinearMap.ker_eq_bot, Submodule.ker_mkQ]
+  rw [classCount, ← Set.image_inter hinj, hinj.injOn.encard_image]
+
+/-- **Claim 3**, in the paper's form: for linearly independent `b_1, ..., b_m` and
+`t = ∑ α_i b_i`, `G_Λ(K + t) ≤ ∑_{I ⊆ supp(t)} G_{Λ|L_I^⊥}(K | L_I^⊥)`, the projected counts
+written as counts of classes mod `L_I = span{b_i : i ∈ I}`. -/
+theorem claim_3 (Λ : AddSubgroup E) {K : Set E} (hK : Convex ℝ K) {m : ℕ} (b : Fin m → E)
+    (α : Fin m → ℝ) :
+    (((fun x => x + ∑ i, α i • b i) '' K) ∩ (Λ : Set E)).encard ≤
+      ∑ I ∈ (Finset.univ.filter fun i => α i ≠ 0).powerset,
+        classCount (Submodule.span ℝ (b '' ↑I)) Λ K := by
+  classical
+  have h := claim_3_relative Λ hK b (Finset.univ.filter fun i => α i ≠ 0) ⊥ α
+    (fun i hi => by simpa using hi)
+  rw [classCount_bot] at h
+  simpa only [bot_sup_eq] using h
+
+end ClaimThree
+
+variable {n : ℕ}
+
+/-- **Theorem 1.3, Eq. (1.12).** For `K ∈ K^n` and linearly independent `b_1, ..., b_n`,
+`vol(K) ≤ ∑_{I ⊆ [n]} G_{ℤ^n | L_I^⊥}(int K | L_I^⊥)`, with `L_I = span{b_i : i ∈ I}` and the
+projected counts written as counts of classes mod `L_I`. The paper assumes `b_i ∈ ℤ^n`, which
+makes the projected lattices discrete; the inequality itself does not need it (a count that is
+infinite only makes the right side `⊤`). -/
+theorem theorem_1_3 {K : Set (Fin n → ℝ)} (hKc : IsCompact K)
+    (hKb : DiscreteMinkowski.IsPaperConvexBody K) (b : Fin n → (Fin n → ℝ))
+    (hb : LinearIndependent ℝ b) :
+    volume K ≤ ∑ I : Finset (Fin n),
+      ((classCount (Submodule.span ℝ (b '' ↑I)) (standardIntegerLattice n).toAddSubgroup
+        (interior K) : ℕ∞) : ℝ≥0∞) := by
+  classical
+  have hdim : finrank ℝ (Fin n → ℝ) = n := Module.finrank_fin_fun ℝ
+  set Λ := (standardIntegerLattice n).toAddSubgroup
+  obtain ⟨t, ht⟩ := van_der_corput isOpen_interior.measurableSet
+    (hKb.1.subset interior_subset)
+  -- coordinates of `t` in the basis `b`
+  obtain ⟨α, hα⟩ : ∃ α : Fin n → ℝ, t = ∑ i, α i • b i := by
+    rcases Nat.eq_zero_or_pos n with rfl | hn
+    · exact ⟨0, Subsingleton.elim _ _⟩
+    · haveI : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
+      set B := basisOfLinearIndependentOfCardEqFinrank hb (by rw [Fintype.card_fin, hdim])
+      refine ⟨B.repr t, ?_⟩
+      conv_lhs => rw [← B.sum_repr t]
+      simp [B]
+  subst hα
+  have hfin : (DiscreteMinkowski.latticePoints ((fun y => y + ∑ i, α i • b i) '' interior K)
+      (standardIntegerLattice n)).Finite :=
+    DiscreteMinkowski.finite_inter_lattice
+      (by
+        have := (hKb.1.subset interior_subset).vadd (∑ i, α i • b i)
+        convert this using 1
+        rw [← Set.image_vadd]; congr 1; funext y; rw [vadd_eq_add, add_comm]) _
+  have hc3 := claim_3 Λ hKb.2.1.interior b α
+  have hsub : (Finset.univ.filter fun i => α i ≠ 0).powerset ⊆ Finset.univ := Finset.subset_univ _
+  have hc3' := hc3.trans (Finset.sum_le_sum_of_subset hsub)
+  have hEq : (fun x => x + ∑ i, α i • b i) '' interior K ∩ (Λ : Set (Fin n → ℝ)) =
+      DiscreteMinkowski.latticePoints ((fun y => y + ∑ i, α i • b i) '' interior K)
+        (standardIntegerLattice n) := rfl
+  rw [hEq] at hc3'
+  rw [← volume_interior_eq hKb.2.1]
+  refine ht.trans ?_
+  rw [← hfin.cast_ncard_eq] at hc3'
+  have := ENat.toENNReal_le.2 hc3'
+  rw [ENat.toENNReal_coe] at this
+  refine this.trans (le_of_eq ?_)
+  exact map_sum ENat.toENNRealRingHom _ _
+
 end
 
 end LatticeVolumeInterpolation
