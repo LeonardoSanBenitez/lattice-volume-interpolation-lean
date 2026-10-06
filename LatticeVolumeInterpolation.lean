@@ -29,5 +29,6 @@ import TheoremThreeOne
 import UpperBound
 import VanDerCorput
 import CoveringRadius
+import PropOneSix
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
