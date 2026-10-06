@@ -38,5 +38,6 @@ import TheoremOneThreeTight
 import ProjectedLattice
 import MinkowskiLower
 import PlanarSections
+import TheoremOneFourCore
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/

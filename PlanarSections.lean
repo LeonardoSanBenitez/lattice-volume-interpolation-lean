@@ -51,7 +51,8 @@ theorem isCompact_hsec (hc : IsCompact A) (t : ℝ) : IsCompact (hsec A t) := by
   refine ((hc.image (continuous_apply 0)).isBounded).subset ?_
   intro s hs; exact ⟨_, hs, by simp⟩
 
-theorem nonneg_of_mem_antiBlocking (hab : IsAntiBlocking A) {x : Fin 2 → ℝ} (hx : x ∈ A) (i : Fin 2) :
+theorem nonneg_of_mem_antiBlocking (hab : IsAntiBlocking A) {x : Fin 2 → ℝ} (hx : x ∈ A)
+    (i : Fin 2) :
     0 ≤ x i := hab.1 x hx i
 
 /-- Lowering coordinates in an anti-blocking planar set. -/
