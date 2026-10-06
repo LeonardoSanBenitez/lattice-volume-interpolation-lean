@@ -19,5 +19,6 @@ import Davenport
 import WeightedSimplex
 import AntiBlockingUpperBound
 import MinimaAntiBlocking
+import TheoremOneOne
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
