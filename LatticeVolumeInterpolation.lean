@@ -20,5 +20,6 @@ import WeightedSimplex
 import AntiBlockingUpperBound
 import MinimaAntiBlocking
 import TheoremOneOne
+import CoordShaking
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
