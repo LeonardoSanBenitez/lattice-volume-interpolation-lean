@@ -186,6 +186,79 @@ theorem theorem_1_1_lower {K : Set (Fin n → ℝ)} (hKcpt : IsCompact K)
     _ ≤ (volume K).toReal * (1 - coveringRadius K) ^ n := mul_le_mul_of_nonneg_left hpow hvol
     _ ≤ _ := h16
 
+/-- Eq. (1.15) at a covering scale `r`: `G(K) ≤ vol(K)(1 + r)^n`. Every `x` has a lattice
+point `c` with `x - c ∈ r K`, and `w ↦ w - c` sends the lattice points of `K` to lattice points
+`z` with `z + x ∈ K + r K = (1 + r) K`; integrating that count over `[0, 1)^n` gives
+`vol((1 + r) K)`. The paper builds a tile `S ⊆ μ K` instead; this argument needs no tile. -/
+theorem prop_1_6_upper_at_scale {K : Set (Fin n → ℝ)} (hKcpt : IsCompact K)
+    (hKb : DiscreteMinkowski.IsPaperConvexBody K) {r : ℝ} (hr : r ∈ coveringSet K) :
+    ((DiscreteMinkowski.latticePoints K (standardIntegerLattice n)).ncard : ℝ≥0∞) ≤
+      volume K * ENNReal.ofReal ((1 + r) ^ n) := by
+  have hdim : finrank ℝ (Fin n → ℝ) = n := Module.finrank_fin_fun ℝ
+  set T := (1 + r) • K with hT
+  have hTm : MeasurableSet T := (hKcpt.smul (1 + r)).isClosed.measurableSet
+  have hsum : K + r • K ⊆ T := by
+    rw [hT, hKb.2.1.add_smul zero_le_one hr.1.le, one_smul]
+  set P := DiscreteMinkowski.latticePoints K (standardIntegerLattice n) with hP
+  have hPfin : P.Finite := DiscreteMinkowski.finite_inter_lattice hKcpt.isBounded _
+  -- the count of translates is everywhere at least `G(K)`
+  have hpt : ∀ x, P.encard ≤ (translateSet T x).encard := by
+    intro x
+    obtain ⟨c, hc, hxc⟩ := hr.2 x
+    have hinj : Set.InjOn (fun w => w - c) P := fun _ _ _ _ h => sub_left_injective h
+    rw [← hinj.encard_image]
+    refine Set.encard_le_encard ?_
+    rintro _ ⟨w, ⟨hwK, hwΛ⟩, rfl⟩
+    refine ⟨(standardIntegerLattice n).sub_mem hwΛ hc, hsum ?_⟩
+    have : w - c + x = w + (x - c) := by abel
+    rw [this]
+    exact Set.add_mem_add hwK hxc
+  have hint := lintegral_translateCount hTm
+  have hle : ∫⁻ _x in unitCubeIco n, (P.encard : ℝ≥0∞) ≤
+      ∫⁻ x in unitCubeIco n, ((translateSet T x).encard : ℝ≥0∞) :=
+    lintegral_mono fun x => ENat.toENNReal_le.2 (hpt x)
+  rw [hint, lintegral_const, Measure.restrict_apply MeasurableSet.univ, univ_inter,
+    volume_unitCubeIco, mul_one, hT, Measure.addHaar_smul_of_nonneg volume
+      (by linarith [hr.1] : (0 : ℝ) ≤ 1 + r), hdim, mul_comm] at hle
+  rw [← hPfin.cast_ncard_eq, ENat.toENNReal_coe] at hle
+  exact hle
+
+/-- In dimension `0`, `G(K) ≤ vol(K)`. -/
+theorem ncard_le_volume_dim_zero {K : Set (Fin 0 → ℝ)}
+    (hKb : DiscreteMinkowski.IsPaperConvexBody K) :
+    ((DiscreteMinkowski.latticePoints K (standardIntegerLattice 0)).ncard : ℝ) ≤
+      (volume K).toReal := by
+  obtain ⟨x, hx⟩ := hKb.2.2
+  have hK : K = univ := by
+    ext y; simp only [mem_univ, iff_true]
+    rw [Subsingleton.elim y x]; exact interior_subset hx
+  have hvol : volume K = 1 := by rw [hK, volume_pi, Measure.pi_of_empty]; simp
+  have hle : (DiscreteMinkowski.latticePoints K (standardIntegerLattice 0)).ncard ≤ 1 :=
+    Set.ncard_le_one_of_subsingleton _
+  rw [hvol, ENNReal.toReal_one]
+  exact_mod_cast hle
+
+/-- **Proposition 1.6, Eq. (1.15).** `G(K) ≤ vol(K)(1 + μ(K))^n`. -/
+theorem proposition_1_6_upper {K : Set (Fin n → ℝ)} (hKcpt : IsCompact K)
+    (hKb : DiscreteMinkowski.IsPaperConvexBody K) :
+    ((DiscreteMinkowski.latticePoints K (standardIntegerLattice n)).ncard : ℝ) ≤
+      (volume K).toReal * (1 + coveringRadius K) ^ n := by
+  rcases Nat.eq_zero_or_pos n with rfl | hn
+  · simpa using ncard_le_volume_dim_zero hKb
+  have hKtop : volume K ≠ ⊤ := hKcpt.measure_lt_top.ne
+  set f : ℝ → ℝ := fun r => (volume K).toReal * (1 + r) ^ n
+  have hcont : Tendsto f (𝓝[>] coveringRadius K) (𝓝 (f (coveringRadius K))) :=
+    ((continuous_const.mul ((continuous_const.add continuous_id).pow n)).tendsto _).mono_left
+      nhdsWithin_le_nhds
+  refine ge_of_tendsto hcont ?_
+  filter_upwards [self_mem_nhdsWithin] with r hr
+  have hr' : coveringRadius K < r := hr
+  have h := prop_1_6_upper_at_scale hKcpt hKb (mem_coveringSet_of_lt hKcpt hKb hn hr')
+  have hr0 : 0 ≤ (1 + r) ^ n := pow_nonneg (by linarith [coveringRadius_nonneg K]) n
+  have := ENNReal.toReal_mono (ENNReal.mul_ne_top hKtop ENNReal.ofReal_ne_top) h
+  rw [ENNReal.toReal_mul, ENNReal.toReal_ofReal hr0, ENNReal.toReal_natCast] at this
+  exact this
+
 end
 
 end LatticeVolumeInterpolation
