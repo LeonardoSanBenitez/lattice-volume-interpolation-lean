@@ -23,5 +23,6 @@ import TheoremOneOne
 import CoordShaking
 import ShakingIterate
 import ClaimOne
+import Triangularize
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
