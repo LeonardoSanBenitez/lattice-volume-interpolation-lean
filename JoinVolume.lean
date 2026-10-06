@@ -219,6 +219,34 @@ theorem join_volume_lower_bound (μ : Measure U) (ν : Measure V)
         lintegral_mono fun v => fibre_lower_bound μ hk hkU hB hC hAC hBC v
     _ = (μ.prod ν) C := (Measure.prod_apply_symm hCm).symm
 
+/-- **The join lower bound, in every dimension.** The case `k = 0` is separate: there `U` is a
+point and `{0} × B ⊆ C` already gives `μ(A) ν(B) ≤ (μ × ν)(C)`. -/
+theorem join_volume_lower_bound' (μ : Measure U) (ν : Measure V)
+    [μ.IsAddHaarMeasure] [ν.IsAddHaarMeasure] {k m : ℕ}
+    (hkU : finrank ℝ U = k) (hmV : finrank ℝ V = m)
+    {A : Set U} {B : Set V} (hB : IsCompact B) {C : Set (U × V)} (hC : Convex ℝ C)
+    (hCm : MeasurableSet C)
+    (hAC : ∀ a ∈ A, (a, (0 : V)) ∈ C) (hBC : ∀ b ∈ B, ((0 : U), b) ∈ C) :
+    μ A * ν B * ENNReal.ofReal
+        ((k.factorial * m.factorial : ℝ) / ((k + m).factorial : ℝ))
+      ≤ (μ.prod ν) C := by
+  rcases Nat.eq_zero_or_pos k with rfl | hk
+  · have hzero : ∀ x : U, x = 0 := finrank_zero_iff_forall_zero.1 hkU
+    have hconst : ENNReal.ofReal
+        (((0 : ℕ).factorial * m.factorial : ℝ) / ((0 + m).factorial : ℝ)) = 1 := by
+      rw [zero_add, Nat.factorial_zero, Nat.cast_one, one_mul,
+        div_self (by positivity), ENNReal.ofReal_one]
+    rw [hconst, mul_one]
+    have hA : A ⊆ {0} := fun a _ => hzero a
+    have hsub : ({0} : Set U) ×ˢ B ⊆ C := by
+      rintro ⟨u, v⟩ ⟨-, hv⟩
+      rw [hzero u]
+      exact hBC v hv
+    calc μ A * ν B ≤ μ {0} * ν B := mul_le_mul_left (measure_mono hA) _
+      _ = (μ.prod ν) (({0} : Set U) ×ˢ B) := (Measure.prod_prod _ _).symm
+      _ ≤ (μ.prod ν) C := measure_mono hsub
+  · exact join_volume_lower_bound μ ν hk hkU hmV hB hC hCm hAC hBC
+
 end
 
 end LatticeVolumeInterpolation

@@ -14,5 +14,6 @@ import SimplexEquality
 import ConcaveIntegralBounds
 import BetaIntegral
 import JoinVolume
+import AntiBlocking
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
