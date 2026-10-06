@@ -523,11 +523,14 @@ theorem encard_image_inter_eq_classCount {E F : Type*} [AddCommGroup E] [Module 
   rw [himg, himg, ← Set.image_inter hφinj, hφinj.injOn.encard_image]
   rfl
 
+/-- `ℝ^n` with its standard Euclidean structure. -/
+abbrev toEucl (n : ℕ) : (Fin n → ℝ) ≃ₗ[ℝ] EuclideanSpace ℝ (Fin n) :=
+  (EuclideanSpace.equiv (Fin n) ℝ).symm.toLinearEquiv
+
 /-- The orthogonal projection of `ℝ^n` onto `L^⊥`, for the standard Euclidean structure. -/
 def projMap (L : Submodule ℝ (Fin n → ℝ)) :
-    (Fin n → ℝ) →ₗ[ℝ] (L.map (EuclideanSpace.equiv (Fin n) ℝ).symm.toLinearEquiv.toLinearMap)ᗮ :=
-  (L.map (EuclideanSpace.equiv (Fin n) ℝ).symm.toLinearEquiv.toLinearMap)ᗮ.orthogonalProjectionOnto.toLinearMap
-    ∘ₗ (EuclideanSpace.equiv (Fin n) ℝ).symm.toLinearEquiv.toLinearMap
+    (Fin n → ℝ) →ₗ[ℝ] (L.map (toEucl n).toLinearMap)ᗮ :=
+  (L.map (toEucl n).toLinearMap)ᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ (toEucl n).toLinearMap
 
 /-- The paper's projected count `G_{ℤ^n | L^⊥}(S | L^⊥)`: the number of points of the orthogonal
 projection of `S` onto `L^⊥` that lie in the orthogonal projection of `ℤ^n`. -/
