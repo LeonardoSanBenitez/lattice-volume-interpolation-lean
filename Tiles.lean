@@ -232,7 +232,8 @@ theorem coveringRadius_smul {K : Set (Fin n → ℝ)} {r : ℝ} (hr : 0 < r) :
 theorem lattice_tile_sandwich (hn : 0 < n) {K : Set (Fin n → ℝ)} (hKc : IsCompact K)
     (hKb : DiscreteMinkowski.IsPaperConvexBody K) (hK : IsLatticeTile K) {r : ℝ} (hr : 1 ≤ r) :
     (r - 1) ^ n ≤
-        ((DiscreteMinkowski.latticePoints (interior (r • K)) (standardIntegerLattice n)).ncard : ℝ) ∧
+        ((DiscreteMinkowski.latticePoints (interior (r • K))
+          (standardIntegerLattice n)).ncard : ℝ) ∧
       ((DiscreteMinkowski.latticePoints (interior (r • K)) (standardIntegerLattice n)).ncard : ℝ) ≤
         ((DiscreteMinkowski.latticePoints (r • K) (standardIntegerLattice n)).ncard : ℝ) ∧
       ((DiscreteMinkowski.latticePoints (r • K) (standardIntegerLattice n)).ncard : ℝ) ≤
