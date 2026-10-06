@@ -31,5 +31,6 @@ import VanDerCorput
 import CoveringRadius
 import PropOneSix
 import CoveringTile
+import Tiles
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
