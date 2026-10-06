@@ -9,6 +9,7 @@ import SimplexLattice
 import SimplexInteriorCounts
 import SimplexInteriorLattice
 import SimplexMinima
+import SimplexVolume
 import SimplexEquality
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/

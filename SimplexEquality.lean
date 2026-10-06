@@ -1,5 +1,6 @@
 import SimplexMinima
 import SimplexInteriorLattice
+import SimplexVolume
 import Mathlib.Data.Nat.Factorial.BigOperators
 import Mathlib.Data.Fintype.BigOperators
 
@@ -61,8 +62,8 @@ theorem simplex_upper_product_identity (n m : ℕ) (hm : 0 < m) :
   field_simp
 
 /-- The conjectured upper product, written with the actual successive minima of `mT_n`,
-equals its closed lattice-point count. The prefactor is the classical simplex-volume
-expression `m^n/n!`; identifying it with Lebesgue volume is kept as a separate bridge. -/
+equals its closed lattice-point count. The prefactor is the simplex-volume expression
+`m^n/n!`, identified with Lebesgue volume in `simplex_upper_equality` below. -/
 theorem simplex_upper_equality_with_volume_expression (n m : ℕ) (hm : 0 < m) :
     ((m : ℝ) ^ n / (n.factorial : ℝ)) *
         (∏ i : Fin n, (1 + ((i.1 + 1 : ℕ) : ℝ) *
@@ -155,30 +156,28 @@ theorem simplex_lower_equality_with_volume_expression (n m : ℕ) (hn : 0 < n) (
   simp_rw [successiveMinimum_realDilatedStandardSimplex_eq_two_div hm]
   exact simplex_lower_product_identity n m hm
 
-/-- Exact upper equality in the paper's volume notation, isolated behind the one classical
-simplex-volume statement not presently available in the pinned Mathlib. -/
-theorem simplex_upper_equality_of_volume_formula (n m : ℕ) (hm : 0 < m)
-    (hvol : (MeasureTheory.volume (realDilatedStandardSimplex n m)).toReal =
-      (m : ℝ) ^ n / (n.factorial : ℝ)) :
+/-- **Upper equality case.** For every positive integer `m`, the standard simplex dilate
+`m T_n` attains the conjectured upper bound: `vol(m T_n) ∏ (1 + i λ_i(m T_n)/2) = G(m T_n)`.
+The volume `m^n/n!` is `volume_realDilatedStandardSimplex_toReal`. -/
+theorem simplex_upper_equality (n m : ℕ) (hm : 0 < m) :
     (MeasureTheory.volume (realDilatedStandardSimplex n m)).toReal *
         (∏ i : Fin n, (1 + ((i.1 + 1 : ℕ) : ℝ) *
           DiscreteMinkowski.successiveMinimum (realDilatedStandardSimplex n m)
             (standardIntegerLattice n) (i.1 + 1) / 2)) =
       ((simplexCoordinateLatticePoints n m).card : ℝ) := by
-  rw [hvol]
+  rw [volume_realDilatedStandardSimplex_toReal]
   exact simplex_upper_equality_with_volume_expression n m hm
 
-/-- Exact lower equality in the paper's volume notation, with the same explicit classical
-simplex-volume bridge. -/
-theorem simplex_lower_equality_of_volume_formula (n m : ℕ) (hn : 0 < n) (hm : 0 < m)
-    (hvol : (MeasureTheory.volume (realDilatedStandardSimplex n m)).toReal =
-      (m : ℝ) ^ n / (n.factorial : ℝ)) :
+/-- **Lower equality case.** For every positive integer `m` and `n > 0`, the strict interior
+of `m T_n` attains the conjectured lower bound:
+`vol(m T_n) ∏ (1 - i λ_i(m T_n)/2) = G(int(m T_n))`. For `m ≤ n` both sides are zero. -/
+theorem simplex_lower_equality (n m : ℕ) (hn : 0 < n) (hm : 0 < m) :
     (MeasureTheory.volume (realDilatedStandardSimplex n m)).toReal *
         (∏ i : Fin n, (1 - ((i.1 + 1 : ℕ) : ℝ) *
           DiscreteMinkowski.successiveMinimum (realDilatedStandardSimplex n m)
             (standardIntegerLattice n) (i.1 + 1) / 2)) =
       ((simplexInteriorCoordinateLatticePoints n m).card : ℝ) := by
-  rw [hvol]
+  rw [volume_realDilatedStandardSimplex_toReal]
   exact simplex_lower_equality_with_volume_expression n m hn hm
 
 end LatticeVolumeInterpolation
