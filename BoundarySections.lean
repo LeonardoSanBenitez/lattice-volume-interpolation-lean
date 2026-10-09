@@ -19,6 +19,24 @@ namespace LatticeVolumeInterpolation
 
 noncomputable section
 
+/-- Splitting a concave section at its central height retains the stronger
+trapezoid bound involving the central section. -/
+theorem concave_integral_midpoint_chords {f : ℝ → ℝ} {a b : ℝ}
+    (ha : a ≤ 0) (hb : 0 ≤ b) (hf : ConcaveOn ℝ (Icc a b) f) :
+    ((f a + f 0) / 2) * (0 - a) +
+      ((f 0 + f b) / 2) * (b - 0) ≤ ∫ t in a..b, f t := by
+  have hab : a ≤ b := ha.trans hb
+  have hleft : ConcaveOn ℝ (Icc a 0) f :=
+    hf.subset (Icc_subset_Icc_right hb) (convex_Icc _ _)
+  have hright : ConcaveOn ℝ (Icc 0 b) f :=
+    hf.subset (Icc_subset_Icc_left ha) (convex_Icc _ _)
+  have hi1 := concave_intervalIntegrable ha hleft
+  have hi2 := concave_intervalIntegrable hb hright
+  have h1 := concave_integral_chord_le ha hleft
+  have h2 := concave_integral_chord_le hb hright
+  rw [← intervalIntegral.integral_add_adjacent_intervals hi1 hi2]
+  linarith
+
 /-- A convex body's area dominates the rectangle whose width is its common
 top and bottom section length. This is the planar concave-section part of the
 Henk–Schürmann–Wills volume estimate. -/
@@ -112,6 +130,30 @@ theorem area_ge_symmetric_extreme_section_rectangle {P : Set (Fin 2 → ℝ)}
       (volume P).toReal :=
   area_ge_extreme_section_rectangle hc hv hne
     (symmetric_extreme_section_width_eq hsym)
+
+/-- The source concavity argument split at the central section. This sharper
+form supplies the area allocated to the nonhorizontal boundary rows. -/
+theorem area_ge_symmetric_extreme_plus_central_section {P : Set (Fin 2 → ℝ)}
+    (hc : IsCompact P) (hv : Convex ℝ P) (hne : P.Nonempty)
+    (hsym : DiscreteMinkowski.IsOriginSymmetric P) :
+    (yHi P - yLo P) *
+      ((rowHi P (yLo P) - rowLo P (yLo P)) +
+        (rowHi P 0 - rowLo P 0)) / 2 ≤ (volume P).toReal := by
+  have hab := yLo_le_yHi hc hv hne
+  have hlo := yLo_eq_neg_yHi_of_symmetric hsym
+  have hwidth := symmetric_extreme_section_width_eq hsym
+  have hzero : 0 ≤ yHi P := by rw [hlo] at hab; linarith
+  have ha : yLo P ≤ 0 := by rw [hlo]; linarith
+  have hconc := concaveOn_rowWidth hc hv hne
+  have hmid := concave_integral_midpoint_chords ha hzero hconc
+  have hintnonneg : 0 ≤ ∫ t in (yLo P)..(yHi P),
+      (rowHi P t - rowLo P t) := by
+    refine intervalIntegral.integral_nonneg hab fun t ht => ?_
+    exact sub_nonneg.2 (rowLo_le_rowHi hc ((hsec_nonempty_iff hc hv hne t).2 ht))
+  have hvol := volume_eq_integral_rows hc hv hne
+  rw [hvol, ENNReal.toReal_ofReal hintnonneg]
+  rw [hlo] at hmid hwidth ⊢
+  nlinarith
 
 /-- The final two-dimensional arithmetic step in the Henk–Schürmann–Wills
 proof. `A` and `B` are respectively the sums of the origin-triangle areas

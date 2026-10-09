@@ -106,6 +106,73 @@ theorem two_div_height_le_second_minimum
   rw [heq]
   exact hrecip
 
+/-- The boundary estimate from horizontal rows and the split-section
+concavity argument. The remaining premise says that the chosen horizontal
+axis is a first-minimum direction. -/
+theorem boundary_bound_of_central_first_minimum
+    {P : Set (Fin 2 → ℝ)} (hP : IsLatticePolygon P)
+    (hint : (interior P).Nonempty)
+    (hsym : DiscreteMinkowski.IsOriginSymmetric P)
+    (hfirst : 2 ≤ lam2 P 1 * (rowHi P 0 - rowLo P 0)) :
+    (G2 (frontier P) : ℝ) / 2 ≤
+      (volume P).toReal * (lam2 P 1 / 2 + lam2 P 2 / 2) := by
+  have hc := hP.isCompact
+  have hv := hP.convex
+  have hne : P.Nonempty := hint.mono interior_subset
+  have hPb : DiscreteMinkowski.IsPaperConvexBody P :=
+    ⟨hc.isBounded, hv, hint⟩
+  let H := yHi P - yLo P
+  let W := rowHi P (yLo P) - rowLo P (yLo P)
+  let C := rowHi P 0 - rowLo P 0
+  let V := (volume P).toReal
+  have hH : 0 < H := by
+    obtain ⟨c, hcI⟩ := hint
+    have h := ((mem_interior_iff_rows hc hv hne c).1 hcI).1
+    rcases h with ⟨hlo, hhi⟩
+    dsimp [H]
+    linarith
+  have hW : 0 ≤ W := by
+    dsimp [W]
+    apply sub_nonneg.mpr
+    apply rowLo_le_rowHi hc
+    apply (hsec_nonempty_iff hc hv hne _).2
+    exact ⟨le_rfl, (yLo_le_yHi hc hv hne)⟩
+  have hL : 0 ≤ lam2 P 1 :=
+    DiscreteMinkowski.successiveMinimum_nonneg P (standardIntegerLattice 2) 1
+  have harea : H * (W + C) / 2 ≤ V :=
+    area_ge_symmetric_extreme_plus_central_section hc hv hne hsym
+  have hrow : (G2 (frontier P) : ℝ) ≤ 2 * W + 2 * H :=
+    boundary_count_le_symmetric_extreme_width_and_height hP hint hsym
+  have hsecond : 2 / H ≤ lam2 P 2 :=
+    two_div_height_le_second_minimum hc hPb hsym
+  have hsecondH : 2 ≤ lam2 P 2 * H := by
+    have := (div_le_iff₀ hH).mp hsecond
+    nlinarith
+  have hcentral : 2 * H ≤ lam2 P 1 * C * H := by
+    change 2 ≤ lam2 P 1 * C at hfirst
+    have := mul_le_mul_of_nonneg_right hfirst hH.le
+    nlinarith
+  have hparallel : 2 * W ≤ lam2 P 2 * H * W := by
+    have := mul_le_mul_of_nonneg_right hsecondH hW
+    nlinarith
+  have hweighted : lam2 P 1 * H * (W + C) / 2 ≤ lam2 P 1 * V := by
+    calc
+      lam2 P 1 * H * (W + C) / 2 = lam2 P 1 * (H * (W + C) / 2) := by ring
+      _ ≤ lam2 P 1 * V := mul_le_mul_of_nonneg_left harea hL
+  have hmono : lam2 P 1 ≤ lam2 P 2 := by
+    have hdim : Module.finrank ℝ (Fin 2 → ℝ) = 2 := Module.finrank_fin_fun ℝ
+    exact DiscreteMinkowski.successiveMinimum_mono_of_le_finrank hPb
+      (by omega) (by rw [hdim])
+  have hrect : H * W ≤ V :=
+    area_ge_symmetric_extreme_section_rectangle hc hv hne hsym
+  have hgain : 0 ≤ (lam2 P 2 - lam2 P 1) * (V - H * W) :=
+    mul_nonneg (sub_nonneg.mpr hmono) (sub_nonneg.mpr hrect)
+  have hA : H ≤ lam2 P 1 * (V - H * W / 2) := by
+    nlinarith [hweighted, hcentral]
+  have hB : W ≤ lam2 P 2 * H * W / 2 := by
+    nlinarith [hparallel]
+  nlinarith [hrow, hgain, hA, hB]
+
 end
 
 end LatticeVolumeInterpolation
