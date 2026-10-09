@@ -2,6 +2,7 @@ import Pick
 import TheoremOneFour
 import UpperBound
 import BoundarySections
+import BoundaryFirstDirection
 
 /-!
 # Proposition 1.5: the Pick–boundary–Minkowski deduction
@@ -11,9 +12,9 @@ This file mechanizes the paper's deduction in its original order: Pick's theorem
 (Eq. (5.1)), the Henk–Schürmann–Wills boundary inequality (Eq. (5.2)), and
 Minkowski's second theorem supply the three terms of the product bound.
 
-The boundary inequality remains an explicit hypothesis here while its separate
-catalog item `henk_schurmann_wills_boundary_bound` is being formalized. Thus the
-theorem below is an intermediate bridge, not a complete proof of Proposition 1.5.
+The boundary inequality is proved unconditionally in `BoundaryFirstDirection.lean`.
+The intermediate conditional bridges remain below to expose the paper's
+dependency structure.
 -/
 
 open Set MeasureTheory
@@ -60,6 +61,16 @@ theorem proposition_1_5_of_pyramid_partition {P : Set (Fin 2 → ℝ)}
   have hboundary := boundary_bound_of_symmetric_pyramid_partition
     hP.isCompact hP.convex hint hsym A B harea hB hedges
   exact proposition_1_5_of_boundary_bound hP hint hsym hboundary
+
+/-- **Proposition 1.5.** The lower Freyer--Lucas product bound for every
+origin-symmetric convex lattice polygon with nonempty interior. -/
+theorem proposition_1_5_symmetric_lattice_polygon {P : Set (Fin 2 → ℝ)}
+    (hP : IsLatticePolygon P) (hint : (interior P).Nonempty)
+    (hsym : DiscreteMinkowski.IsOriginSymmetric P) :
+    (volume P).toReal * ((1 - lam2 P 1 / 2) * (1 - lam2 P 2 / 2)) ≤
+      (G2 (interior P) : ℝ) :=
+  proposition_1_5_of_boundary_bound hP hint hsym
+    (henk_schurmann_wills_boundary_bound hP hint hsym)
 
 end
 

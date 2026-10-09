@@ -122,6 +122,129 @@ theorem exists_first_minimum_lattice_vector
   rw [DiscreteMinkowski.halfDifferenceBody_eq_self hPb.2.1 hsym] at hg
   exact ⟨v, hvΛ, hv0, hg⟩
 
+/-- Align the first flag vector horizontally by an integer unimodular map.
+The two-vector flag is used only to obtain an integral automorphism. -/
+theorem exists_unimodular_horizontal_first_vector
+    {P : Set (Fin 2 → ℝ)}
+    (hPb : DiscreteMinkowski.IsPaperConvexBody P)
+    (hsym : DiscreteMinkowski.IsOriginSymmetric P) :
+    ∃ (V : (Fin 2 → ℝ) ≃ₗ[ℝ] (Fin 2 → ℝ)) (w : Fin 2 → ℝ),
+      (∀ x, V x ∈ standardIntegerLattice 2 ↔ x ∈ standardIntegerLattice 2) ∧
+      |LinearMap.det (V : (Fin 2 → ℝ) →ₗ[ℝ] (Fin 2 → ℝ))| = 1 ∧
+      w ∈ standardIntegerLattice 2 ∧ w ≠ 0 ∧ w 1 = 0 ∧
+      gauge (V '' P) w ≤ lam2 (V '' P) 1 := by
+  classical
+  have hdim : Module.finrank ℝ (Fin 2 → ℝ) = 2 := Module.finrank_fin_fun ℝ
+  let v : Fin 2 → (Fin 2 → ℝ) := fun k =>
+    DiscreteMinkowski.flagVector P (standardIntegerLattice 2) k.1
+  have hvΛ : ∀ k, v k ∈ standardIntegerLattice 2 := fun k =>
+    DiscreteMinkowski.flagVector_mem k.1
+      (DiscreteMinkowski.greedyChoice_flagSpan hPb (by rw [hdim]; exact k.2))
+  have hvind : LinearIndependent ℝ v := linearIndependent_flagVector hPb
+  choose z hz using fun k => (mem_standardIntegerLattice_iff_castCoords (v k)).1 (hvΛ k)
+  have hzind : LinearIndependent ℤ z := by
+    rw [Fintype.linearIndependent_iff] at hvind ⊢
+    intro g hg k
+    have hreal : ∑ j, (g j : ℝ) • v j = 0 := by
+      funext l
+      have := congrFun hg l
+      simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Pi.zero_apply] at this ⊢
+      simp only [hz, castCoords]
+      exact_mod_cast this
+    exact_mod_cast hvind _ hreal k
+  obtain ⟨U, hU⟩ := exists_triangularizing 2 z hzind
+  obtain ⟨V, hV, hVs, hdet⟩ := realize_unimodular U
+  have hΛ := mem_lattice_iff_of_realize V hV hVs
+  let w := V (v 0)
+  have hwΛ : w ∈ standardIntegerLattice 2 := (hΛ (v 0)).2 (hvΛ 0)
+  have hw0 : w ≠ 0 := fun h => (hvind.ne_zero 0) (V.injective (by simpa [w] using h))
+  have hwy : w 1 = 0 := by
+    simp only [w, hz 0, hV, castCoords]
+    exact_mod_cast hU 0 1 (by decide)
+  have hg := gauge_flagVector_le_successiveMinimum
+    (Λ := standardIntegerLattice 2) (k := 0) hPb (by rw [hdim]; norm_num)
+  rw [DiscreteMinkowski.halfDifferenceBody_eq_self hPb.2.1 hsym] at hg
+  have hwg : gauge (V '' P) w ≤ lam2 (V '' P) 1 := by
+    change gauge (V '' P) (V (v 0)) ≤
+      DiscreteMinkowski.successiveMinimum (V '' P) (standardIntegerLattice 2) 1
+    rw [gauge_image_apply V P (v 0), successiveMinimum_image V hΛ]
+    exact hg
+  exact ⟨V, w, hΛ, hdet, hwΛ, hw0, hwy, hwg⟩
+
+/-- An integer-preserving real linear automorphism sends a lattice polygon
+to a lattice polygon. -/
+theorem IsLatticePolygon.image_unimodular {P : Set (Fin 2 → ℝ)}
+    (hP : IsLatticePolygon P)
+    (V : (Fin 2 → ℝ) ≃ₗ[ℝ] (Fin 2 → ℝ))
+    (hΛ : ∀ x, V x ∈ standardIntegerLattice 2 ↔ x ∈ standardIntegerLattice 2) :
+    IsLatticePolygon (V '' P) := by
+  classical
+  obtain ⟨S, hS, rfl⟩ := hP
+  refine ⟨S.image V, fun s hs => ?_, ?_⟩
+  · obtain ⟨t, ht, rfl⟩ := Finset.mem_image.1 hs
+    exact (hΛ t).2 (hS t ht)
+  · rw [Finset.coe_image]
+    exact V.toLinearMap.image_convexHull _
+
+/-- Origin symmetry is invariant under a linear automorphism. -/
+theorem symmetric_image_linearEquiv {P : Set (Fin 2 → ℝ)}
+    (hsym : DiscreteMinkowski.IsOriginSymmetric P)
+    (V : (Fin 2 → ℝ) ≃ₗ[ℝ] (Fin 2 → ℝ)) :
+    DiscreteMinkowski.IsOriginSymmetric (V '' P) := by
+  change -P = P at hsym
+  change -(V '' P) = V '' P
+  ext y
+  constructor
+  · intro hy
+    rw [Set.mem_neg] at hy
+    obtain ⟨x, hx, hxy⟩ := hy
+    have hnx : -x ∈ P := by
+      have : -x ∈ -P := Set.neg_mem_neg.mpr hx
+      rwa [hsym] at this
+    refine ⟨-x, hnx, ?_⟩
+    rw [map_neg, hxy, neg_neg]
+  · rintro ⟨x, hx, rfl⟩
+    rw [Set.mem_neg]
+    have hnx : -x ∈ P := by
+      have : -x ∈ -P := Set.neg_mem_neg.mpr hx
+      rwa [hsym] at this
+    exact ⟨-x, hnx, by simp⟩
+
+/-- The lattice boundary count is unchanged by an integer-preserving real
+linear automorphism. -/
+theorem boundary_count_image_unimodular (P : Set (Fin 2 → ℝ))
+    (V : (Fin 2 → ℝ) ≃ₗ[ℝ] (Fin 2 → ℝ))
+    (hΛ : ∀ x, V x ∈ standardIntegerLattice 2 ↔ x ∈ standardIntegerLattice 2) :
+    G2 (frontier (V '' P)) = G2 (frontier P) := by
+  let W := LinearEquiv.toContinuousLinearEquiv V
+  have hfront : frontier (V '' P) = V '' frontier P := by
+    simpa [W] using (W.toHomeomorph.image_frontier P).symm
+  rw [hfront]
+  exact ncard_latticePoints_image V hΛ (frontier P)
+
+/-- The planar Henk--Schürmann--Wills boundary bound (Eq. (5.2)) for a
+centrally symmetric lattice polygon. The proof combines the source's
+first-minimum alignment and concave-section estimate with exact row counts. -/
+theorem henk_schurmann_wills_boundary_bound
+    {P : Set (Fin 2 → ℝ)} (hP : IsLatticePolygon P)
+    (hint : (interior P).Nonempty)
+    (hsym : DiscreteMinkowski.IsOriginSymmetric P) :
+    (G2 (frontier P) : ℝ) / 2 ≤
+      (volume P).toReal * (lam2 P 1 / 2 + lam2 P 2 / 2) := by
+  have hPb : DiscreteMinkowski.IsPaperConvexBody P :=
+    ⟨hP.isCompact.isBounded, hP.convex, hint⟩
+  obtain ⟨V, w, hΛ, hdet, hwΛ, hw0, hwy, hwg⟩ :=
+    exists_unimodular_horizontal_first_vector hPb hsym
+  have hQ : IsLatticePolygon (V '' P) := hP.image_unimodular V hΛ
+  have hQb := isPaperConvexBody_image V hPb
+  have hQsym := symmetric_image_linearEquiv hsym V
+  have hbound := boundary_bound_of_horizontal_first_gauge hQ hQb.2.2 hQsym
+    hwΛ hw0 hwy hwg
+  rw [boundary_count_image_unimodular P V hΛ,
+    volume_image_of_det V hdet P] at hbound
+  simp only [lam2, successiveMinimum_image V hΛ] at hbound
+  exact hbound
+
 end
 
 end LatticeVolumeInterpolation
