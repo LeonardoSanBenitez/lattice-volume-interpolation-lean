@@ -47,5 +47,6 @@ import PlanarRows
 import Pick
 import PropOneFive
 import BoundarySections
+import BoundaryRowCount
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
