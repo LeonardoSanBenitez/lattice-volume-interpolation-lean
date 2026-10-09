@@ -1,6 +1,7 @@
 import Pick
 import TheoremOneFour
 import UpperBound
+import BoundarySections
 
 /-!
 # Proposition 1.5: the Pick–boundary–Minkowski deduction
@@ -43,6 +44,22 @@ theorem proposition_1_5_of_boundary_bound {P : Set (Fin 2 → ℝ)}
       lam2 P 1 * lam2 P 2 by simp [lam2, Finset.prod_range_succ]] at hmink
   norm_num at hmink
   nlinarith
+
+/-- Proposition 1.5 after the symmetric-section part of the cited boundary
+proof has been discharged. The two facet identities `harea` and `hedges`
+remain explicit until the lattice-polygon edge construction supplies them. -/
+theorem proposition_1_5_of_pyramid_partition {P : Set (Fin 2 → ℝ)}
+    (hP : IsLatticePolygon P) (hint : (interior P).Nonempty)
+    (hsym : DiscreteMinkowski.IsOriginSymmetric P) (A B : ℝ)
+    (harea : A + B = (volume P).toReal)
+    (hB : B = (yHi P - yLo P) *
+      (rowHi P (yLo P) - rowLo P (yLo P)) / 2)
+    (hedges : (G2 (frontier P) : ℝ) / 2 ≤ lam2 P 1 * A + lam2 P 2 * B) :
+    (volume P).toReal * ((1 - lam2 P 1 / 2) * (1 - lam2 P 2 / 2)) ≤
+      (G2 (interior P) : ℝ) := by
+  have hboundary := boundary_bound_of_symmetric_pyramid_partition
+    hP.isCompact hP.convex hint hsym A B harea hB hedges
+  exact proposition_1_5_of_boundary_bound hP hint hsym hboundary
 
 end
 

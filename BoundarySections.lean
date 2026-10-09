@@ -98,6 +98,52 @@ theorem area_ge_symmetric_extreme_section_rectangle {P : Set (Fin 2 → ℝ)}
   area_ge_extreme_section_rectangle hc hv hne
     (symmetric_extreme_section_width_eq hsym)
 
+/-- The final two-dimensional arithmetic step in the Henk–Schürmann–Wills
+proof. `A` and `B` are respectively the sums of the origin-triangle areas
+over edges whose primitive normals do and do not annihilate a first-minimum
+vector. The hypotheses are exactly the polygon-edge decomposition and the
+specialized volume estimate that remain to be connected to `P`. -/
+theorem boundary_bound_of_pyramid_partition {P : Set (Fin 2 → ℝ)}
+    (hPb : DiscreteMinkowski.IsPaperConvexBody P) (A B : ℝ)
+    (harea : A + B = (volume P).toReal)
+    (hedges : (G2 (frontier P) : ℝ) / 2 ≤ lam2 P 1 * A + lam2 P 2 * B)
+    (hparallel : 2 * B ≤ (volume P).toReal) :
+    (G2 (frontier P) : ℝ) / 2 ≤
+      (volume P).toReal * (lam2 P 1 / 2 + lam2 P 2 / 2) := by
+  have hdim : Module.finrank ℝ (Fin 2 → ℝ) = 2 := Module.finrank_fin_fun ℝ
+  have hmono : lam2 P 1 ≤ lam2 P 2 :=
+    DiscreteMinkowski.successiveMinimum_mono_of_le_finrank hPb (by omega)
+      (by rw [hdim])
+  have hBA : 0 ≤ A - B := by linarith
+  have hgain := mul_nonneg (sub_nonneg.mpr hmono) hBA
+  have hidentity : (volume P).toReal * (lam2 P 1 / 2 + lam2 P 2 / 2) -
+      (lam2 P 1 * A + lam2 P 2 * B) =
+      (lam2 P 2 - lam2 P 1) * (A - B) / 2 := by
+    rw [← harea]
+    ring
+  linarith
+
+/-- The symmetric-body version of the source route. The remaining obligations
+are the two lattice-polygon facet identities: the origin-triangle areas sum to
+the total area, and primitive normals bound boundary lattice points by their
+weighted area sum. -/
+theorem boundary_bound_of_symmetric_pyramid_partition {P : Set (Fin 2 → ℝ)}
+    (hc : IsCompact P) (hv : Convex ℝ P) (hint : (interior P).Nonempty)
+    (hsym : DiscreteMinkowski.IsOriginSymmetric P) (A B : ℝ)
+    (harea : A + B = (volume P).toReal)
+    (hB : B = (yHi P - yLo P) *
+      (rowHi P (yLo P) - rowLo P (yLo P)) / 2)
+    (hedges : (G2 (frontier P) : ℝ) / 2 ≤ lam2 P 1 * A + lam2 P 2 * B) :
+    (G2 (frontier P) : ℝ) / 2 ≤
+      (volume P).toReal * (lam2 P 1 / 2 + lam2 P 2 / 2) := by
+  have hparallel : 2 * B ≤ (volume P).toReal := by
+    have hsection := area_ge_symmetric_extreme_section_rectangle hc hv
+      ⟨hint.some, interior_subset hint.some_mem⟩ hsym
+    rw [hB]
+    linarith
+  exact boundary_bound_of_pyramid_partition ⟨hc.isBounded, hv, hint⟩ A B
+    harea hedges hparallel
+
 end
 
 end LatticeVolumeInterpolation
