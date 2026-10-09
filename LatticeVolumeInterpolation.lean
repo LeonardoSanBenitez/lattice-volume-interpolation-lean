@@ -45,5 +45,6 @@ import LemmaFiveOne
 import TheoremOneFour
 import PlanarRows
 import Pick
+import PropOneFive
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
