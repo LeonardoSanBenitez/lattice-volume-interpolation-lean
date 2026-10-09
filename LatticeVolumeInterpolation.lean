@@ -48,5 +48,6 @@ import Pick
 import PropOneFive
 import BoundarySections
 import BoundaryRowCount
+import BoundaryMinima
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/

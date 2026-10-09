@@ -40,12 +40,9 @@ theorem area_ge_extreme_section_rectangle {P : Set (Fin 2 → ℝ)}
   rw [hvol, ENNReal.toReal_ofReal hintnonneg]
   nlinarith
 
-/-- Central symmetry identifies the lower extreme horizontal section with the
-reflection of the upper one. -/
-theorem symmetric_extreme_section_width_eq {P : Set (Fin 2 → ℝ)}
-    (hsym : DiscreteMinkowski.IsOriginSymmetric P) :
-    rowHi P (yLo P) - rowLo P (yLo P) =
-      rowHi P (yHi P) - rowLo P (yHi P) := by
+/-- The vertical range of an origin-symmetric planar set is symmetric. -/
+theorem yLo_eq_neg_yHi_of_symmetric {P : Set (Fin 2 → ℝ)}
+    (hsym : DiscreteMinkowski.IsOriginSymmetric P) : yLo P = -yHi P := by
   change -P = P at hsym
   have hneg (x : Fin 2 → ℝ) : x ∈ P ↔ -x ∈ P := by
     constructor
@@ -69,12 +66,30 @@ theorem symmetric_extreme_section_width_eq {P : Set (Fin 2 → ℝ)}
       obtain ⟨x, hx, hxt⟩ := ht
       refine ⟨-x, (hneg x).mp hx, ?_⟩
       simpa using congrArg Neg.neg hxt
-  have hlo : yLo P = -yHi P := by
-    unfold yLo yHi
-    calc
-      sInf ((fun x : Fin 2 → ℝ => x 1) '' P) =
-          sInf (-((fun x : Fin 2 → ℝ => x 1) '' P)) := congrArg sInf hIm
-      _ = -sSup ((fun x : Fin 2 → ℝ => x 1) '' P) := Real.sInf_neg _
+  unfold yLo yHi
+  calc
+    sInf ((fun x : Fin 2 → ℝ => x 1) '' P) =
+        sInf (-((fun x : Fin 2 → ℝ => x 1) '' P)) := congrArg sInf hIm
+    _ = -sSup ((fun x : Fin 2 → ℝ => x 1) '' P) := Real.sInf_neg _
+
+/-- Central symmetry identifies the lower extreme horizontal section with the
+reflection of the upper one. -/
+theorem symmetric_extreme_section_width_eq {P : Set (Fin 2 → ℝ)}
+    (hsym : DiscreteMinkowski.IsOriginSymmetric P) :
+    rowHi P (yLo P) - rowLo P (yLo P) =
+      rowHi P (yHi P) - rowLo P (yHi P) := by
+  have hlo := yLo_eq_neg_yHi_of_symmetric hsym
+  change -P = P at hsym
+  have hneg (x : Fin 2 → ℝ) : x ∈ P ↔ -x ∈ P := by
+    constructor
+    · intro hx
+      have h : -x ∈ -P := Set.neg_mem_neg.mpr hx
+      rw [hsym] at h
+      exact h
+    · intro hx
+      have h : -(-x) ∈ -P := Set.neg_mem_neg.mpr hx
+      rw [hsym, neg_neg] at h
+      exact h
   have hsecEq : hsec P (yLo P) = -(hsec P (yHi P)) := by
     ext s
     rw [Set.mem_neg]
