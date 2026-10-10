@@ -1,5 +1,7 @@
 import GeneralShaking
 import Mathlib.LinearAlgebra.Matrix.DotProduct
+import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
+import Mathlib.Algebra.Order.Field.Pointwise
 
 /-!
 # Blaschke shaking in an arbitrary direction and dimension
@@ -8,7 +10,7 @@ Catalog item `lemma_3_2_shaking_properties` (Lemma 3.2(i)--(iv)). The earlier
 `GeneralShaking` proves all four parts in the plane. Here the orthogonal projection
 and each fibre are expressed in the paper's direction `u` in `ℝⁿ`; the scalar fibre
 parameter multiplies `u` itself, so its interval length is Euclidean chord length
-divided by `‖u‖`.
+divided by the Euclidean length of `u` (not the supremum norm on the function space).
 -/
 
 open Set Module MeasureTheory
@@ -61,6 +63,87 @@ theorem dotN_self_pos {u : Fin n → ℝ} (hu : u ≠ 0) : 0 < dotN u u := by
   · exact h
   · exact False.elim (hne h.symm)
 
+theorem orthProjN_mem_hyperplane {u : Fin n → ℝ} (hu : u ≠ 0) (x : Fin n → ℝ) :
+    dotN u (orthProjN u x) = 0 := by
+  have hd := (dotN_self_pos hu).ne'
+  have hd' : u ⬝ᵥ u ≠ 0 := hd
+  simp only [orthProjN, dotN, dotProduct_sub, dotProduct_smul, smul_eq_mul]
+  field_simp [hd']
+  ring
+
+/-- An orthogonal chart sends any nonzero `u` to a positive coordinate vector.
+The reflection is across the hyperplane perpendicular to `u/‖u‖ - e_j`. -/
+theorem exists_direction_chart (j : Fin n) {u : Fin n → ℝ} (hu : u ≠ 0) :
+    ∃ (V : (Fin n → ℝ) ≃ₗ[ℝ] (Fin n → ℝ)) (c : ℝ),
+      0 < c ∧ V u = c • Pi.single j (1 : ℝ) ∧
+      |LinearMap.det (V : (Fin n → ℝ) →ₗ[ℝ] (Fin n → ℝ))| = 1 ∧
+      (∀ x y, dotN (V x) (V y) = dotN x y) := by
+  let F := EuclideanSpace.equiv (Fin n) ℝ
+  let z : EuclideanSpace ℝ (Fin n) := F.symm u
+  have hz : z ≠ 0 := by
+    intro h
+    apply hu
+    have : u = F z := by simp [z]
+    rw [this, h]
+    simp
+  let w : EuclideanSpace ℝ (Fin n) := ‖z‖⁻¹ • z
+  let e : EuclideanSpace ℝ (Fin n) := EuclideanSpace.single j 1
+  have hw : ‖w‖ = 1 := norm_smul_inv_norm hz
+  have he : ‖e‖ = 1 := by simp [e]
+  let R := (ℝ ∙ (w - e))ᗮ.reflection
+  have hRw : R w = e := Submodule.reflection_sub (hw.trans he.symm)
+  let V : (Fin n → ℝ) ≃ₗ[ℝ] (Fin n → ℝ) :=
+    F.symm.toLinearEquiv.trans (R.toLinearEquiv.trans F.toLinearEquiv)
+  have hzw : z = ‖z‖ • w := by
+    simp [w, smul_smul, mul_inv_cancel₀ (norm_ne_zero_iff.mpr hz)]
+  refine ⟨V, ‖z‖, norm_pos_iff.mpr hz, ?_, ?_, ?_⟩
+  · calc
+      V u = F (R z) := rfl
+      _ = F (R (‖z‖ • w)) := by rw [← hzw]
+      _ = ‖z‖ • F e := by rw [map_smul, hRw, map_smul]
+      _ = ‖z‖ • Pi.single j (1 : ℝ) := by congr 1
+  · have hdet_eq : LinearMap.det (V : (Fin n → ℝ) →ₗ[ℝ] (Fin n → ℝ)) =
+        LinearMap.det (R.toLinearEquiv :
+          (EuclideanSpace ℝ (Fin n)) →ₗ[ℝ] (EuclideanSpace ℝ (Fin n))) := by
+      change LinearMap.det (F.toLinearEquiv.toLinearMap ∘ₗ
+        R.toLinearEquiv.toLinearMap ∘ₗ F.symm.toLinearEquiv.toLinearMap) = _
+      exact LinearMap.det_conj R.toLinearEquiv.toLinearMap F.toLinearEquiv
+    rw [hdet_eq, Submodule.det_reflection]
+    simp
+  · intro x y
+    have hinner := R.inner_map_map (F.symm x) (F.symm y)
+    change (F (R (F.symm y))) ⬝ᵥ (F (R (F.symm x))) = y ⬝ᵥ x at hinner
+    simpa [dotN, dotProduct_comm, V, F] using hinner
+
+theorem chart_proj_zero (j : Fin n) {u : Fin n → ℝ} (hu : u ≠ 0)
+    (V : (Fin n → ℝ) ≃ₗ[ℝ] (Fin n → ℝ)) (c : ℝ) (hc : 0 < c)
+    (hVu : V u = c • Pi.single j (1 : ℝ))
+    (hdot : ∀ x y, dotN (V x) (V y) = dotN x y)
+    (x : Fin n → ℝ) : (V (orthProjN u x)) j = 0 := by
+  have h0 := orthProjN_mem_hyperplane hu x
+  have h := hdot u (orthProjN u x)
+  rw [hVu] at h
+  change (c • Pi.single j (1 : ℝ)) ⬝ᵥ V (orthProjN u x) = dotN u (orthProjN u x) at h
+  rw [smul_dotProduct, single_dotProduct, one_mul] at h
+  exact (mul_eq_zero.mp (h.trans h0)).resolve_left hc.ne'
+
+theorem chart_orthProj (j : Fin n) {u : Fin n → ℝ} (hu : u ≠ 0)
+    (V : (Fin n → ℝ) ≃ₗ[ℝ] (Fin n → ℝ)) (c : ℝ) (hc : 0 < c)
+    (hVu : V u = c • Pi.single j (1 : ℝ))
+    (hdot : ∀ x y, dotN (V x) (V y) = dotN x y)
+    (x : Fin n → ℝ) :
+    V (orthProjN u x) = Function.update (V x) j 0 := by
+  have h0 := chart_proj_zero j hu V c hc hVu hdot x
+  have hlin : V (orthProjN u x) =
+      V x - (dotN u x / dotN u u) • (c • Pi.single j (1 : ℝ)) := by
+    simp [orthProjN, map_sub, map_smul, hVu]
+  funext i
+  by_cases hi : i = j
+  · subst i
+    simpa using h0
+  · have hcoord := congrFun hlin i
+    simpa [Function.update_of_ne hi, Pi.single_eq_of_ne hi] using hcoord
+
 theorem orthProjN_add_smul (u x : Fin n → ℝ) :
     orthProjN u x + (dotN u x / dotN u u) • u = x := by
   unfold orthProjN
@@ -89,14 +172,6 @@ theorem orthProjN_eq_of_sub_smul {u : Fin n → ℝ} (hu : u ≠ 0)
     orthProjN u a = orthProjN u b := by
   have h : a = b + t • u := by rw [← hab]; abel
   rw [h, orthProjN_add_smul_u hu]
-
-theorem orthProjN_mem_hyperplane {u : Fin n → ℝ} (hu : u ≠ 0) (x : Fin n → ℝ) :
-    dotN u (orthProjN u x) = 0 := by
-  have hd := (dotN_self_pos hu).ne'
-  have hd' : u ⬝ᵥ u ≠ 0 := hd
-  simp only [orthProjN, dotN, dotProduct_sub, dotProduct_smul, smul_eq_mul]
-  field_simp [hd']
-  ring
 
 theorem rawFibre_bdd {K : Set (Fin n → ℝ)} (hK : Bornology.IsBounded K)
     {u : Fin n → ℝ} (hu : u ≠ 0) (p : Fin n → ℝ) :
@@ -335,6 +410,131 @@ theorem gauge_orthShakingN_proj_le {K : Set (Fin n → ℝ)}
     rw [hrep, DiscreteMinkowski.halfDifferenceBody_apply]
     exact smul_mem_smul_set (smul_mem_smul_set (sub_mem_sub hpa hpb))
   exact DiscreteMinkowski.gauge_le_of_mem_smul hr0.le hmem
+
+/-! ### Transport of the fibres and their volumes -/
+
+theorem chart_fibre_point (j : Fin n) {u p : Fin n → ℝ}
+    (V : (Fin n → ℝ) ≃ₗ[ℝ] (Fin n → ℝ)) (c : ℝ)
+    (hVu : V u = c • Pi.single j (1 : ℝ)) (hp : (V p) j = 0) (t : ℝ) :
+    V (p + t • u) = Function.update (V p) j (c * t) := by
+  rw [map_add, map_smul, hVu]
+  funext i
+  by_cases hi : i = j
+  · subst i; simp [hp, mul_comm]
+  · simp [Function.update_of_ne hi, Pi.single_eq_of_ne hi]
+
+theorem fibre_chart (K : Set (Fin n → ℝ)) (j : Fin n) {u p : Fin n → ℝ}
+    (V : (Fin n → ℝ) ≃ₗ[ℝ] (Fin n → ℝ)) (c : ℝ) (hc : 0 < c)
+    (hVu : V u = c • Pi.single j (1 : ℝ)) (hp : (V p) j = 0) :
+    fibre (V '' K) j (V p) = c • rawFibre K u p := by
+  ext s
+  constructor
+  · intro hs
+    refine ⟨s / c, ?_, by simpa only [smul_eq_mul] using mul_div_cancel₀ s hc.ne'⟩
+    change p + (s / c) • u ∈ K
+    have hpoint := chart_fibre_point j V c hVu hp (s / c)
+    rw [mul_div_cancel₀ _ hc.ne'] at hpoint
+    have himage : V (p + (s / c) • u) ∈ V '' K := hpoint.symm ▸ hs
+    exact V.injective.mem_set_image.mp himage
+  · rintro ⟨t, ht, rfl⟩
+    change Function.update (V p) j (c * t) ∈ V '' K
+    rw [← chart_fibre_point j V c hVu hp t]
+    exact ⟨p + t • u, ht, rfl⟩
+
+theorem fibreLength_chart {K : Set (Fin n → ℝ)} (hK : IsCompact K)
+    (hKc : Convex ℝ K) (j : Fin n) {u p : Fin n → ℝ} (hu : u ≠ 0)
+    (V : (Fin n → ℝ) ≃ₗ[ℝ] (Fin n → ℝ)) (c : ℝ) (hc : 0 < c)
+    (hVu : V u = c • Pi.single j (1 : ℝ)) (hp : (V p) j = 0)
+    (hne : (rawFibre K u p).Nonempty) :
+    fibreLength (V '' K) j (V p) = c * rawLength K u p := by
+  have hf := fibre_chart K j V c hc hVu hp
+  rw [rawFibre_eq_Icc hK hKc hu p hne, LinearOrderedField.smul_Icc hc] at hf
+  have hord : sInf (rawFibre K u p) ≤ sSup (rawFibre K u p) := by
+    have := rawLength_nonneg hK hu hne
+    unfold rawLength at this
+    linarith
+  unfold fibreLength
+  rw [hf, csSup_Icc (mul_le_mul_of_nonneg_left hord hc.le),
+    csInf_Icc (mul_le_mul_of_nonneg_left hord hc.le)]
+  exact (mul_sub c _ _).symm
+
+/-- The direction chart identifies the exact shaking sets, including their boundary fibres. -/
+theorem image_orthShakingN_eq_coordShaking {K : Set (Fin n → ℝ)}
+    (hK : IsCompact K) (hKc : Convex ℝ K) (j : Fin n) {u : Fin n → ℝ} (hu : u ≠ 0)
+    (V : (Fin n → ℝ) ≃ₗ[ℝ] (Fin n → ℝ)) (c : ℝ) (hc : 0 < c)
+    (hVu : V u = c • Pi.single j (1 : ℝ))
+    (hdot : ∀ x y, dotN (V x) (V y) = dotN x y) :
+    V '' orthShakingN K u = coordShaking (V '' K) j := by
+  ext y
+  constructor
+  · rintro ⟨z, ⟨p, hp, t, ht, rfl⟩, rfl⟩
+    have hp0 : (V p) j = 0 := by
+      obtain ⟨x, hx, rfl⟩ := hp
+      exact chart_proj_zero j hu V c hc hVu hdot x
+    have hne := rawFibre_nonempty_of_proj hp
+    rw [chart_fibre_point j V c hVu hp0]
+    refine ⟨?_, by simpa using mul_nonneg hc.le ht.1, ?_⟩
+    · rw [fibre_update, fibre_chart K j V c hc hVu hp0]
+      obtain ⟨t, ht⟩ := hne
+      exact ⟨c * t, ⟨t, ht, rfl⟩⟩
+    · rw [fibreLength_update, fibreLength_chart hK hKc j hu V c hc hVu hp0 hne]
+      simpa using mul_le_mul_of_nonneg_left ht.2 hc.le
+  · rintro ⟨hne, hy0, hyl⟩
+    obtain ⟨s, x, hx, hxchart⟩ := hne
+    let p := orthProjN u x
+    have hp : p ∈ orthProjN u '' K := ⟨x, hx, rfl⟩
+    have hVp : V p = Function.update y j 0 := by
+      rw [chart_orthProj j hu V c hc hVu hdot x, hxchart]
+      simp
+    have hp0 : (V p) j = 0 := by rw [hVp]; simp
+    have hraw := rawFibre_nonempty_of_proj hp
+    have hlen : fibreLength (V '' K) j y = c * rawLength K u p := by
+      rw [← fibreLength_update (V '' K) j y 0, ← hVp]
+      exact fibreLength_chart hK hKc j hu V c hc hVu hp0 hraw
+    refine ⟨p + (y j / c) • u, ⟨p, hp, y j / c, ⟨div_nonneg hy0 hc.le, ?_⟩, rfl⟩, ?_⟩
+    · apply (div_le_iff₀ hc).2
+      rw [hlen] at hyl
+      simpa [mul_comm] using hyl
+    · rw [chart_fibre_point j V c hVu hp0, hVp, mul_div_cancel₀ _ hc.ne']
+      simp
+
+/-- The Euclidean length of the actual chord is its scalar length times the
+Euclidean length of the direction; the ambient function-space norm is not used. -/
+theorem euclidean_chord_length {K : Set (Fin n → ℝ)} (hK : IsCompact K)
+    {u p : Fin n → ℝ} (hu : u ≠ 0) (hne : (rawFibre K u p).Nonempty) :
+    dist ((EuclideanSpace.equiv (Fin n) ℝ).symm
+      (p + sSup (rawFibre K u p) • u))
+      ((EuclideanSpace.equiv (Fin n) ℝ).symm
+      (p + sInf (rawFibre K u p) • u)) =
+    rawLength K u p * ‖(EuclideanSpace.equiv (Fin n) ℝ).symm u‖ := by
+  rw [dist_eq_norm, ← map_sub]
+  have hsub : (p + sSup (rawFibre K u p) • u) -
+      (p + sInf (rawFibre K u p) • u) = rawLength K u p • u := by
+    unfold rawLength
+    module
+  rw [hsub, map_smul, norm_smul, Real.norm_eq_abs,
+    abs_of_nonneg (rawLength_nonneg hK hu hne)]
+
+/-- **Lemma 3.2(ii), all dimensions:** orthogonal shaking preserves volume.
+The chart transports the unchanged chord lengths to the coordinate Fubini identity. -/
+theorem volume_orthShakingN {K : Set (Fin n → ℝ)} (hK : IsCompact K)
+    (hKc : Convex ℝ K) {u : Fin n → ℝ} (hu : u ≠ 0) :
+    volume (orthShakingN K u) = volume K := by
+  have hn : 0 < n := by
+    by_contra h
+    have hn0 : n = 0 := by omega
+    subst n
+    exact hu (Subsingleton.elim _ _)
+  let j : Fin n := ⟨0, hn⟩
+  obtain ⟨V, c, hc, hVu, hdet, hdot⟩ := exists_direction_chart j hu
+  have hcont : Continuous V := V.toContinuousLinearEquiv.continuous
+  calc
+    volume (orthShakingN K u) = volume (V '' orthShakingN K u) :=
+      (volume_image_of_det V hdet _).symm
+    _ = volume (coordShaking (V '' K) j) := by
+      rw [image_orthShakingN_eq_coordShaking hK hKc j hu V c hc hVu hdot]
+    _ = volume (V '' K) := volume_coordShaking (hK.image hcont) (hKc.linear_image V.toLinearMap) j
+    _ = volume K := volume_image_of_det V hdet K
 
 end
 
