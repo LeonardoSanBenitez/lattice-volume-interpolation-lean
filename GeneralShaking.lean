@@ -127,6 +127,61 @@ theorem dirFibre_bdd {L : Set (Fin 2 → ℝ)} (hL : Bornology.IsBounded L) {u :
   rw [abs_le] at this
   exact this.1
 
+/-- The general planar shaking contains its projection onto the anchor line.
+This is Lemma 3.2(i) in dimension two, stated for the later general shaking. -/
+theorem obliqueProj_image_subset_generalShaking
+    {K : Set (Fin 2 → ℝ)} (hK : IsCompact K)
+    {ν : Fin 2 → ℝ} {c : ℝ} {u : Fin 2 → ℝ}
+    (h : dot2 ν u ≠ 0) :
+    obliqueProj ν c u '' K ⊆ generalShaking K ν c u := by
+  rintro p ⟨x, hx, rfl⟩
+  have hu := ne_zero_of_dot2_ne_zero h
+  have hne : (dirFibre K u (obliqueProj ν c u x)).Nonempty := by
+    refine ⟨(dot2 ν x - c) / dot2 ν u * eucLen u, ?_⟩
+    show _ ∈ K
+    rw [obliqueProj_add_smul_unitDir h]
+    exact hx
+  obtain ⟨habove, hbelow⟩ := dirFibre_bdd hK.isBounded hu (obliqueProj ν c u x)
+  obtain ⟨t, ht⟩ := hne
+  have hlen : 0 ≤ dirLength K u (obliqueProj ν c u x) := by
+    unfold dirLength
+    have hlo := csInf_le hbelow ht
+    have hhi := le_csSup habove ht
+    linarith
+  exact ⟨_, ⟨x, hx, rfl⟩, 0, ⟨le_rfl, hlen⟩, by simp⟩
+
+/-- Orthogonal shaking in a nonzero direction, with anchor `u⊥` through the origin. -/
+def orthShaking (K : Set (Fin 2 → ℝ)) (u : Fin 2 → ℝ) : Set (Fin 2 → ℝ) :=
+  generalShaking K u 0 u
+
+/-- The orthogonal projection to `u⊥`, written in the paper's direction notation. -/
+def orthProj (u x : Fin 2 → ℝ) : Fin 2 → ℝ := obliqueProj u 0 u x
+
+/-- The orthogonal projection is linear in the point being projected. -/
+def orthProjLin (u : Fin 2 → ℝ) : (Fin 2 → ℝ) →ₗ[ℝ] (Fin 2 → ℝ) where
+  toFun := orthProj u
+  map_add' x y := by
+    funext i; fin_cases i <;> simp [orthProj, obliqueProj, dot2, Pi.add_apply,
+      Pi.sub_apply, Pi.smul_apply, smul_eq_mul] <;> ring
+  map_smul' r x := by
+    funext i; fin_cases i <;> simp [orthProj, obliqueProj, dot2, Pi.smul_apply,
+      Pi.sub_apply, smul_eq_mul] <;> ring
+
+theorem dot2_self_pos {u : Fin 2 → ℝ} (hu : u ≠ 0) : 0 < dot2 u u := by
+  unfold dot2
+  by_contra h
+  push Not at h
+  have h0 : u 0 = 0 := by nlinarith [sq_nonneg (u 0), sq_nonneg (u 1)]
+  have h1 : u 1 = 0 := by nlinarith [sq_nonneg (u 0), sq_nonneg (u 1)]
+  apply hu
+  funext i; fin_cases i <;> simp [h0, h1]
+
+/-- **Lemma 3.2(i), planar general direction:** `K|u⊥ ⊆ sh_u(K)`. -/
+theorem orthProj_image_subset_orthShaking {K : Set (Fin 2 → ℝ)}
+    (hK : IsCompact K) {u : Fin 2 → ℝ} (hu : u ≠ 0) :
+    orthProj u '' K ⊆ orthShaking K u :=
+  obliqueProj_image_subset_generalShaking hK (dot2_self_pos hu).ne'
+
 /-- **Lemma 5.3.** The general planar shaking is monotone under inclusion. -/
 theorem lemma_5_3 {K L : Set (Fin 2 → ℝ)} (hL : Bornology.IsBounded L) (hKL : K ⊆ L)
     {ν : Fin 2 → ℝ} {c : ℝ} {u : Fin 2 → ℝ} (h : dot2 ν u ≠ 0) :
@@ -344,6 +399,17 @@ theorem image_shakeChartInv (hd : dot2 ν (unitDir u) ≠ 0) (S : Set (Fin 2 →
   funext z
   rw [shakeChartInv_eq hd, sub_eq_add_neg]
 
+theorem chartShift_zero (ν u : Fin 2 → ℝ) : chartShift ν 0 u = 0 := by
+  refine vec2_ext ?_ ?_ <;> simp [chartShift]
+
+theorem generalShaking_eq_of_zero (h : dot2 ν u ≠ 0) (K : Set (Fin 2 → ℝ)) :
+    generalShaking K ν 0 u =
+      (chartLin ν u (dot2_unitDir_ne_zero h)).symm ''
+        coordShaking (chartLin ν u (dot2_unitDir_ne_zero h) '' K) 1 := by
+  have hd := dot2_unitDir_ne_zero h
+  rw [generalShaking_eq h, image_shakeChartInv hd, image_shakeChart hd, chartShift_zero]
+  simp
+
 theorem det_chartLin (hd : dot2 ν (unitDir u) ≠ 0) :
     LinearMap.det (chartLin ν u hd : (Fin 2 → ℝ) →ₗ[ℝ] (Fin 2 → ℝ)) = 1 := by
   rw [← LinearMap.det_toMatrix', Matrix.det_fin_two]
@@ -427,6 +493,191 @@ theorem volume_generalShaking (h : dot2 ν u ≠ 0) {K : Set (Fin 2 → ℝ)} (h
     volume_coordShaking (isCompact_image_shakeChart hd hK) (convex_image_shakeChart hd hKc) 1,
     volume_image_shakeChart hd]
 
+/-- **Lemma 3.2(ii), planar general direction:** orthogonal shaking preserves volume. -/
+theorem volume_orthShaking {K : Set (Fin 2 → ℝ)} (hK : IsCompact K)
+    (hKc : Convex ℝ K) {u : Fin 2 → ℝ} (hu : u ≠ 0) :
+    volume (orthShaking K u) = volume K :=
+  volume_generalShaking (dot2_self_pos hu).ne' hK hKc
+
+/-- The orthogonal chart carries `u` to a multiple of the second coordinate vector. -/
+theorem chartLin_self_eq_single {u : Fin 2 → ℝ} (hu : u ≠ 0) :
+    chartLin u u (dot2_unitDir_ne_zero (dot2_self_pos hu).ne') u =
+      (dot2 u u / dot2 u (unitDir u)) • (Pi.single 1 (1 : ℝ) : Fin 2 → ℝ) := by
+  funext i
+  fin_cases i
+  · simp [chartLin, unitDir, Pi.smul_apply, smul_eq_mul]; ring
+  · simp [chartLin]
+
+/-- The chart sends orthogonal shaking to ordinary coordinate shaking. -/
+theorem image_orthShaking_chart {K : Set (Fin 2 → ℝ)} {u : Fin 2 → ℝ}
+    (hu : u ≠ 0) :
+    let V := chartLin u u (dot2_unitDir_ne_zero (dot2_self_pos hu).ne')
+    V '' orthShaking K u = coordShaking (V '' K) 1 := by
+  dsimp
+  rw [orthShaking, generalShaking_eq_of_zero (dot2_self_pos hu).ne', Set.image_image]
+  simp
+
+/-- A coordinate shaking of a compact convex body is again a body in the paper's sense. -/
+theorem paperConvexBody_coordShaking {n : ℕ} {K : Set (Fin n → ℝ)}
+    (hK : IsCompact K) (hKb : DiscreteMinkowski.IsPaperConvexBody K) (j : Fin n) :
+    DiscreteMinkowski.IsPaperConvexBody (coordShaking K j) := by
+  have hconv := convex_coordShaking hK hKb.2.1 j
+  refine ⟨(isCompact_coordShaking hK j).isBounded, hconv, ?_⟩
+  apply interior_nonempty_of_volume_pos hconv
+  rw [volume_coordShaking hK hKb.2.1 j]
+  obtain ⟨x, hx⟩ := hKb.2.2
+  exact lt_of_lt_of_le (isOpen_interior.measure_pos volume ⟨x, hx⟩)
+    (measure_mono interior_subset)
+
+/-- The reverse direction along a coordinate axis: a shaken fibre has its old length. -/
+theorem gauge_coordShaking_single_ge {n : ℕ} {K : Set (Fin n → ℝ)}
+    (hK : IsCompact K) (hKb : DiscreteMinkowski.IsPaperConvexBody K) (j : Fin n) :
+    gauge (DiscreteMinkowski.halfDifferenceBody K) (Pi.single j (1 : ℝ)) ≤
+      gauge (DiscreteMinkowski.halfDifferenceBody (coordShaking K j))
+        (Pi.single j (1 : ℝ)) := by
+  refine le_of_forall_gt_imp_ge_of_dense fun r hr => ?_
+  have hr0 : 0 < r := lt_of_le_of_lt (gauge_nonneg _) hr
+  have hx : (Pi.single j (1 : ℝ) : Fin n → ℝ) ∈
+      r • DiscreteMinkowski.halfDifferenceBody (coordShaking K j) :=
+    DiscreteMinkowski.mem_smul_of_gauge_lt (paperConvexBody_coordShaking hK hKb j) hr
+  obtain ⟨d, hd, hdx⟩ := mem_smul_set.1 hx
+  rw [DiscreteMinkowski.halfDifferenceBody_apply] at hd
+  obtain ⟨w, ⟨a, ha, b, hb, rfl⟩, rfl⟩ := mem_smul_set.1 hd
+  have hcoord : ∀ i, (Pi.single j (1 : ℝ) : Fin n → ℝ) i =
+      r * (2⁻¹ * (a i - b i)) := by
+    intro i; rw [← hdx]; simp [smul_eq_mul]
+  have hoff : ∀ i, i ≠ j → b i = a i := by
+    intro i hi
+    have hc := hcoord i
+    rw [Pi.single_eq_of_ne hi] at hc
+    have hr2 : r * 2⁻¹ ≠ 0 := by positivity
+    have : r * 2⁻¹ * (a i - b i) = 0 := by linarith
+    rcases mul_eq_zero.1 this with h | h
+    · exact absurd h hr2
+    · linarith
+  have hon : a j - b j = 2 / r := by
+    have hc := hcoord j
+    rw [Pi.single_eq_same] at hc
+    field_simp at hc ⊢
+    linarith
+  have hlen : 2 / r ≤ fibreLength K j a := by
+    have := ha.2.2
+    have := hb.2.1
+    linarith
+  have hne : (fibre K j a).Nonempty := ha.1
+  have hcompact := isCompact_fibre hK j a
+  have hlo : sInf (fibre K j a) ∈ fibre K j a := hcompact.sInf_mem hne
+  have hhi : sInf (fibre K j a) + 2 / r ∈ fibre K j a := by
+    have hmemIcc : sInf (fibre K j a) + 2 / r ∈
+        Icc (sInf (fibre K j a)) (sSup (fibre K j a)) := by
+      have hdiv : 0 ≤ 2 / r := by positivity
+      refine ⟨by linarith, ?_⟩
+      unfold fibreLength at hlen
+      linarith
+    exact (congrArg (fun S : Set ℝ => sInf (fibre K j a) + 2 / r ∈ S)
+      (fibre_eq_Icc hK hKb.2.1 hne).symm).mp hmemIcc
+  have hq : Function.update a j (sInf (fibre K j a)) ∈ K := hlo
+  have hp : Function.update a j (sInf (fibre K j a) + 2 / r) ∈ K := hhi
+  have hrep : (Pi.single j (1 : ℝ) : Fin n → ℝ) =
+      r • ((2 : ℝ)⁻¹ • (Function.update a j (sInf (fibre K j a) + 2 / r) -
+        Function.update a j (sInf (fibre K j a)))) := by
+    funext i
+    by_cases h : i = j
+    · subst h; simp; field_simp
+    · simp [Function.update_of_ne h, Pi.single_eq_of_ne h]
+  have hmem : (Pi.single j (1 : ℝ) : Fin n → ℝ) ∈
+      r • DiscreteMinkowski.halfDifferenceBody K := by
+    rw [hrep, DiscreteMinkowski.halfDifferenceBody_apply]
+    exact smul_mem_smul_set (smul_mem_smul_set (sub_mem_sub hp hq))
+  exact DiscreteMinkowski.gauge_le_of_mem_smul hr0.le hmem
+
+theorem gauge_coordShaking_smul_single_ge {n : ℕ} {K : Set (Fin n → ℝ)}
+    (hK : IsCompact K) (hKb : DiscreteMinkowski.IsPaperConvexBody K)
+    (j : Fin n) (c : ℝ) :
+    gauge (DiscreteMinkowski.halfDifferenceBody K)
+        (c • (Pi.single j (1 : ℝ) : Fin n → ℝ)) ≤
+      gauge (DiscreteMinkowski.halfDifferenceBody (coordShaking K j))
+        (c • (Pi.single j (1 : ℝ) : Fin n → ℝ)) := by
+  rw [gauge_halfDifferenceBody_smul, gauge_halfDifferenceBody_smul]
+  exact mul_le_mul_of_nonneg_left (gauge_coordShaking_single_ge hK hKb j) (abs_nonneg c)
+
+/-- **Lemma 3.2(iii)** on a coordinate axis: shaking preserves its gauge exactly. -/
+theorem gauge_coordShaking_smul_single_eq {n : ℕ} {K : Set (Fin n → ℝ)}
+    (hK : IsCompact K) (hKb : DiscreteMinkowski.IsPaperConvexBody K)
+    (j : Fin n) (c : ℝ) :
+    gauge (DiscreteMinkowski.halfDifferenceBody (coordShaking K j))
+        (c • (Pi.single j (1 : ℝ) : Fin n → ℝ)) =
+      gauge (DiscreteMinkowski.halfDifferenceBody K)
+        (c • (Pi.single j (1 : ℝ) : Fin n → ℝ)) :=
+  le_antisymm (gauge_coordShaking_smul_single_le hK hKb j c)
+    (gauge_coordShaking_smul_single_ge hK hKb j c)
+
+/-- The `≤` direction of Lemma 3.2(iii), transferred from the fibre argument for `e₂`. -/
+theorem gauge_orthShaking_direction_le {K : Set (Fin 2 → ℝ)}
+    (hK : IsCompact K) (hKb : DiscreteMinkowski.IsPaperConvexBody K)
+    {u : Fin 2 → ℝ} (hu : u ≠ 0) :
+    gauge (DiscreteMinkowski.halfDifferenceBody (orthShaking K u)) u ≤
+      gauge (DiscreteMinkowski.halfDifferenceBody K) u := by
+  let V := chartLin u u (dot2_unitDir_ne_zero (dot2_self_pos hu).ne')
+  let c := dot2 u u / dot2 u (unitDir u)
+  have hVu : V u = c • (Pi.single 1 (1 : ℝ) : Fin 2 → ℝ) :=
+    chartLin_self_eq_single hu
+  have hVsh : V '' orthShaking K u = coordShaking (V '' K) 1 :=
+    image_orthShaking_chart hu
+  have hVc : IsCompact (V '' K) := hK.image V.toLinearMap.continuous_of_finiteDimensional
+  have hVb := isPaperConvexBody_image V hKb
+  have hcore := gauge_coordShaking_smul_single_le hVc hVb 1 c
+  rw [← hVsh, ← hVu, halfDifferenceBody_image V,
+    gauge_image_apply V, halfDifferenceBody_image V, gauge_image_apply V] at hcore
+  exact hcore
+
+/-- **Lemma 3.2(iii), planar general direction:** `|u|` is unchanged by shaking along `u`. -/
+theorem gauge_orthShaking_direction_eq {K : Set (Fin 2 → ℝ)}
+    (hK : IsCompact K) (hKb : DiscreteMinkowski.IsPaperConvexBody K)
+    {u : Fin 2 → ℝ} (hu : u ≠ 0) :
+    gauge (DiscreteMinkowski.halfDifferenceBody (orthShaking K u)) u =
+      gauge (DiscreteMinkowski.halfDifferenceBody K) u := by
+  let V := chartLin u u (dot2_unitDir_ne_zero (dot2_self_pos hu).ne')
+  let c := dot2 u u / dot2 u (unitDir u)
+  have hVu : V u = c • (Pi.single 1 (1 : ℝ) : Fin 2 → ℝ) :=
+    chartLin_self_eq_single hu
+  have hVsh : V '' orthShaking K u = coordShaking (V '' K) 1 :=
+    image_orthShaking_chart hu
+  have hVc : IsCompact (V '' K) := hK.image V.toLinearMap.continuous_of_finiteDimensional
+  have hVb := isPaperConvexBody_image V hKb
+  have hcore := gauge_coordShaking_smul_single_eq hVc hVb 1 c
+  rw [← hVsh, ← hVu, halfDifferenceBody_image V,
+    gauge_image_apply V, halfDifferenceBody_image V, gauge_image_apply V] at hcore
+  exact hcore
+
+/-- **Lemma 3.2(iv), planar general direction:** the projected gauge does not increase. -/
+theorem gauge_orthShaking_proj_le {K : Set (Fin 2 → ℝ)}
+    (hK : IsCompact K) (hKb : DiscreteMinkowski.IsPaperConvexBody K)
+    {u : Fin 2 → ℝ} (hu : u ≠ 0) (x : Fin 2 → ℝ) :
+    gauge (DiscreteMinkowski.halfDifferenceBody (orthShaking K u)) (orthProj u x) ≤
+      gauge (DiscreteMinkowski.halfDifferenceBody K) x := by
+  refine le_of_forall_gt_imp_ge_of_dense fun r hr => ?_
+  have hr0 : 0 < r := lt_of_le_of_lt (gauge_nonneg _) hr
+  have hx : x ∈ r • DiscreteMinkowski.halfDifferenceBody K :=
+    DiscreteMinkowski.mem_smul_of_gauge_lt hKb hr
+  obtain ⟨d, hd, hdx⟩ := mem_smul_set.1 hx
+  rw [DiscreteMinkowski.halfDifferenceBody_apply] at hd
+  obtain ⟨w, ⟨a, ha, b, hb, rfl⟩, rfl⟩ := mem_smul_set.1 hd
+  have hpa : orthProj u a ∈ orthShaking K u :=
+    orthProj_image_subset_orthShaking hK hu ⟨a, ha, rfl⟩
+  have hpb : orthProj u b ∈ orthShaking K u :=
+    orthProj_image_subset_orthShaking hK hu ⟨b, hb, rfl⟩
+  have hrep : orthProj u x =
+      r • ((2 : ℝ)⁻¹ • (orthProj u a - orthProj u b)) := by
+    rw [← hdx]
+    exact (orthProjLin u).map_smul r ((2 : ℝ)⁻¹ • (a - b)) |>.trans (by
+      rw [map_smul, map_sub]; rfl)
+  have hmem : orthProj u x ∈
+      r • DiscreteMinkowski.halfDifferenceBody (orthShaking K u) := by
+    rw [hrep, DiscreteMinkowski.halfDifferenceBody_apply]
+    exact smul_mem_smul_set (smul_mem_smul_set (sub_mem_sub hpa hpb))
+  exact DiscreteMinkowski.gauge_le_of_mem_smul hr0.le hmem
+
 end Consequences
 
 /-! ### Lattice points, for a line through the origin with an integral chart -/
@@ -434,17 +685,6 @@ end Consequences
 section Lattice
 
 variable {ν u : Fin 2 → ℝ}
-
-theorem chartShift_zero (ν u : Fin 2 → ℝ) : chartShift ν 0 u = 0 := by
-  refine vec2_ext ?_ ?_ <;> simp [chartShift]
-
-theorem generalShaking_eq_of_zero (h : dot2 ν u ≠ 0) (K : Set (Fin 2 → ℝ)) :
-    generalShaking K ν 0 u =
-      (chartLin ν u (dot2_unitDir_ne_zero h)).symm ''
-        coordShaking (chartLin ν u (dot2_unitDir_ne_zero h) '' K) 1 := by
-  have hd := dot2_unitDir_ne_zero h
-  rw [generalShaking_eq h, image_shakeChartInv hd, image_shakeChart hd, chartShift_zero]
-  simp
 
 variable (hΛ : ∀ (hd : dot2 ν (unitDir u) ≠ 0) (x : Fin 2 → ℝ),
   chartLin ν u hd x ∈ standardIntegerLattice 2 ↔ x ∈ standardIntegerLattice 2)
