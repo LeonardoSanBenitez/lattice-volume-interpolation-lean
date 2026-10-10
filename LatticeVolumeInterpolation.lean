@@ -41,6 +41,7 @@ import PlanarSections
 import TheoremOneFourCore
 import TheoremOneFourLower
 import GeneralShaking
+import GeneralOrthShaking
 import LemmaFiveOne
 import TheoremOneFour
 import PlanarRows
