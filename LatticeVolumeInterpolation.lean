@@ -2,6 +2,7 @@ import LviBasic
 import SuccessiveMinimaBridge
 import BoxCounts
 import CoordinateLattice
+import StandardLattice
 import CoordinateMinima
 import BoxEquality
 import SimplexCounts

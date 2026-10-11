@@ -1,4 +1,4 @@
-import Davenport
+import StandardLattice
 import Mathlib.MeasureTheory.Integral.Average
 import Mathlib.Algebra.Module.ZLattice.Basic
 

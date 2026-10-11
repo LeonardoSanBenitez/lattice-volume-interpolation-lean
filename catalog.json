@@ -39,7 +39,12 @@
       "proof_completeness": "definition",
       "external_dependencies": [],
       "depends_on": [],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "The development uses DiscreteMinkowski.IsPaperConvexBody together with IsCompact. Supply an explicit paper-definition bridge; the former alone does not encode compactness."
+      }
     },
     {
       "id": "support_function",
@@ -67,7 +72,12 @@
       "proof_completeness": "definition",
       "external_dependencies": [],
       "depends_on": ["convex_body_class"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "Supply the paper-notation definition bridge to the pinned library support function."
+      }
     },
     {
       "id": "gauge_function",
@@ -100,8 +110,14 @@
       "formalization_notes": "Use Mathlib's gauge/Minkowski functional or an infimum-based definition with |0|_K = 0, then prove the attained-minimum characterization only for x nonzero.",
       "lean": {
         "status": "stated",
-        "files": ["SuccessiveMinimaBridge.lean"],
-        "declarations": ["LatticeVolumeInterpolation.gauge_zero_correction", "LatticeVolumeInterpolation.latticePoint_mem_dilate_of_gauge_lt", "LatticeVolumeInterpolation.gauge_le_of_latticePoint_mem_dilate"],
+        "files": [
+          "SuccessiveMinimaBridge.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.gauge_zero_correction",
+          "LatticeVolumeInterpolation.latticePoint_mem_dilate_of_gauge_lt",
+          "LatticeVolumeInterpolation.gauge_le_of_latticePoint_mem_dilate"
+        ],
         "added_hypotheses": [],
         "route_note": "The two gauge--dilation implications make the paper's use of the gauge explicit; the zero-vector endpoint is recorded separately."
       }
@@ -135,8 +151,14 @@
       "formalization_notes": "Bridge cs(K) to the half difference body already used by the preceding discrete-Minkowski formalization. Prove cs(U K) = U(cs(K)) for the unimodular-invariance lemma.",
       "lean": {
         "status": "stated",
-        "files": ["SuccessiveMinimaBridge.lean", "CoordinateLattice.lean"],
-        "declarations": ["LatticeVolumeInterpolation.centralSymmetral_eq_halfDifferenceBody", "LatticeVolumeInterpolation.halfDifferenceBody_realCoordinateBox"],
+        "files": [
+          "SuccessiveMinimaBridge.lean",
+          "CoordinateLattice.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.centralSymmetral_eq_halfDifferenceBody",
+          "LatticeVolumeInterpolation.halfDifferenceBody_realCoordinateBox"
+        ],
         "added_hypotheses": [],
         "route_note": "This is the paper's defining equality in the same half-difference-body notation used throughout the development."
       }
@@ -178,8 +200,14 @@
       ],
       "lean": {
         "status": "stated",
-        "files": ["SuccessiveMinimaBridge.lean", "CoordinateLattice.lean"],
-        "declarations": ["LatticeVolumeInterpolation.paper_successiveMinimum_of_originSymmetric", "LatticeVolumeInterpolation.paper_successiveMinimum_realCoordinateBox"],
+        "files": [
+          "SuccessiveMinimaBridge.lean",
+          "CoordinateLattice.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.paper_successiveMinimum_of_originSymmetric",
+          "LatticeVolumeInterpolation.paper_successiveMinimum_realCoordinateBox"
+        ],
         "added_hypotheses": [],
         "route_note": "The source's symmetric-body formula is restated in its dilation notation and instantiated for the coordinate-box equality family; the formal definition uses the corresponding infimum until its attainment is proved."
       }
@@ -214,7 +242,12 @@
       "known_issues_in_paper": [
         "For K = [-1,1]^2 one has lambda_1(K) = lambda_2(K) = 1, while span(lambda_1(K) K intersect Z^2) = R^2, so the displayed minimization set for lambda_2 is empty. Thus the recursive formula is false as written whenever the preceding minimum already spans too large a subspace; no strict-minima hypothesis is part of the paper."
       ],
-      "formalization_notes": "Use Eq. (1.1) as the definition. Prove the gauge characterization through a greedy flag or through the threshold subspaces span({z in Z^n : |z|_cs(K) <= r}), so repeated minima are handled without adding lambda_{i-1} < lambda_i."
+      "formalization_notes": "Use Eq. (1.1) as the definition. Prove the gauge characterization through a greedy flag or through the threshold subspaces span({z in Z^n : |z|_cs(K) <= r}), so repeated minima are handled without adding lambda_{i-1} < lambda_i.",
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "The printed strict-smaller-minima recurrence fails at ties. The valid gauge-dilation helpers exist in SuccessiveMinimaBridge; supply the corrected flag-level statement and its exact paper bridge."
+      }
     },
     {
       "id": "lattice_point_enumerator",
@@ -242,7 +275,12 @@
       "proof_completeness": "definition",
       "external_dependencies": [],
       "depends_on": [],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "The development uses DiscreteMinkowski.latticePoints and Set.ncard for finite sets; supply the general paper-notation bridge. StandardLattice provides the standard lattice instances."
+      }
     },
     {
       "id": "projection_of_lattice_is_lattice",
@@ -271,7 +309,19 @@
       "depends_on": ["lattice_point_enumerator"],
       "known_issues_in_paper": [
         "The statement is true because span(X) is spanned by lattice vectors, which makes the projected group discrete. Projecting along the span of an arbitrary subspace does not give a lattice, so the hypothesis X subseteq Lambda carries the whole content and is easy to lose."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "ProjectedLattice.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.finite_projMap_inter_bounded",
+          "LatticeVolumeInterpolation.span_projMap_eq_top"
+        ],
+        "added_hypotheses": [],
+        "route_note": "Discreteness is expressed by finite intersection with every bounded set, together with full real span. A packaged projected ZLattice instance and its covolume are separate obligations."
+      }
     },
     {
       "id": "covering_radius",
@@ -298,7 +348,12 @@
       "depends_on": ["convex_body_class"],
       "known_issues_in_paper": [
         "Written as 'the smallest number mu > 0 such that mu K + Z^n = R^n'; attainment of the minimum again is not argued."
-      ]
+      ],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "coveringRadius is the infimum of positive covering scales. Positive-scale bounds and the mu = 1 endpoint are implemented; the paper's minimum/attainment formulation still needs an explicit bridge in positive dimension."
+      }
     },
     {
       "id": "anti_blocking_body",
@@ -327,7 +382,17 @@
       "proof_completeness": "asserted, not derived",
       "external_dependencies": [],
       "depends_on": ["convex_body_class"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "AntiBlocking.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.IsAntiBlocking"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "blaschke_shaking",
@@ -355,7 +420,19 @@
       "proof_completeness": "definition",
       "external_dependencies": [],
       "depends_on": ["convex_body_class"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "GeneralOrthShaking.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.orthShakingN",
+          "LatticeVolumeInterpolation.euclidean_chord_length"
+        ],
+        "added_hypotheses": [],
+        "route_note": "Scalar fibre parameters multiply the nonzero direction itself. euclidean_chord_length bridges this convention to Euclidean chord length; the function-space supremum norm is not used for normalization."
+      }
     },
     {
       "id": "general_blaschke_shaking",
@@ -383,7 +460,17 @@
       "proof_completeness": "definition",
       "external_dependencies": [],
       "depends_on": ["blaschke_shaking"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "GeneralShaking.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.generalShaking"
+        ],
+        "added_hypotheses": []
+      }
     },
 
     {
@@ -417,7 +504,12 @@
         "Henk, Henze and Hernandez Cifre, Remark 1.1, for the non-symmetric lower bound."
       ],
       "depends_on": ["successive_minima", "convex_body_class"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "The lower bound is in MinkowskiLower; the upper bound is supplied by the pinned dependency. Assemble the exact two-sided paper statement and normalization bridge."
+      }
     },
     {
       "id": "minkowski_second_theorem_equality_examples",
@@ -447,7 +539,12 @@
       "external_dependencies": [],
       "depends_on": ["successive_minima", "convex_body_class"],
       "known_issues_in_paper": [],
-      "formalization_notes": "Reuse the same proof of lambda_i(T_n)=2 required by simplex_equality_cases; prove the cube computation coordinatewise."
+      "formalization_notes": "Reuse the same proof of lambda_i(T_n)=2 required by simplex_equality_cases; prove the cube computation coordinatewise.",
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "Cube and simplex ingredients exist. Assemble both equality statements for the paper's normalization and positive dimension."
+      }
     },
     {
       "id": "betke_henk_wills_two_sided_bound",
@@ -483,7 +580,12 @@
         "The cited Betke-Henk-Wills Corollary 2.1 has factors 2/lambda_i-1, whereas the target display prints 1/lambda_i-1. These normalizations agree neither for the target's origin-symmetric K nor under its definition of central symmetral.",
         "Consequently the sentence 'the lower bound is best-possible' is false for the displayed lower bound: the cited source itself gives a strictly stronger universal lower estimate. Under lambda_n <= 2 the printed lower bound can instead be proved directly from 0 in K intersect Z^n, since a negative product is trivial and a positive product is at most 1."
       ],
-      "formalization_notes": "Formalize the literal target display as printed and separately prove the exact stronger primary-source Corollary 2.1 in the dependency layer. Do not silently replace the target's factor 1 by 2, and do not formalize the false best-possible sentence as a theorem."
+      "formalization_notes": "Formalize the literal target display as printed and separately prove the exact stronger primary-source Corollary 2.1 in the dependency layer. Do not silently replace the target's factor 1 by 2, and do not formalize the false best-possible sentence as a theorem.",
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "Quoted contextual result: formal statement only under the recorded scope, not a theorem claim."
+      }
     },
     {
       "id": "bhw_lattice_point_conjecture",
@@ -514,7 +616,12 @@
       "depends_on": ["successive_minima", "lattice_point_enumerator"],
       "known_issues_in_paper": [
         "As stated here, Conjecture 1 allows arbitrary convex bodies because lambda_i(K) is defined through the central symmetral. Betke-Henk-Wills Theorem 2.2 and Malikiosis Section 3.2 prove only the origin-symmetric cases in dimensions 2 and 3. Thus the sentence that 'the conjecture' as printed has been confirmed in those dimensions overstates the cited results."
-      ]
+      ],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "State as a proposition expressing an open conjecture; do not assert it as an axiom or theorem."
+      }
     },
     {
       "id": "bhw_lattice_conjecture_dimension_two_symmetric",
@@ -541,7 +648,12 @@
       "external_dependencies": ["Betke, Henk and Wills, Successive-minima-type inequalities, Theorem 2.2."],
       "depends_on": ["successive_minima", "lattice_point_enumerator"],
       "known_issues_in_paper": ["This theorem does not establish the target's arbitrary-body dimension-two specialization; origin symmetry is a source hypothesis, not an assumption to be added to Conjecture 1."],
-      "formalization_notes": "Prove this exact symmetric theorem as an upstream dependency result and retain the broader dimension-two target specialization as unproved unless independently established."
+      "formalization_notes": "Prove this exact symmetric theorem as an upstream dependency result and retain the broader dimension-two target specialization as unproved unless independently established.",
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "Established symmetric two-dimensional subcase requires its own proof or verified source bridge. Proposition 1.5 for lattice polygons does not discharge this arbitrary-body floor-product bound."
+      }
     },
     {
       "id": "bhw_lattice_conjecture_dimension_three_symmetric",
@@ -568,7 +680,12 @@
       "external_dependencies": ["Malikiosis, A discrete analogue for Minkowski's second theorem on successive minima, Section 3.2."],
       "depends_on": ["successive_minima", "lattice_point_enumerator"],
       "known_issues_in_paper": ["This theorem does not establish the target's arbitrary-body dimension-three specialization; the source's initial body is origin-symmetric."],
-      "formalization_notes": "Formalize the exact symmetric theorem and its source hypotheses. Do not infer the arbitrary-body case merely because the inductive slices are non-symmetric."
+      "formalization_notes": "Formalize the exact symmetric theorem and its source hypotheses. Do not infer the arbitrary-body case merely because the inductive slices are non-symmetric.",
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "Established symmetric three-dimensional subcase requires its own proof or verified source bridge to Malikiosis. It is not covered by the contextual-statement exclusion."
+      }
     },
     {
       "id": "integer_box_equality_for_bhw_lattice_conjecture",
@@ -603,10 +720,14 @@
       "formalization_notes": "Prove this together with the integer-vertex symmetric lower equality case: the same minima computation feeds the closed count prod_i(2m_i+1) and interior count prod_i(2m_i-1).",
       "lean": {
         "status": "stated",
-        "files": ["BoxCounts.lean", "CoordinateLattice.lean", "CoordinateMinima.lean", "BoxEquality.lean"],
-        "declarations": ["LatticeVolumeInterpolation.card_integerBox", "LatticeVolumeInterpolation.card_coordinateLatticePoints", "LatticeVolumeInterpolation.coordinateLatticePoints_coe_eq_latticePoints", "LatticeVolumeInterpolation.coordinateUnitVector_mem_reciprocal_smul_realCoordinateBox", "LatticeVolumeInterpolation.lattice_coordinate_eq_zero_of_mem_smul_realCoordinateBox", "LatticeVolumeInterpolation.successiveMinimum_le_reciprocal_of_antitone", "LatticeVolumeInterpolation.finrank_scaledLatticeSpan_le_of_lt_reciprocal", "LatticeVolumeInterpolation.successiveMinimum_realCoordinateBox_eq_reciprocal_of_antitone", "LatticeVolumeInterpolation.floor_two_div_reciprocal_nat_add_one", "LatticeVolumeInterpolation.integerBox_attains_bhw_lattice_conjecture"],
+        "files": [
+          "BoxEquality.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.integerBox_attains_bhw_lattice_conjecture"
+        ],
         "added_hypotheses": [],
-        "route_note": "The exact closed-box count, its identification with `DiscreteMinkowski.latticePoints`, the ordered-box formula lambda_(i+1) = 1/m_i, and the conjectured floor-product equality are proved in the paper's coordinate-box notation."
+        "route_note": "The terminal equality uses the exact closed-box count and ordered-box minima. Its proof dependencies carry the coordinate-lattice bridges."
       }
     },
     {
@@ -636,7 +757,12 @@
       "external_dependencies": ["Malikiosis, A discrete analogue for Minkowski's second theorem on successive minima, journal Theorem 3.2.1 / arXiv:1001.3729v1 Theorem 3.1.2."],
       "depends_on": ["successive_minima", "lattice_point_enumerator"],
       "known_issues_in_paper": [],
-      "formalization_notes": "Formalize the stronger primary-source theorem with q_i = floor(2/lambda_i + 1), then derive the target paper's floor-free Eq. (1.3) by factorwise monotonicity. Do not present the two displays as verbatim identical."
+      "formalization_notes": "Formalize the stronger primary-source theorem with q_i = floor(2/lambda_i + 1), then derive the target paper's floor-free Eq. (1.3) by factorwise monotonicity. Do not present the two displays as verbatim identical.",
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "Quoted contextual bound: formal statement only under the recorded scope; distinct from the established dimension-three subcase."
+      }
     },
     {
       "id": "product_bound_implies_minkowski",
@@ -668,7 +794,12 @@
       "depends_on": ["successive_minima", "lattice_point_enumerator"],
       "known_issues_in_paper": [
         "The step that the successive minima scale under lattice refinement, lambda_i(K, rZ^n) = r lambda_i(K, Z^n), is used silently."
-      ]
+      ],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "Formalize the dilation/limit implication in the paper's notation, retaining its universal product-bound premise."
+      }
     },
     {
       "id": "bhw_ratio_conjecture",
@@ -700,7 +831,12 @@
       "proof_completeness": "asserted as an open conjecture; not derived",
       "external_dependencies": ["Betke, Henk and Wills, Conjecture 2.2, for Eq. (1.7)."],
       "depends_on": ["successive_minima", "lattice_point_enumerator"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "State the corrected upper and lower ratio conjectures as propositions, retaining the smallness condition and the documented discrepancy with the printed formulas."
+      }
     },
     {
       "id": "theorem_1_1_upper_bound",
@@ -744,7 +880,17 @@
         "The chain uses k! binom(n,k) <= n^k, which holds for 0 <= k <= n, without stating it.",
         "The volume of conv{ (2/lambda_i) e_i : i in I } is (1/k!) prod_{i in I} (2/lambda_i), the volume of a k-dimensional simplex with those vertices and the origin; the origin is a vertex because K is anti-blocking, and the paper does not say so explicitly.",
         "The reduction to an anti-blocking body changes the successive minima, so the final product must be monotone in each lambda_i; this is true for the upper bound because lambda_i(A) <= lambda_i(K), and the step is left implicit."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "UpperBound.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.theorem_1_1_upper"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "theorem_1_1_lower_bound",
@@ -785,7 +931,18 @@
       "known_issues_in_paper": [
         "The arithmetic-geometric mean step needs each factor 1 - n lambda_i / 2 to be non-negative, which follows from lambda_n <= 2/n and the monotonicity of the minima; the paper does not state it.",
         "The proof of Eq. (1.9) does not go through the anti-blocking reduction, although the sentence introducing Sec. 3 says the reduction suffices for Eqs. (1.5) and (1.6)."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "PropOneSix.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.theorem_1_1_lower"
+        ],
+        "added_hypotheses": [],
+        "route_note": "Includes the paper's smallness hypothesis on the last successive minimum. Compactness and IsPaperConvexBody together express the paper's body class."
+      }
     },
     {
       "id": "corollary_1_2",
@@ -817,7 +974,17 @@
       "depends_on": ["theorem_1_1_upper_bound", "minkowski_second_theorem"],
       "known_issues_in_paper": [
         "The comparison paragraph writes 'our bound is tight for convex bodies rK, r to infinity'; tightness here means asymptotic, in the sense that both sides have the same leading behaviour, not that equality is attained."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "UpperBound.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.corollary_1_2"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "davenport_inequality",
@@ -851,7 +1018,12 @@
       "known_issues_in_paper": [
         "Eq. (1.10) is printed with k = 1, omitting the necessary k = 0 term vol_n(K). The literal formula is false already for n = 1 and K = [0,1], where G(K) = 2 but the printed right-hand side is vol_0({0}) = 1. The cited inequality and the paper's later anti-blocking decomposition both require k = 0."
       ],
-      "formalization_notes": "Formalize the intended k = 0 through n theorem and retain the printed k = 1 formula only as a documented source discrepancy; do not add a hypothesis to rescue the literal formula. The index bridge is m = n-k: Davenport's V_m becomes the inner sum over |I| = k."
+      "formalization_notes": "Formalize the intended k = 0 through n theorem and retain the printed k = 1 formula only as a documented source discrepancy; do not add a hypothesis to rescue the literal formula. The index bridge is m = n-k: Davenport's V_m becomes the inner sum over |I| = k.",
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "General coordinate-projection inequality remains open. Davenport.davenport_antiBlocking is a restricted result and does not discharge this item."
+      }
     },
     {
       "id": "schymura_inequality",
@@ -884,7 +1056,12 @@
       "known_issues_in_paper": [
         "Eq. (1.11) is printed with k = 1, but the cited Lemma 1.1 sums from k = 0. The literal formula fails for n = 1, K = [0,1] and b_1 = 1, exactly as Eq. (1.10) does; the omitted empty-subset term is vol_n(K)."
       ],
-      "formalization_notes": "Formalize the cited k = 0 through n theorem. The target paper's name Schymura and the cited source's publication name Henze refer to the same cited result; expose both names in documentation so the provenance is traceable."
+      "formalization_notes": "Formalize the cited k = 0 through n theorem. The target paper's name Schymura and the cited source's publication name Henze refer to the same cited result; expose both names in documentation so the provenance is traceable.",
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "Quoted contextual result: formal statement only under the recorded scope, not a theorem claim."
+      }
     },
     {
       "id": "theorem_1_3_reverse_schymura",
@@ -924,7 +1101,19 @@
       "known_issues_in_paper": [
         "Eq. (1.12) is stated for K in K^n, hence compact, while the interior enters on the right; the step vol(K) = vol(int K) is used silently.",
         "Eq. (1.12) correctly runs over every I subseteq [n], including the empty set. The contrast with the printed k = 1 in Eq. (1.11) is further evidence that Eq. (1.11) omitted its k = 0 term."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "ReverseSchymura.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.theorem_1_3_paper",
+          "LatticeVolumeInterpolation.projCount_eq_classCount"
+        ],
+        "added_hypotheses": [],
+        "route_note": "First proved using quotient-class counts, then identified exactly with orthogonal-projection counts. The theorem does not require the chosen independent vectors to be integral."
+      }
     },
     {
       "id": "theorem_1_3_tight_for_boxes",
@@ -956,7 +1145,17 @@
       "known_issues_in_paper": [
         "Projection onto L_I^perp retains the coordinates j not in I, so G_{Z^n|L_I^perp}(int K | L_I^perp) = prod_{j notin I}(k_j - 1), not prod_{i in I}(k_i - 1) term by term as the displayed chain suggests. The two total sums agree by the complement bijection I maps to [n] without I. The projected lattice is the standard coordinate lattice Z^{n-|I|}."
       ],
-      "formalization_notes": "Prove the projected count with the complement indices, then reindex the finite sum by set complement before applying the product expansion."
+      "formalization_notes": "Prove the projected count with the complement indices, then reindex the finite sum by set complement before applying the product expansion.",
+      "lean": {
+        "status": "stated",
+        "files": [
+          "TheoremOneThreeTight.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.theorem_1_3_tight_for_boxes"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "projected_lattice_determinant_bound",
@@ -982,7 +1181,12 @@
       "external_dependencies": [],
       "depends_on": ["projection_of_lattice_is_lattice"],
       "known_issues_in_paper": [],
-      "formalization_notes": "The direction is correct. If Lambda_I = Z^n intersect L_I is the primitive lattice in L_I, then det(Z^n|L_I^perp) = 1/det(Lambda_I). The lattice generated by the b_i, i in I, is a sublattice of Lambda_I, so vol_k(P_I) is an integer index times det(Lambda_I), giving det(Z^n|L_I^perp) >= 1/vol_k(P_I)."
+      "formalization_notes": "The direction is correct. If Lambda_I = Z^n intersect L_I is the primitive lattice in L_I, then det(Z^n|L_I^perp) = 1/det(Lambda_I). The lattice generated by the b_i, i in I, is a sublattice of Lambda_I, so vol_k(P_I) is an integer index times det(Lambda_I), giving det(Z^n|L_I^perp) >= 1/vol_k(P_I).",
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "ProjectedLattice proves bounded-set finiteness and spanning. Construct the projected lattice and its Euclidean covolume, then prove the reciprocal zonotope-volume bound; discreteness alone does not imply it."
+      }
     },
     {
       "id": "volume_lattice_point_limit",
@@ -1012,7 +1216,12 @@
       "depends_on": ["bhw_ratio_conjecture", "successive_minima"],
       "known_issues_in_paper": [
         "The scaling lambda_i(rK) = lambda_i(K)/r is used without statement."
-      ]
+      ],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "The pinned dependency has an unconditional lattice-count asymptotic. Supply the exact volume/count ratio bridge and retain the paper's conditional derivation from the corrected conjecture separately."
+      }
     },
     {
       "id": "universal_bound_from_conjecture_upper",
@@ -1041,7 +1250,12 @@
       "depends_on": ["bhw_ratio_conjecture", "successive_minima"],
       "known_issues_in_paper": [
         "The implication dim(K intersect Z^n) = n implies lambda_i(K) <= 2 is asserted in one clause; it comes from the fact that n independent lattice points of K lie in 2 cs(K)."
-      ]
+      ],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "Prove the paper's implication from the corrected conjecture; do not assume the conjecture as an axiom."
+      }
     },
     {
       "id": "universal_bound_from_conjecture_lower",
@@ -1068,7 +1282,12 @@
       "proof_completeness": "self-contained given bhw_ratio_conjecture",
       "external_dependencies": ["van der Corput, Geometry of Numbers, Ch. 2, Theorem 7.1, mentioned for comparison only."],
       "depends_on": ["bhw_ratio_conjecture", "successive_minima"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "Prove the paper's implication from the corrected conjecture with its smallness regime and strict-interior count."
+      }
     },
     {
       "id": "simplex_equality_cases",
@@ -1099,7 +1318,22 @@
         "The claim lambda_i(T_n) = 2 is stated without proof. It follows because 2 cs(T_n) = T_n - T_n contains the independent points e_i, whereas for lambda < 2 every coordinate of every point of lambda cs(T_n) has absolute value less than 1, so its only integer point is zero.",
         "For 1 <= m <= n, the interior formula is still correct: both sides vanish because the product contains the factor m - m. This small-scale case is not discussed separately."
       ],
-      "formalization_notes": "Prove the two lattice-point counts directly by stars and bars and prove lambda_i(T_n) = 2 from coordinate bounds on T_n - T_n. This yields the exact equality case without importing general Ehrhart theory."
+      "formalization_notes": "Prove the two lattice-point counts directly by stars and bars and prove lambda_i(T_n) = 2 from coordinate bounds on T_n - T_n. This yields the exact equality case without importing general Ehrhart theory.",
+      "lean": {
+        "status": "stated",
+        "files": [
+          "SimplexEquality.lean",
+          "SimplexMinima.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.simplex_upper_equality",
+          "LatticeVolumeInterpolation.simplex_lower_equality",
+          "LatticeVolumeInterpolation.successiveMinimum_realStandardSimplex_eq_two",
+          "LatticeVolumeInterpolation.successiveMinimum_realDilatedStandardSimplex_eq_two_div"
+        ],
+        "added_hypotheses": [],
+        "route_note": "Direct simplex volume, minima, closed count and strict-interior count calculations. The paper's positive dimension and positive dilation regimes are retained; no general Ehrhart theory is assumed."
+      }
     },
     {
       "id": "symmetric_box_equality_case",
@@ -1136,10 +1370,14 @@
       "formalization_notes": "Preserve the literal source defect in documentation and prove the exact intended integer-vertex family B = product_i [-m_i,m_i]. Do not add a parity hypothesis to the paper's printed sentence and pretend it was the original statement.",
       "lean": {
         "status": "stated",
-        "files": ["BoxCounts.lean", "CoordinateLattice.lean", "CoordinateMinima.lean", "BoxEquality.lean"],
-        "declarations": ["LatticeVolumeInterpolation.card_integerBox", "LatticeVolumeInterpolation.card_integerInteriorBox", "LatticeVolumeInterpolation.card_coordinateInteriorLatticePoints", "LatticeVolumeInterpolation.coordinateInteriorLatticePoints_coe_eq_latticePoints", "LatticeVolumeInterpolation.coordinateUnitVector_mem_reciprocal_smul_realCoordinateBox", "LatticeVolumeInterpolation.lattice_coordinate_eq_zero_of_mem_smul_realCoordinateBox", "LatticeVolumeInterpolation.successiveMinimum_le_reciprocal_of_antitone", "LatticeVolumeInterpolation.finrank_scaledLatticeSpan_le_of_lt_reciprocal", "LatticeVolumeInterpolation.successiveMinimum_realCoordinateBox_eq_reciprocal_of_antitone", "LatticeVolumeInterpolation.volume_realCoordinateBox_toReal", "LatticeVolumeInterpolation.two_mul_one_sub_reciprocal_div_two", "LatticeVolumeInterpolation.symmetricIntegerBox_attains_lower_conjectured_bound"],
+        "files": [
+          "BoxEquality.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.symmetricIntegerBox_attains_lower_conjectured_bound"
+        ],
         "added_hypotheses": [],
-        "route_note": "For the intended integer-vertex family, the exact open-box count, its identification with `DiscreteMinkowski.latticePoints`, the ordered-box formula lambda_(i+1) = 1/m_i, the Euclidean box volume, and the full symmetric lower equality are proved. The literal integral-side-length wording remains false as documented above."
+        "route_note": "The terminal equality uses integer vertices, strict-interior lattice counts and ordered-box minima. The literal integral-side-length wording remains false as documented in known_issues_in_paper."
       }
     },
     {
@@ -1184,7 +1422,17 @@
         "The next displayed rearrangement has an unmatched opening parenthesis after the factor 1/2. The following line shows the intended grouping: only f(0) + f(floor(2/lambda_2)) is halved, while the trapezoid sum and floor(2/lambda_2) + 1 remain outside.",
         "The count over horizontal lattice lines runs from 0 to floor(2/lambda_2), which presumes that the body meets no horizontal lattice line above that height; this uses h(K, e_2) = 2/lambda_2, stated one line earlier for the anti-blocking body.",
         "The step G(K intersect l_i) <= f(i) + 1 is the one-dimensional count on a segment of length f(i) and is used without comment."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "TheoremOneFour.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.theorem_1_4_upper"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "theorem_1_4_lower_bound",
@@ -1227,7 +1475,17 @@
         "In Eq. (5.4) the upper limit of the last integral is printed as lambda_2/2 where the argument requires 2/lambda_2; the surrounding lines use 2/lambda_2 consistently.",
         "The estimate f(i) >= integral_i^{i+1} f - (1/2) f'(i) applies Lemma 5.2 on the interval [i, i+1] and uses that -f'(i) >= 0; the sign convention is easy to lose."
       ],
-      "formalization_notes": "The theorem must remain quantified over every planar convex body. Either formalize the paper's smooth-from-below approximation with all preserved endpoint and containment data, or replace only this analytic substep by an equivalent nonsmooth concavity argument. Do not add differentiability of the section function as a hypothesis."
+      "formalization_notes": "The theorem must remain quantified over every planar convex body. Either formalize the paper's smooth-from-below approximation with all preserved endpoint and containment data, or replace only this analytic substep by an equivalent nonsmooth concavity argument. Do not add differentiability of the section function as a hypothesis.",
+      "lean": {
+        "status": "stated",
+        "files": [
+          "TheoremOneFour.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.theorem_1_4_lower"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "theorem_1_4_lower_bound_product_form",
@@ -1254,7 +1512,17 @@
       "proof_completeness": "asserted, not derived in the published text",
       "external_dependencies": [],
       "depends_on": ["theorem_1_4_lower_bound"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "TheoremOneFour.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.theorem_1_4_lower_product_form"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "proposition_1_5_symmetric_lattice_polygon",
@@ -1289,7 +1557,18 @@
         "The upper bound of Minkowski's second theorem."
       ],
       "depends_on": ["pick_theorem_interior", "henk_schurmann_wills_boundary_bound", "minkowski_second_theorem"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "PropOneFive.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.proposition_1_5_symmetric_lattice_polygon"
+        ],
+        "added_hypotheses": [],
+        "route_note": "Unconditional deduction from Pick, the boundary estimate and Minkowski. The boundary estimate uses horizontal rows and split central-section integration; the source's primitive-facet decomposition is not formalized by this route."
+      }
     },
     {
       "id": "proposition_1_6_upper_bound",
@@ -1323,7 +1602,17 @@
       "known_issues_in_paper": [
         "The identity G(K) = vol((K intersect Z^n) + S) uses that the translates of S by distinct lattice points are interiorly disjoint and each has volume 1.",
         "The paper notes that the same tiling strategy appears in the proof of Blichfeldt's classical variant of Theorem 2.1, and that convex tilings of this kind need not exist."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "CoveringTile.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.proposition_1_6_upper"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "proposition_1_6_lower_bound",
@@ -1358,7 +1647,17 @@
         "The reduction to t in mu K uses that translating by a lattice vector does not change the count and that mu K + Z^n = R^n; the paper states the correct set mu K but leaves the lattice-translation step implicit.",
         "The equality (1 - mu) int K + mu K = int K holds for 0 <= mu < 1 by convexity and nonempty interior, but fails at mu = 1 because the left side is K. The proposition remains true at mu = 1 because its right-hand side is zero, so the proof needs a separate endpoint case rather than a stronger hypothesis."
       ],
-      "formalization_notes": "Split mu = 1, where nonnegativity of G(int K) proves the claim, from mu < 1, where the paper's van der Corput and convex-combination argument applies."
+      "formalization_notes": "Split mu = 1, where nonnegativity of G(int K) proves the claim, from mu < 1, where the paper's van der Corput and convex-combination argument applies.",
+      "lean": {
+        "status": "stated",
+        "files": [
+          "PropOneSix.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.proposition_1_6_lower"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "proposition_1_6_tight_for_cubes",
@@ -1387,7 +1686,17 @@
       "proof_completeness": "self-contained",
       "external_dependencies": [],
       "depends_on": ["proposition_1_6_upper_bound", "proposition_1_6_lower_bound"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "Tiles.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.proposition_1_6_tight_for_cubes"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "covering_radius_bound_not_comparable",
@@ -1413,7 +1722,12 @@
       "proof_completeness": "asserted, not derived",
       "external_dependencies": [],
       "depends_on": ["proposition_1_6_upper_bound", "theorem_1_1_upper_bound", "covering_radius"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "Formalize both directions of non-comparability, including the elongated-box limiting constants; cube tightness alone is insufficient."
+      }
     },
     {
       "id": "lattice_tile_sandwich",
@@ -1441,7 +1755,17 @@
       "depends_on": ["proposition_1_6_upper_bound", "proposition_1_6_lower_bound", "covering_radius"],
       "known_issues_in_paper": [
         "vol(K) = 1 and mu(K) = 1 for a convex lattice tile are stated without proof; the first is the tiling property and the second follows from it."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "Tiles.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.lattice_tile_sandwich"
+        ],
+        "added_hypotheses": []
+      }
     },
 
     {
@@ -1471,7 +1795,17 @@
       "proof_completeness": "relies on external Gruber and Lekkerkerker, Geometry of Numbers, Ch. 2, Theorem 6.1",
       "external_dependencies": ["Gruber and Lekkerkerker, Geometry of Numbers, Ch. 2, Theorem 6.1."],
       "depends_on": ["lattice_point_enumerator"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "VanDerCorput.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.van_der_corput"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "rogers_shephard_section_projection",
@@ -1501,7 +1835,12 @@
       "depends_on": [],
       "known_issues_in_paper": [
         "The cited theorem is stronger than the displayed consequence: it uses the maximum volume over all translates of the section, whereas Eq. (4.1) keeps only the section through the origin. No assumption that the origin section is maximal is needed."
-      ]
+      ],
+      "lean": {
+        "status": "planned",
+        "declarations": [],
+        "route_note": "AntiBlocking.rogers_shephard_antiBlocking assumes anti-blocking. General compact convex bodies still require a projection-section argument; the join bound needs an actual zero-section containment and cannot be applied to arbitrary projections directly."
+      }
     },
     {
       "id": "covering_radius_successive_minima_bound",
@@ -1530,7 +1869,17 @@
       "external_dependencies": ["Kannan and Lovasz, Covering minima and lattice point free convex bodies, Lemma 2.4."],
       "depends_on": ["covering_radius", "successive_minima"],
       "known_issues_in_paper": [],
-      "formalization_notes": "Expose the notation bridge explicitly: primary lambda_i(K-K) = lambda_i((K-K)/2)/2, and primary mu_n(K,Lambda) is the target covering radius."
+      "formalization_notes": "Expose the notation bridge explicitly: primary lambda_i(K-K) = lambda_i((K-K)/2)/2, and primary mu_n(K,Lambda) is the target covering radius.",
+      "lean": {
+        "status": "stated",
+        "files": [
+          "CoveringRadius.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.coveringRadius_le_sum_minima"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "pick_theorem_interior",
@@ -1558,7 +1907,17 @@
       "proof_completeness": "relies on external Beck and Robins, Theorem 2.8",
       "external_dependencies": ["Beck and Robins, Computing the continuum discretely, Theorem 2.8."],
       "depends_on": ["lattice_point_enumerator"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "Pick.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.pick_theorem_interior"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "henk_schurmann_wills_boundary_bound",
@@ -1586,7 +1945,18 @@
       "proof_completeness": "relies on external Henk, Schuermann and Wills, Equation 1.6",
       "external_dependencies": ["Henk, Schuermann and Wills, Equation 1.6."],
       "depends_on": ["lattice_point_enumerator", "successive_minima"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "BoundaryFirstDirection.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.henk_schurmann_wills_boundary_bound"
+        ],
+        "added_hypotheses": [],
+        "route_note": "First-minimum alignment and section concavity are retained, with horizontal-row counting replacing the source's primitive-facet count. This establishes the stated inequality, not the omitted facet identities."
+      }
     },
     {
       "id": "shaking_preserves_convexity",
@@ -1616,7 +1986,23 @@
       "proof_completeness": "relies on external Campi, Colesanti and Gronchi, Lemma 1.1, for the orthogonal case; self-contained given lemma_5_3_shaking_is_monotone for the planar general case",
       "external_dependencies": ["Campi, Colesanti and Gronchi, Shaking compact sets, Lemma 1.1."],
       "depends_on": ["blaschke_shaking", "general_blaschke_shaking", "lemma_5_3_shaking_is_monotone"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "GeneralShaking.lean",
+          "CoordShaking.lean",
+          "GeneralOrthShaking.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.isCompact_generalShaking",
+          "LatticeVolumeInterpolation.convex_generalShaking",
+          "LatticeVolumeInterpolation.convex_coordShaking",
+          "LatticeVolumeInterpolation.image_orthShakingN_eq_coordShaking"
+        ],
+        "added_hypotheses": [],
+        "route_note": "Planar oblique convexity and arbitrary-dimensional coordinate convexity are explicit. The general-direction chart conjugacy is proved, but the terminal arbitrary-dimensional convexity wrapper still needs to transport coordinate convexity back through the inverse chart."
+      }
     },
     {
       "id": "lemma_3_2_shaking_properties",
@@ -1652,7 +2038,25 @@
         "In the chain for v) the identity floor(b - delta) - ceil(a - delta) + 1 = floor(b - delta) - floor(a) + 1 holds because a - delta = floor(a) is an integer, so its ceiling is itself.",
         "Item vi) as printed has an unbalanced parenthesis: G(int K) >= G(int(sh_{e_i}(K)).",
         "Item ii) is stated for all u, and its proof 'follows directly from the definition'; the underlying fact is that the fibres keep their length, which is Fubini in coordinates adapted to u."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "GeneralOrthShaking.lean",
+          "CoordShaking.lean",
+          "ShakingInterior.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.orthProjN_image_subset_orthShakingN",
+          "LatticeVolumeInterpolation.volume_orthShakingN",
+          "LatticeVolumeInterpolation.gauge_orthShakingN_direction_eq",
+          "LatticeVolumeInterpolation.gauge_orthShakingN_proj_le",
+          "LatticeVolumeInterpolation.ncard_latticePoints_le_coordShaking",
+          "LatticeVolumeInterpolation.ncard_latticePoints_interior_coordShaking_le"
+        ],
+        "added_hypotheses": [],
+        "route_note": "Parts (i)-(iv) use arbitrary nonzero directions in arbitrary dimension. Parts (v)-(vi) use coordinate directions, as in the paper. The coordinate and arbitrary-direction presentations are connected by chart conjugacy."
+      }
     },
     {
       "id": "unimodular_invariance_of_paper_functionals",
@@ -1681,7 +2085,19 @@
       "proof_completeness": "paper assertion; the catalog records every constituent that Lean must prove",
       "external_dependencies": [],
       "depends_on": ["central_symmetral", "lattice_point_enumerator", "successive_minima"],
-      "known_issues_in_paper": []
+      "known_issues_in_paper": [],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "Unimodular.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.ncard_latticePoints_image",
+          "LatticeVolumeInterpolation.successiveMinimum_image",
+          "LatticeVolumeInterpolation.volume_image_of_det"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "hermite_normal_form_adapted_basis",
@@ -1712,7 +2128,20 @@
       "depends_on": [],
       "known_issues_in_paper": [
         "Schrijver's convention is lower triangular and uses column operations. The paper's upper-triangular ambient-coordinate conclusion follows only after applying the theorem to the transpose, as made explicit here."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "Triangularize.lean",
+          "Unimodular.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.exists_triangularizing",
+          "LatticeVolumeInterpolation.realize_unimodular"
+        ],
+        "added_hypotheses": [],
+        "route_note": "Triangularization is obtained through the integer module basis machinery and realized as a real unimodular change of coordinates."
+      }
     },
     {
       "id": "theorem_3_1_anti_blocking_reduction",
@@ -1753,7 +2182,17 @@
       "known_issues_in_paper": [
         "Invariance of all four functionals under unimodular transformations is asserted rather than proved; it is what allows the reduction to a triangular basis.",
         "The shaken bodies K_j are convex by the cited result of Campi, Colesanti and Gronchi, and compact; compactness is needed for the minima of the shaken body to be attained and is not discussed."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "TheoremThreeOne.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.theorem_3_1"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "claim_1_block_triangular_basis",
@@ -1789,7 +2228,17 @@
       "known_issues_in_paper": [
         "The projections u_i|e_{j+1}^perp are integer vectors because the coordinates are the standard ones; this is used silently.",
         "Linear independence after the projection is argued from the shape of the matrix, which requires the diagonal entries to remain non-zero."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "ClaimOne.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.claim_1"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "claim_2_coordinate_projection_stability",
@@ -1821,7 +2270,17 @@
       "known_issues_in_paper": [
         "The induction is stated for j in {0, ..., n} but the step assumes the claim 'for some j in [n]' and proves it for j+1, so the base case j = 0 and the range of the step do not line up exactly as printed.",
         "That the segment [y|e_i^perp, y|e_i^perp + x_{j+1} e_{j+1}] lies in K_j uses the induction hypothesis applied to every point of the segment, not only to its endpoints."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "ShakingIterate.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.claim_2"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "lemma_3_3_minima_at_standard_basis",
@@ -1854,7 +2313,17 @@
         "The sentence that the coordinate-axis projection w_i of v_i is contained in K is false in general: for a sufficiently small anti-blocking box, v_i = e_i realizes a successive minimum while e_i is not in K. What is true and needed is |w_i|_cs(K) <= |v_i|_cs(K), obtained directly from closure of an anti-blocking body under coordinate projections; Lemma 3.2 iv) is stated for a shaking and is not the right justification here.",
         "The projection is initially w_i = m_i e_i for a nonzero signed integer m_i, not necessarily e_i. Gauge monotonicity gives |e_i|_cs(K) <= lambda_i/|m_i|, but for i > 1 this does not by itself invoke the defining minimality of lambda_i. One must compare the ordered gauges of all coordinate axes with the dimension thresholds, including blocks of repeated minima, and choose signs separately."
       ],
-      "formalization_notes": "Orient each matched lattice vector so its selected coordinate is positive, project to obtain a nonzero integer multiple of a coordinate axis, and derive an upper bound for that axis gauge. Sort the n axis gauges and use the definition of successive minima in both directions: the first i axes give lambda_i <= the i-th ordered axis gauge, while the matching bounds and a counting/order-statistics argument give the reverse inequality even across repeated-minimum blocks. Then show the positive point (2/lambda_i)e_i lies in K by the paper's extremal central-symmetral argument."
+      "formalization_notes": "Orient each matched lattice vector so its selected coordinate is positive, project to obtain a nonzero integer multiple of a coordinate axis, and derive an upper bound for that axis gauge. Sort the n axis gauges and use the definition of successive minima in both directions: the first i axes give lambda_i <= the i-th ordered axis gauge, while the matching bounds and a counting/order-statistics argument give the reverse inequality even across repeated-minimum blocks. Then show the positive point (2/lambda_i)e_i lies in K by the paper's extremal central-symmetral argument.",
+      "lean": {
+        "status": "stated",
+        "files": [
+          "MinimaAntiBlocking.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.lemma_3_3"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "claim_3_translation_projection_bound",
@@ -1896,7 +2365,17 @@
         "The recombination step writes sum over I contained in supp(t) minus j of the two terms and identifies the second family with the subsets containing j; this uses (Lambda|b_j^perp)|L-tilde_I^perp = Lambda|L_{I union j}^perp, which is stated as an equality of enumerators without comment.",
         "The base case is stated for n = 1 and then used inside the induction for arbitrary n on one-dimensional fibres; the fibres are segments in a translate of R b_1, so the reduction is legitimate but the quantifier over n moves.",
         "K is allowed to be non-closed here, which is what lets the final application take K = int K."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "ReverseSchymura.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.claim_3"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "davenport_for_anti_blocking_bodies",
@@ -1928,7 +2407,18 @@
         "The decomposition is correctly indexed by all I subseteq [n], but the following sum is printed from k = 1. The empty-set prism is K itself and contributes vol_n(K), so the intended sum must start at k = 0; excluding the empty prism would make the displayed volume equality false.",
         "Disjointness of the prisms is asserted; it follows from the anti-blocking property but is not argued."
       ],
-      "formalization_notes": "Prove the corrected k = 0 identity directly from the all-subsets prism decomposition. This is an internal proof of the anti-blocking specialization and does not depend on the separately quoted Davenport theorem."
+      "formalization_notes": "Prove the corrected k = 0 identity directly from the all-subsets prism decomposition. This is an internal proof of the anti-blocking specialization and does not depend on the separately quoted Davenport theorem.",
+      "lean": {
+        "status": "stated",
+        "files": [
+          "Davenport.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.davenport_antiBlocking"
+        ],
+        "added_hypotheses": [],
+        "route_note": "The sum includes the empty coordinate subset (the full-dimensional volume). This is the anti-blocking specialization, not the general Davenport item."
+      }
     },
     {
       "id": "diagonal_section_bound",
@@ -1960,7 +2450,17 @@
       "depends_on": ["lemma_5_1_properties_of_the_planar_reduction", "anti_blocking_body", "support_function"],
       "known_issues_in_paper": [
         "f(0) = 2/lambda_1 uses that the reduced body meets the horizontal axis in a segment of exactly that length, which comes from Lemma 3.3 and the diagonal containment."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "TheoremOneFour.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.diagonal_section_bound"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "lemma_5_1_properties_of_the_planar_reduction",
@@ -2007,7 +2507,21 @@
         "In the proof of ii), vi) and vii), after establishing K subseteq B and hence T(K) subseteq T(B), the paper says the vertical segments of sh_{-e_1,D}(sh_{-e_2,D}(B)) are no longer than those of sh_{-e_2,D}(K). That comparison has the wrong body: monotonicity from K subseteq B points in the opposite direction. The box estimate only needs comparison with the vertical fibres of sh_{-e_2,D}(B), all of length 2/lambda_2(K).",
         "In the proof of viii) the final containment is written with 2/lambda_1(A) on both axes, while the intermediate triangle is stated with 2/lambda_1(K) on the first axis and 2/lambda_2(K) on the second; the passage between the two uses vi) and vii).",
         "Item iii) invokes Fubini for the oblique shaking, where the product decomposition is along span{u} and a line l not orthogonal to u; the paper removed the justifying sentence to a comment in the source."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "LemmaFiveOne.lean",
+          "TheoremOneFour.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.lemma_5_1",
+          "LatticeVolumeInterpolation.exists_normalized_antiBlocking",
+          "LatticeVolumeInterpolation.exists_planar_reduction"
+        ],
+        "added_hypotheses": [],
+        "route_note": "The construction is implemented for the diagonal with intercept m = 0. The normalized input hypotheses are discharged for the main theorem by exists_normalized_antiBlocking and exists_planar_reduction. Transport of the construction to every integer intercept in the source presentation is not supplied."
+      }
     },
     {
       "id": "lemma_5_2_concave_integral_bounds",
@@ -2040,7 +2554,18 @@
       "known_issues_in_paper": [
         "The proof labels both parts 'For the upper bound'; the first paragraph proves the lower bound on the integral.",
         "The second inequality is written with an intermediate step that is an equality for the tangent, so the displayed chain contains a redundant inequality sign."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "ConcaveIntegralBounds.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.concave_integral_chord_le",
+          "LatticeVolumeInterpolation.concave_integral_le_tangent"
+        ],
+        "added_hypotheses": []
+      }
     },
     {
       "id": "lemma_5_3_shaking_is_monotone",
@@ -2071,7 +2596,17 @@
       "depends_on": ["general_blaschke_shaking"],
       "known_issues_in_paper": [
         "The hypothesis is written as u in R^n minus {0} inside a planar statement; the intended space is R^2."
-      ]
+      ],
+      "lean": {
+        "status": "stated",
+        "files": [
+          "GeneralShaking.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.lemma_5_3"
+        ],
+        "added_hypotheses": []
+      }
     }
   ]
 }

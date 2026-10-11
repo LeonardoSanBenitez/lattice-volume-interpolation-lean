@@ -1,4 +1,5 @@
-import GeneralShaking
+import CoordShaking
+import Unimodular
 import Mathlib.LinearAlgebra.Matrix.DotProduct
 import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
 import Mathlib.Algebra.Order.Field.Pointwise

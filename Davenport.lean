@@ -1,5 +1,5 @@
 import AntiBlocking
-import CoordinateLattice
+import StandardLattice
 
 /-!
 # Davenport's inequality for anti-blocking bodies
@@ -20,8 +20,7 @@ half-open cube `(-1, 0]^n` so that the translates by lattice points are disjoint
 `I = {i : x_i < 0}` as the prism that contains a given point `x`. Only the union bound over
 the prisms is needed, not their disjointness.
 
-The file also equips the standard lattice with the instances that the general theory of
-lattices (`ZLattice`) expects.
+The standard lattice instances used here are supplied by `StandardLattice`.
 -/
 
 open MeasureTheory Set Module
@@ -32,27 +31,6 @@ namespace LatticeVolumeInterpolation
 noncomputable section
 
 variable {n : ℕ}
-
-/-- `ℤ^n` is the integral span of the standard basis. -/
-theorem standardIntegerLattice_eq_span (n : ℕ) :
-    standardIntegerLattice n = Submodule.span ℤ (Set.range (Pi.basisFun ℝ (Fin n))) := by
-  ext x
-  rw [Basis.mem_span_iff_repr_mem, mem_standardIntegerLattice_iff]
-  simp only [Pi.basisFun_repr, Set.mem_range, eq_intCast]
-  constructor
-  · rintro ⟨z, hz⟩ i
-    exact ⟨z i, (hz i).symm⟩
-  · intro h
-    choose z hz using h
-    exact ⟨z, fun i => (hz i).symm⟩
-
-instance (n : ℕ) : DiscreteTopology (standardIntegerLattice n) := by
-  rw [standardIntegerLattice_eq_span]; infer_instance
-
-instance (n : ℕ) : IsZLattice ℝ (standardIntegerLattice n) where
-  span_top := by
-    rw [standardIntegerLattice_eq_span]
-    exact ZSpan.span_top (Pi.basisFun ℝ (Fin n))
 
 /-- The half-open unit cube `(-1, 0]^n`. -/
 def unitCubeIoc (n : ℕ) : Set (Fin n → ℝ) := Set.pi univ fun _ => Ioc (-1) 0
