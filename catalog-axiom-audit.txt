@@ -1,5 +1,5 @@
 command: lake env lean CatalogAxioms.lean
-catalog declarations: 65
+catalog declarations: 69
 allowed axioms: Classical.choice, Quot.sound, propext
 exit code: 0
 
@@ -24,11 +24,17 @@ exit code: 0
  Quot.sound]
 'LatticeVolumeInterpolation.finite_projMap_inter_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.span_projMap_eq_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.projectedLattice_discrete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.projectedLattice_span_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.projectedLattice_covolume_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.IsAntiBlocking' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.orthShakingN' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.euclidean_chord_length' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.generalShaking' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.integerBox_attains_bhw_lattice_conjecture' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'LatticeVolumeInterpolation.product_bound_implies_volume_bound' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
 'LatticeVolumeInterpolation.theorem_1_1_upper' depends on axioms: [propext, Classical.choice, Quot.sound]

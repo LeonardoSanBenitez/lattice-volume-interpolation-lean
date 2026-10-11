@@ -312,15 +312,19 @@
       ],
       "lean": {
         "status": "stated",
-        "files": [
-          "ProjectedLattice.lean"
-        ],
+      "files": [
+        "ProjectedLattice.lean",
+        "ProjectedLatticeInstances.lean"
+      ],
         "declarations": [
           "LatticeVolumeInterpolation.finite_projMap_inter_bounded",
-          "LatticeVolumeInterpolation.span_projMap_eq_top"
+        "LatticeVolumeInterpolation.span_projMap_eq_top",
+        "LatticeVolumeInterpolation.projectedLattice_discrete",
+        "LatticeVolumeInterpolation.projectedLattice_span_top",
+        "LatticeVolumeInterpolation.projectedLattice_covolume_pos"
         ],
         "added_hypotheses": [],
-        "route_note": "Discreteness is expressed by finite intersection with every bounded set, together with full real span. A packaged projected ZLattice instance and its covolume are separate obligations."
+      "route_note": "The projection image is now a Z-submodule of the orthogonal-complement subtype. Its induced topology is discrete and its real span is the full subtype; these are instantiated locally to obtain a positive covolume. The ambient/projected covolume comparison belongs to the separate projection-determinant item."
       }
     },
     {
@@ -796,9 +800,11 @@
         "The step that the successive minima scale under lattice refinement, lambda_i(K, rZ^n) = r lambda_i(K, Z^n), is used silently."
       ],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "Formalize the dilation/limit implication in the paper's notation, retaining its universal product-bound premise."
+        "status": "stated",
+        "files": ["ProductBoundLimit.lean"],
+        "declarations": ["LatticeVolumeInterpolation.product_bound_implies_volume_bound"],
+        "added_hypotheses": ["The product-count bound is assumed for K against every positive reciprocal-integer refinement of an arbitrary lattice; the paper states a universal standard-lattice bound for all bodies."],
+        "route_note": "The arbitrary-constants limit step is proved from the pinned count asymptotic and scaling law. Still prove the universal standard-lattice premise implies this refined-lattice premise by an exact linear-change-of-variables bridge before marking the catalog item complete."
       }
     },
     {
