@@ -3,20 +3,21 @@ import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 import Mathlib.MeasureTheory.Measure.Prod
 
 /-!
-# A lower bound for the volume of a join
+# A lower bound from a section and a projection
 
 Let `U` and `V` be finite-dimensional real spaces of dimensions `k ≥ 1` and `m`, with Haar
-measures `μ` and `ν`. If a convex set `C ⊆ U × V` contains `A × {0}` and `{0} × B`, with `B`
-compact, then
+measures `μ` and `ν`. If a convex set `C ⊆ U × V` contains `A × {0}` and its
+projection onto `V` contains the compact set `B`, then
 
   `μ(A) ν(B) k! m! / (k + m)! ≤ (μ × ν)(C)`.
 
-This is the volume computation behind the anti-blocking case of the Rogers-Shephard
+This is the volume computation behind the general Rogers-Shephard
 inequality (Eq. (4.1), catalog item `rogers_shephard_section_projection`): there `C = K`,
-`A = K ∩ L_I` and `B = K ∩ L_I^⊥`, and `k! m! / (k + m)! = 1 / binom(n, k)`.
+`A = K ∩ L_I` and `B = K | L_I^⊥`, and `k! m! / (k + m)! = 1 / binom(n, k)`.
 
-The proof. If `v ∈ sB` with `s ∈ [0, 1]`, convexity of `C` gives `(1 - s)A × {v} ⊆ C`, so the
-fibre of `C` over `v` has measure at least `(1 - s)^k μ(A)`. Taking the least such `s`
+If `v = sb` with `b ∈ B` and `s ∈ [0, 1]`, take any lift `(w,b) ∈ C`.
+Convexity gives `(sw + (1 - s)A) × {v} ⊆ C`, so translation invariance bounds the
+fibre measure below by `(1 - s)^k μ(A)`. Taking the least such `s`
 (it exists because `B` is compact) and writing `(1 - s_0)^k = ∫_{s_0}^1 k (1 - s)^(k-1) ds`,
 the fibre measure dominates `μ(A) ∫_0^1 1[v ∈ sB] k (1 - s)^(k-1) ds`. Integrating over `v`
 and exchanging the order of integration gives
@@ -86,10 +87,10 @@ theorem integral_joinWeight {k : ℕ} (hk : 1 ≤ k) {s₀ : ℝ} (hs₀ : s₀ 
 omit [MeasurableSpace V] [BorelSpace V] [FiniteDimensional ℝ V] in
 /-- **The fibre estimate.** For each `v`, the fibre of `C` over `v` has measure at least
 `μ(A) ∫_0^1 1[v ∈ sB] k (1 - s)^(k-1) ds`. -/
-theorem fibre_lower_bound (μ : Measure U) [μ.IsAddHaarMeasure] {k : ℕ}
+theorem projection_fibre_lower_bound (μ : Measure U) [μ.IsAddHaarMeasure] {k : ℕ}
     (hk : 1 ≤ k) (hkU : finrank ℝ U = k)
     {A : Set U} {B : Set V} (hB : IsCompact B) {C : Set (U × V)} (hC : Convex ℝ C)
-    (hAC : ∀ a ∈ A, (a, (0 : V)) ∈ C) (hBC : ∀ b ∈ B, ((0 : U), b) ∈ C) (v : V) :
+    (hAC : ∀ a ∈ A, (a, (0 : V)) ∈ C) (hBC : ∀ b ∈ B, ∃ u : U, (u, b) ∈ C) (v : V) :
     μ A * ∫⁻ s, (scaleSet B).indicator (fun p => joinWeight k p.2) (v, s)
       ≤ μ ((fun u => (u, v)) ⁻¹' C) := by
   set S : Set ℝ := {s | (v, s) ∈ scaleSet B} with hS
@@ -118,28 +119,28 @@ theorem fibre_lower_bound (μ : Measure U) [μ.IsAddHaarMeasure] {k : ℕ}
   have hint : ∫⁻ s, S.indicator (joinWeight k) s ≤ ENNReal.ofReal ((1 - s₀) ^ k) := by
     rw [lintegral_indicator (hScpt.isClosed.measurableSet), ← integral_joinWeight hk hs₀I.2]
     exact lintegral_mono_set hSsub
-  have hsub : (1 - s₀) • A ⊆ (fun u => (u, v)) ⁻¹' C := by
-    intro u hu
-    obtain ⟨a, ha, rfl⟩ := mem_smul_set.1 hu
-    obtain ⟨b, hb, hvb⟩ := mem_smul_set.1 hs₀.2
-    have hcomb := hC (hAC a ha) (hBC b hb) (by linarith [hs₀I.2] : (0 : ℝ) ≤ 1 - s₀)
+  obtain ⟨b, hb, hvb⟩ := mem_smul_set.1 hs₀.2
+  obtain ⟨w, hw⟩ := hBC b hb
+  have hsub : (s₀ • w) +ᵥ ((1 - s₀) • A) ⊆ (fun u => (u, v)) ⁻¹' C := by
+    rintro u ⟨z, ⟨a, ha, rfl⟩, rfl⟩
+    have hcomb := hC (hAC a ha) hw (by linarith [hs₀I.2] : (0 : ℝ) ≤ 1 - s₀)
       hs₀I.1 (by ring)
     simp only [mem_preimage]
     convert hcomb using 1
-    ext <;> simp [hvb]
+    ext <;> simp [hvb, vadd_eq_add, add_comm]
   calc μ A * ∫⁻ s, S.indicator (joinWeight k) s
       ≤ μ A * ENNReal.ofReal ((1 - s₀) ^ k) := mul_le_mul_right hint _
-    _ = μ ((1 - s₀) • A) := by
-        rw [addHaar_smul_of_nonneg μ (by linarith [hs₀I.2]), hkU, mul_comm]
+    _ = μ ((s₀ • w) +ᵥ ((1 - s₀) • A)) := by
+        rw [measure_vadd, addHaar_smul_of_nonneg μ (by linarith [hs₀I.2]), hkU, mul_comm]
     _ ≤ μ ((fun u => (u, v)) ⁻¹' C) := measure_mono hsub
 
-/-- **The join lower bound.** -/
-theorem join_volume_lower_bound (μ : Measure U) (ν : Measure V)
+/-- **The section-projection lower bound**, for positive section dimension. -/
+theorem section_projection_volume_lower_bound (μ : Measure U) (ν : Measure V)
     [μ.IsAddHaarMeasure] [ν.IsAddHaarMeasure] {k m : ℕ}
     (hk : 1 ≤ k) (hkU : finrank ℝ U = k) (hmV : finrank ℝ V = m)
     {A : Set U} {B : Set V} (hB : IsCompact B) {C : Set (U × V)} (hC : Convex ℝ C)
     (hCm : MeasurableSet C)
-    (hAC : ∀ a ∈ A, (a, (0 : V)) ∈ C) (hBC : ∀ b ∈ B, ((0 : U), b) ∈ C) :
+    (hAC : ∀ a ∈ A, (a, (0 : V)) ∈ C) (hBC : ∀ b ∈ B, ∃ u : U, (u, b) ∈ C) :
     μ A * ν B * ENNReal.ofReal
         ((k.factorial * m.factorial : ℝ) / ((k + m).factorial : ℝ))
       ≤ (μ.prod ν) C := by
@@ -216,17 +217,17 @@ theorem join_volume_lower_bound (μ : Measure U) (ν : Measure V)
     _ = ∫⁻ v, μ A * (∫⁻ s, (scaleSet B).indicator (fun q => joinWeight k q.2) (v, s)) ∂ν := by
         rw [lintegral_const_mul _ hF.lintegral_prod_right']
     _ ≤ ∫⁻ v, μ ((fun u => (u, v)) ⁻¹' C) ∂ν :=
-        lintegral_mono fun v => fibre_lower_bound μ hk hkU hB hC hAC hBC v
+        lintegral_mono fun v => projection_fibre_lower_bound μ hk hkU hB hC hAC hBC v
     _ = (μ.prod ν) C := (Measure.prod_apply_symm hCm).symm
 
-/-- **The join lower bound, in every dimension.** The case `k = 0` is separate: there `U` is a
-point and `{0} × B ⊆ C` already gives `μ(A) ν(B) ≤ (μ × ν)(C)`. -/
-theorem join_volume_lower_bound' (μ : Measure U) (ν : Measure V)
+/-- **The section-projection lower bound, in every dimension.** If `k = 0`,
+every lift of `B` has first coordinate zero, giving the product bound directly. -/
+theorem section_projection_volume_lower_bound' (μ : Measure U) (ν : Measure V)
     [μ.IsAddHaarMeasure] [ν.IsAddHaarMeasure] {k m : ℕ}
     (hkU : finrank ℝ U = k) (hmV : finrank ℝ V = m)
     {A : Set U} {B : Set V} (hB : IsCompact B) {C : Set (U × V)} (hC : Convex ℝ C)
     (hCm : MeasurableSet C)
-    (hAC : ∀ a ∈ A, (a, (0 : V)) ∈ C) (hBC : ∀ b ∈ B, ((0 : U), b) ∈ C) :
+    (hAC : ∀ a ∈ A, (a, (0 : V)) ∈ C) (hBC : ∀ b ∈ B, ∃ u : U, (u, b) ∈ C) :
     μ A * ν B * ENNReal.ofReal
         ((k.factorial * m.factorial : ℝ) / ((k + m).factorial : ℝ))
       ≤ (μ.prod ν) C := by
@@ -241,11 +242,38 @@ theorem join_volume_lower_bound' (μ : Measure U) (ν : Measure V)
     have hsub : ({0} : Set U) ×ˢ B ⊆ C := by
       rintro ⟨u, v⟩ ⟨-, hv⟩
       rw [hzero u]
-      exact hBC v hv
+      obtain ⟨u, hu⟩ := hBC v hv
+      simpa [hzero u] using hu
     calc μ A * ν B ≤ μ {0} * ν B := mul_le_mul_left (measure_mono hA) _
       _ = (μ.prod ν) (({0} : Set U) ×ˢ B) := (Measure.prod_prod _ _).symm
       _ ≤ (μ.prod ν) C := measure_mono hsub
-  · exact join_volume_lower_bound μ ν hk hkU hmV hB hC hCm hAC hBC
+  · exact section_projection_volume_lower_bound μ ν hk hkU hmV hB hC hCm hAC hBC
+
+/-- The join bound is the section-projection bound with zero lifts of `B`. -/
+theorem join_volume_lower_bound' (μ : Measure U) (ν : Measure V)
+    [μ.IsAddHaarMeasure] [ν.IsAddHaarMeasure] {k m : ℕ}
+    (hkU : finrank ℝ U = k) (hmV : finrank ℝ V = m)
+    {A : Set U} {B : Set V} (hB : IsCompact B) {C : Set (U × V)} (hC : Convex ℝ C)
+    (hCm : MeasurableSet C)
+    (hAC : ∀ a ∈ A, (a, (0 : V)) ∈ C) (hBC : ∀ b ∈ B, ((0 : U), b) ∈ C) :
+    μ A * ν B * ENNReal.ofReal
+        ((k.factorial * m.factorial : ℝ) / ((k + m).factorial : ℝ))
+      ≤ (μ.prod ν) C :=
+  section_projection_volume_lower_bound' μ ν hkU hmV hB hC hCm hAC
+    (fun b hb => ⟨0, hBC b hb⟩)
+
+/-- The positive-section-dimension join bound. -/
+theorem join_volume_lower_bound (μ : Measure U) (ν : Measure V)
+    [μ.IsAddHaarMeasure] [ν.IsAddHaarMeasure] {k m : ℕ}
+    (hk : 1 ≤ k) (hkU : finrank ℝ U = k) (hmV : finrank ℝ V = m)
+    {A : Set U} {B : Set V} (hB : IsCompact B) {C : Set (U × V)} (hC : Convex ℝ C)
+    (hCm : MeasurableSet C)
+    (hAC : ∀ a ∈ A, (a, (0 : V)) ∈ C) (hBC : ∀ b ∈ B, ((0 : U), b) ∈ C) :
+    μ A * ν B * ENNReal.ofReal
+        ((k.factorial * m.factorial : ℝ) / ((k + m).factorial : ℝ))
+      ≤ (μ.prod ν) C :=
+  section_projection_volume_lower_bound μ ν hk hkU hmV hB hC hCm hAC
+    (fun b hb => ⟨0, hBC b hb⟩)
 
 end
 

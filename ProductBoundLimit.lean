@@ -1,4 +1,6 @@
 import LviBasic
+import DilationBridge
+import UpperBound
 
 /-!
 # A lattice-point product bound implies the volume product bound
@@ -74,6 +76,61 @@ theorem product_bound_implies_volume_bound {K : Set E} (hK : DiscreteMinkowski.I
     exact div_le_div_of_nonneg_right (hbound n hn) (pow_nonneg hnreal.le _)
   have hlimit := le_of_tendsto_of_tendsto hcount hupper hle
   exact (div_le_iff₀ (ZLattice.covolume_pos Λ volume)).mp hlimit
+
+/-- The Riemann-sum limit in the paper's standard-lattice notation. Compactness
+and convexity give measurability and a null frontier; the lattice has covolume one. -/
+theorem tendsto_standardLattice_refinement {d : ℕ} {K : Set (Fin d → ℝ)}
+    (hKc : IsCompact K) (hKb : DiscreteMinkowski.IsPaperConvexBody K) :
+    Tendsto (fun k : ℕ =>
+      ((DiscreteMinkowski.latticePoints K ((k : ℝ)⁻¹ • standardIntegerLattice d)).ncard : ℝ) /
+        (k : ℝ) ^ d) atTop (𝓝 (volume K).toReal) := by
+  have h := ZLattice.covolume.tendsto_card_div_pow (standardIntegerLattice d)
+    (standardLatticeBasis d) hKc.isBounded hKc.isClosed.measurableSet
+    (hKb.2.1.addHaar_frontier volume)
+  simpa [Nat.card_coe_set_eq, DiscreteMinkowski.latticePoints_apply,
+    Submodule.coe_pointwise_smul, Fintype.card_fin, measureReal_def,
+    covolume_standardIntegerLattice] using h
+
+/-- **Eq. (1.4), its implication to Minkowski's upper bound.** The hypothesis is
+exactly a universal bound for bodies on the standard lattice, with constants
+independent of the body. Apply it to integer dilates, then take the Riemann-sum limit. -/
+theorem product_bound_implies_minkowski {d : ℕ} (c : ℕ → ℝ)
+    (hbound : ∀ B : Set (Fin d → ℝ), IsCompact B →
+      DiscreteMinkowski.IsPaperConvexBody B →
+      ((DiscreteMinkowski.latticePoints B (standardIntegerLattice d)).ncard : ℝ) ≤
+        ∏ i ∈ Finset.range d,
+          (2 / DiscreteMinkowski.successiveMinimum B (standardIntegerLattice d) (i + 1) + c i))
+    {K : Set (Fin d → ℝ)} (hKc : IsCompact K)
+    (hKb : DiscreteMinkowski.IsPaperConvexBody K) :
+    (volume K).toReal ≤ ∏ i ∈ Finset.range d,
+      2 / DiscreteMinkowski.successiveMinimum K (standardIntegerLattice d) (i + 1) := by
+  let lam : ℕ → ℝ := fun i =>
+    DiscreteMinkowski.successiveMinimum K (standardIntegerLattice d) (i + 1)
+  have hcount := tendsto_standardLattice_refinement hKc hKb
+  have hupper := tendsto_product_with_constants (d := d) lam c
+  apply le_of_tendsto_of_tendsto hcount hupper
+  filter_upwards [eventually_gt_atTop 0] with k hk
+  have hkreal : (0 : ℝ) < k := by exact_mod_cast hk
+  have hB := hbound ((k : ℝ) • K) (hKc.smul (k : ℝ))
+    (isPaperConvexBody_smul hkreal hKb)
+  rw [ncard_latticePoints_smul_body hkreal.ne'] at hB
+  simp_rw [successiveMinimum_smul_body hkreal] at hB
+  have hfactor : ∀ i ∈ Finset.range d,
+      (2 / (lam i / (k : ℝ)) + c i) / (k : ℝ) =
+        2 / lam i + c i / (k : ℝ) := by
+    intro i hi
+    have hpos : 0 < lam i := DiscreteMinkowski.successiveMinimum_pos hKb
+      (by omega) (by simpa using Finset.mem_range.mp hi)
+    field_simp
+  have hrewrite :
+      (∏ i ∈ Finset.range d, (2 / (lam i / (k : ℝ)) + c i)) / (k : ℝ) ^ d =
+        ∏ i ∈ Finset.range d, (2 / lam i + c i / (k : ℝ)) := by
+    calc
+      _ = ∏ i ∈ Finset.range d, (2 / (lam i / (k : ℝ)) + c i) / (k : ℝ) := by
+        rw [Finset.prod_div_distrib, Finset.prod_const, Finset.card_range]
+      _ = _ := Finset.prod_congr rfl hfactor
+  rw [← hrewrite]
+  exact div_le_div_of_nonneg_right hB (pow_nonneg hkreal.le _)
 
 end
 

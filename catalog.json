@@ -41,9 +41,18 @@
       "depends_on": [],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "The development uses DiscreteMinkowski.IsPaperConvexBody together with IsCompact. Supply an explicit paper-definition bridge; the former alone does not encode compactness."
+        "status": "stated",
+        "files": [
+          "PaperNotation.lean",
+          "DilationBridge.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.IsConvexBody",
+          "LatticeVolumeInterpolation.isConvexBody_iff",
+          "LatticeVolumeInterpolation.isPaperConvexBody_smul"
+        ],
+        "added_hypotheses": [],
+        "route_note": "The explicit compact-convex-interior predicate is equivalent to IsCompact together with the pinned body's bounded-convex-interior predicate. No compactness assumption is lost in the notation bridge."
       }
     },
     {
@@ -74,9 +83,16 @@
       "depends_on": ["convex_body_class"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "Supply the paper-notation definition bridge to the pinned library support function."
+        "status": "stated",
+        "files": [
+          "PaperNotation.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.supportFunction",
+          "LatticeVolumeInterpolation.supportFunction_attained"
+        ],
+        "added_hypotheses": [],
+        "route_note": "The coordinate dot-product supremum is proved to be an attained maximum on every nonempty compact set, as in Section 2."
       }
     },
     {
@@ -202,11 +218,15 @@
         "status": "stated",
         "files": [
           "SuccessiveMinimaBridge.lean",
-          "CoordinateLattice.lean"
+          "CoordinateLattice.lean",
+          "DilationBridge.lean"
         ],
         "declarations": [
           "LatticeVolumeInterpolation.paper_successiveMinimum_of_originSymmetric",
-          "LatticeVolumeInterpolation.paper_successiveMinimum_realCoordinateBox"
+          "LatticeVolumeInterpolation.paper_successiveMinimum_realCoordinateBox",
+          "LatticeVolumeInterpolation.halfDifferenceBody_smul",
+          "LatticeVolumeInterpolation.scaledLatticeSpan_smul_body",
+          "LatticeVolumeInterpolation.successiveMinimum_smul_body"
         ],
         "added_hypotheses": [],
         "route_note": "The source's symmetric-body formula is restated in its dilation notation and instantiated for the coordinate-box equality family; the formal definition uses the corresponding infimum until its attainment is proved."
@@ -277,9 +297,21 @@
       "depends_on": [],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "The development uses DiscreteMinkowski.latticePoints and Set.ncard for finite sets; supply the general paper-notation bridge. StandardLattice provides the standard lattice instances."
+        "status": "stated",
+        "files": [
+          "PaperNotation.lean",
+          "DilationBridge.lean",
+          "StandardLattice.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.latticePointEnumerator",
+          "LatticeVolumeInterpolation.latticePointEnumerator_eq_card",
+          "LatticeVolumeInterpolation.mem_integerSpan_iff",
+          "LatticeVolumeInterpolation.latticePoints_smul_body",
+          "LatticeVolumeInterpolation.ncard_latticePoints_smul_body"
+        ],
+        "added_hypotheses": [],
+        "route_note": "The enumerator equals the cardinality of the finite lattice intersection for compact sets and discrete lattices. Integral spans are identified with integer linear combinations. Positive body dilation is identified exactly with reciprocal lattice refinement, both at set and cardinality level."
       }
     },
     {
@@ -510,9 +542,18 @@
       "depends_on": ["successive_minima", "convex_body_class"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "The lower bound is in MinkowskiLower; the upper bound is supplied by the pinned dependency. Assemble the exact two-sided paper statement and normalization bridge."
+        "status": "stated",
+        "files": [
+          "MinkowskiBounds.lean",
+          "MinkowskiLower.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.minkowski_second_theorem_bounds",
+          "LatticeVolumeInterpolation.minkowski_second_theorem_upper",
+          "LatticeVolumeInterpolation.minkowski_second_theorem_lower"
+        ],
+        "added_hypotheses": [],
+        "route_note": "Both halves of Eq. (1.2) are assembled in the paper's reciprocal-minima normalization. The lower bound uses the segments realizing the minima. The upper bound specializes the pinned Minkowski theorem to the standard lattice and converts its product normalization using covolume one. The pinned upper proof uses squeezing and Blichfeldt rather than a reduction through the central symmetral. Dimension zero is included."
       }
     },
     {
@@ -545,9 +586,16 @@
       "known_issues_in_paper": [],
       "formalization_notes": "Reuse the same proof of lambda_i(T_n)=2 required by simplex_equality_cases; prove the cube computation coordinatewise.",
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "Cube and simplex ingredients exist. Assemble both equality statements for the paper's normalization and positive dimension."
+        "status": "stated",
+        "files": [
+          "MinkowskiBounds.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.simplex_attains_minkowski_lower",
+          "LatticeVolumeInterpolation.cube_attains_minkowski_upper"
+        ],
+        "added_hypotheses": [],
+        "route_note": "The terminal statements include both all successive minima and exact volume equality in Eq. (1.2): minima two for T_n and minima one for [-1,1]^n. They instantiate the direct simplex and coordinate-box calculations, including dimension zero."
       }
     },
     {
@@ -801,10 +849,17 @@
       ],
       "lean": {
         "status": "stated",
-        "files": ["ProductBoundLimit.lean"],
-        "declarations": ["LatticeVolumeInterpolation.product_bound_implies_volume_bound"],
-        "added_hypotheses": ["The product-count bound is assumed for K against every positive reciprocal-integer refinement of an arbitrary lattice; the paper states a universal standard-lattice bound for all bodies."],
-        "route_note": "The arbitrary-constants limit step is proved from the pinned count asymptotic and scaling law. Still prove the universal standard-lattice premise implies this refined-lattice premise by an exact linear-change-of-variables bridge before marking the catalog item complete."
+        "files": [
+          "ProductBoundLimit.lean",
+          "DilationBridge.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.product_bound_implies_minkowski",
+          "LatticeVolumeInterpolation.tendsto_standardLattice_refinement",
+          "LatticeVolumeInterpolation.product_bound_implies_volume_bound"
+        ],
+        "added_hypotheses": [],
+        "route_note": "The terminal product_bound_implies_minkowski assumes the paper's universal standard-lattice count bound with arbitrary body-independent constants. Apply it to positive integer dilates; exact count and minima scaling give the refined-lattice inequalities. The standard-lattice Riemann-sum limit has covolume one. The earlier arbitrary-lattice implication is retained as a supplemental theorem with its explicit refined-lattice premise, not as the terminal paper statement."
       }
     },
     {
@@ -1851,9 +1906,19 @@
         "The cited theorem is stronger than the displayed consequence: it uses the maximum volume over all translates of the section, whereas Eq. (4.1) keeps only the section through the origin. No assumption that the origin section is maximal is needed."
       ],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "AntiBlocking.rogers_shephard_antiBlocking assumes anti-blocking. General compact convex bodies still require a projection-section argument; the join bound needs an actual zero-section containment and cannot be applied to arbitrary projections directly."
+        "status": "stated",
+        "files": [
+          "GeneralRogersShephard.lean",
+          "JoinVolume.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.rogers_shephard_section_projection",
+          "LatticeVolumeInterpolation.projection_fibre_lower_bound",
+          "LatticeVolumeInterpolation.section_projection_volume_lower_bound",
+          "LatticeVolumeInterpolation.section_projection_volume_lower_bound'"
+        ],
+        "added_hypotheses": [],
+        "route_note": "Eq. (4.1) is proved for every compact convex set and coordinate subspace, with no anti-blocking premise. A projected point is lifted arbitrarily into the body; convexity gives a translated scaled copy of the origin section inside the intermediate fibre. Translation invariance, Fubini and the Beta integral give the exact binomial constant. Empty sections and zero-dimensional factors are included. This directly proves the target paper's quoted inequality rather than the cited theorem's maximal-section strengthening."
       }
     },
     {

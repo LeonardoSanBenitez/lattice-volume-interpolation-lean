@@ -2,6 +2,11 @@
 -- Do not edit it by hand.
 import LatticeVolumeInterpolation
 
+#print axioms LatticeVolumeInterpolation.IsConvexBody
+#print axioms LatticeVolumeInterpolation.isConvexBody_iff
+#print axioms LatticeVolumeInterpolation.isPaperConvexBody_smul
+#print axioms LatticeVolumeInterpolation.supportFunction
+#print axioms LatticeVolumeInterpolation.supportFunction_attained
 #print axioms LatticeVolumeInterpolation.gauge_zero_correction
 #print axioms LatticeVolumeInterpolation.latticePoint_mem_dilate_of_gauge_lt
 #print axioms LatticeVolumeInterpolation.gauge_le_of_latticePoint_mem_dilate
@@ -9,6 +14,14 @@ import LatticeVolumeInterpolation
 #print axioms LatticeVolumeInterpolation.halfDifferenceBody_realCoordinateBox
 #print axioms LatticeVolumeInterpolation.paper_successiveMinimum_of_originSymmetric
 #print axioms LatticeVolumeInterpolation.paper_successiveMinimum_realCoordinateBox
+#print axioms LatticeVolumeInterpolation.halfDifferenceBody_smul
+#print axioms LatticeVolumeInterpolation.scaledLatticeSpan_smul_body
+#print axioms LatticeVolumeInterpolation.successiveMinimum_smul_body
+#print axioms LatticeVolumeInterpolation.latticePointEnumerator
+#print axioms LatticeVolumeInterpolation.latticePointEnumerator_eq_card
+#print axioms LatticeVolumeInterpolation.mem_integerSpan_iff
+#print axioms LatticeVolumeInterpolation.latticePoints_smul_body
+#print axioms LatticeVolumeInterpolation.ncard_latticePoints_smul_body
 #print axioms LatticeVolumeInterpolation.finite_projMap_inter_bounded
 #print axioms LatticeVolumeInterpolation.span_projMap_eq_top
 #print axioms LatticeVolumeInterpolation.projectedLattice_discrete
@@ -18,7 +31,14 @@ import LatticeVolumeInterpolation
 #print axioms LatticeVolumeInterpolation.orthShakingN
 #print axioms LatticeVolumeInterpolation.euclidean_chord_length
 #print axioms LatticeVolumeInterpolation.generalShaking
+#print axioms LatticeVolumeInterpolation.minkowski_second_theorem_bounds
+#print axioms LatticeVolumeInterpolation.minkowski_second_theorem_upper
+#print axioms LatticeVolumeInterpolation.minkowski_second_theorem_lower
+#print axioms LatticeVolumeInterpolation.simplex_attains_minkowski_lower
+#print axioms LatticeVolumeInterpolation.cube_attains_minkowski_upper
 #print axioms LatticeVolumeInterpolation.integerBox_attains_bhw_lattice_conjecture
+#print axioms LatticeVolumeInterpolation.product_bound_implies_minkowski
+#print axioms LatticeVolumeInterpolation.tendsto_standardLattice_refinement
 #print axioms LatticeVolumeInterpolation.product_bound_implies_volume_bound
 #print axioms LatticeVolumeInterpolation.theorem_1_1_upper
 #print axioms LatticeVolumeInterpolation.theorem_1_1_lower
@@ -42,6 +62,10 @@ import LatticeVolumeInterpolation
 #print axioms LatticeVolumeInterpolation.proposition_1_6_tight_for_cubes
 #print axioms LatticeVolumeInterpolation.lattice_tile_sandwich
 #print axioms LatticeVolumeInterpolation.van_der_corput
+#print axioms LatticeVolumeInterpolation.rogers_shephard_section_projection
+#print axioms LatticeVolumeInterpolation.projection_fibre_lower_bound
+#print axioms LatticeVolumeInterpolation.section_projection_volume_lower_bound
+#print axioms LatticeVolumeInterpolation.section_projection_volume_lower_bound'
 #print axioms LatticeVolumeInterpolation.coveringRadius_le_sum_minima
 #print axioms LatticeVolumeInterpolation.pick_theorem_interior
 #print axioms LatticeVolumeInterpolation.henk_schurmann_wills_boundary_bound

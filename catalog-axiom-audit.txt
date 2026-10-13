@@ -1,8 +1,13 @@
 command: lake env lean CatalogAxioms.lean
-catalog declarations: 73
+catalog declarations: 97
 allowed axioms: Classical.choice, Quot.sound, propext
 exit code: 0
 
+'LatticeVolumeInterpolation.IsConvexBody' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.isConvexBody_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.isPaperConvexBody_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.supportFunction' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.supportFunction_attained' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.gauge_zero_correction' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.latticePoint_mem_dilate_of_gauge_lt' depends on axioms: [propext,
  Classical.choice,
@@ -22,6 +27,14 @@ exit code: 0
 'LatticeVolumeInterpolation.paper_successiveMinimum_realCoordinateBox' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
+'LatticeVolumeInterpolation.halfDifferenceBody_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.scaledLatticeSpan_smul_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.successiveMinimum_smul_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.latticePointEnumerator' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.latticePointEnumerator_eq_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.mem_integerSpan_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.latticePoints_smul_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.ncard_latticePoints_smul_body' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.finite_projMap_inter_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.span_projMap_eq_top' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.projectedLattice_discrete' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -31,7 +44,16 @@ exit code: 0
 'LatticeVolumeInterpolation.orthShakingN' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.euclidean_chord_length' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.generalShaking' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.minkowski_second_theorem_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.minkowski_second_theorem_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.minkowski_second_theorem_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.simplex_attains_minkowski_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.cube_attains_minkowski_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.integerBox_attains_bhw_lattice_conjecture' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'LatticeVolumeInterpolation.product_bound_implies_minkowski' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.tendsto_standardLattice_refinement' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
 'LatticeVolumeInterpolation.product_bound_implies_volume_bound' depends on axioms: [propext,
@@ -69,6 +91,16 @@ exit code: 0
 'LatticeVolumeInterpolation.proposition_1_6_tight_for_cubes' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.lattice_tile_sandwich' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.van_der_corput' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.rogers_shephard_section_projection' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'LatticeVolumeInterpolation.projection_fibre_lower_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.section_projection_volume_lower_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'LatticeVolumeInterpolation.section_projection_volume_lower_bound'' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
 'LatticeVolumeInterpolation.coveringRadius_le_sum_minima' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.pick_theorem_interior' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.henk_schurmann_wills_boundary_bound' depends on axioms: [propext,
