@@ -23,6 +23,8 @@ import LatticeVolumeInterpolation
 #print axioms LatticeVolumeInterpolation.theorem_1_1_upper
 #print axioms LatticeVolumeInterpolation.theorem_1_1_lower
 #print axioms LatticeVolumeInterpolation.corollary_1_2
+#print axioms LatticeVolumeInterpolation.davenport_inequality
+#print axioms LatticeVolumeInterpolation.volume_projectionOff_shakeUpTo_le
 #print axioms LatticeVolumeInterpolation.theorem_1_3_paper
 #print axioms LatticeVolumeInterpolation.projCount_eq_classCount
 #print axioms LatticeVolumeInterpolation.theorem_1_3_tight_for_boxes
@@ -47,6 +49,8 @@ import LatticeVolumeInterpolation
 #print axioms LatticeVolumeInterpolation.convex_generalShaking
 #print axioms LatticeVolumeInterpolation.convex_coordShaking
 #print axioms LatticeVolumeInterpolation.image_orthShakingN_eq_coordShaking
+#print axioms LatticeVolumeInterpolation.convex_orthShakingN
+#print axioms LatticeVolumeInterpolation.isCompact_orthShakingN
 #print axioms LatticeVolumeInterpolation.orthProjN_image_subset_orthShakingN
 #print axioms LatticeVolumeInterpolation.volume_orthShakingN
 #print axioms LatticeVolumeInterpolation.gauge_orthShakingN_direction_eq

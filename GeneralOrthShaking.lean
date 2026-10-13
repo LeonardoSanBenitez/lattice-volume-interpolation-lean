@@ -516,6 +516,50 @@ theorem euclidean_chord_length {K : Set (Fin n → ℝ)} (hK : IsCompact K)
   rw [hsub, map_smul, norm_smul, Real.norm_eq_abs,
     abs_of_nonneg (rawLength_nonneg hK hu hne)]
 
+/-- Orthogonal Blaschke shaking is convex in every dimension. The exact
+direction chart transports the coordinate convexity theorem back to `u`. -/
+theorem convex_orthShakingN {K : Set (Fin n → ℝ)} (hK : IsCompact K)
+    (hKc : Convex ℝ K) {u : Fin n → ℝ} (hu : u ≠ 0) :
+    Convex ℝ (orthShakingN K u) := by
+  have hn : 0 < n := by
+    by_contra h
+    have hn0 : n = 0 := by omega
+    subst n
+    exact hu (Subsingleton.elim _ _)
+  let j : Fin n := ⟨0, hn⟩
+  obtain ⟨V, c, hc, hVu, _, hdot⟩ := exists_direction_chart j hu
+  have hcont : Continuous V := V.toContinuousLinearEquiv.continuous
+  have himage : Convex ℝ (V '' orthShakingN K u) := by
+    rw [image_orthShakingN_eq_coordShaking hK hKc j hu V c hc hVu hdot]
+    exact convex_coordShaking (hK.image hcont) (hKc.linear_image V.toLinearMap) j
+  have hback : V.symm '' (V '' orthShakingN K u) = orthShakingN K u := by
+    rw [← Set.image_comp]
+    simp
+  rw [← hback]
+  exact himage.linear_image V.symm.toLinearMap
+
+/-- Orthogonal Blaschke shaking of a compact convex set is compact in every
+dimension, including all boundary fibres. -/
+theorem isCompact_orthShakingN {K : Set (Fin n → ℝ)} (hK : IsCompact K)
+    (hKc : Convex ℝ K) {u : Fin n → ℝ} (hu : u ≠ 0) :
+    IsCompact (orthShakingN K u) := by
+  have hn : 0 < n := by
+    by_contra h
+    have hn0 : n = 0 := by omega
+    subst n
+    exact hu (Subsingleton.elim _ _)
+  let j : Fin n := ⟨0, hn⟩
+  obtain ⟨V, c, hc, hVu, _, hdot⟩ := exists_direction_chart j hu
+  have hcont : Continuous V := V.toContinuousLinearEquiv.continuous
+  have himage : IsCompact (V '' orthShakingN K u) := by
+    rw [image_orthShakingN_eq_coordShaking hK hKc j hu V c hc hVu hdot]
+    exact isCompact_coordShaking (hK.image hcont) j
+  have hback : V.symm '' (V '' orthShakingN K u) = orthShakingN K u := by
+    rw [← Set.image_comp]
+    simp
+  rw [← hback]
+  exact himage.image V.symm.toContinuousLinearEquiv.continuous
+
 /-- **Lemma 3.2(ii), all dimensions:** orthogonal shaking preserves volume.
 The chart transports the unchanged chord lengths to the coordinate Fubini identity. -/
 theorem volume_orthShakingN {K : Set (Fin n → ℝ)} (hK : IsCompact K)

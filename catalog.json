@@ -1026,9 +1026,17 @@
       ],
       "formalization_notes": "Formalize the intended k = 0 through n theorem and retain the printed k = 1 formula only as a documented source discrepancy; do not add a hypothesis to rescue the literal formula. The index bridge is m = n-k: Davenport's V_m becomes the inner sum over |I| = k.",
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "General coordinate-projection inequality remains open. Davenport.davenport_antiBlocking is a restricted result and does not discharge this item."
+        "status": "stated",
+        "files": [
+          "GeneralDavenport.lean",
+          "ProjectionShaking.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.davenport_inequality",
+          "LatticeVolumeInterpolation.volume_projectionOff_shakeUpTo_le"
+        ],
+        "added_hypotheses": [],
+        "route_note": "The general all-coordinate-subsets upper bound is proved for every compact convex set. The proof uses successive coordinate shakings: lattice count increases, each intrinsic projection volume decreases, and the final anti-blocking body satisfies the paper's prism bound. This is an alternative derivation of the quoted upper bound; it does not mechanize Davenport's two-sided discrepancy induction. Source-route disposition remains subject to the faithfulness audit."
       }
     },
     {
@@ -2004,10 +2012,12 @@
           "LatticeVolumeInterpolation.isCompact_generalShaking",
           "LatticeVolumeInterpolation.convex_generalShaking",
           "LatticeVolumeInterpolation.convex_coordShaking",
-          "LatticeVolumeInterpolation.image_orthShakingN_eq_coordShaking"
+          "LatticeVolumeInterpolation.image_orthShakingN_eq_coordShaking",
+          "LatticeVolumeInterpolation.convex_orthShakingN",
+          "LatticeVolumeInterpolation.isCompact_orthShakingN"
         ],
         "added_hypotheses": [],
-        "route_note": "Planar oblique convexity and arbitrary-dimensional coordinate convexity are explicit. The general-direction chart conjugacy is proved, but the terminal arbitrary-dimensional convexity wrapper still needs to transport coordinate convexity back through the inverse chart."
+        "route_note": "Planar oblique convexity and arbitrary-dimensional orthogonal convexity and compactness are explicit. The general-direction proof transports the coordinate concavity-of-fibre-length construction through an exact orthogonal chart. The planar proof uses the same fibre-length argument rather than the source's quadrilateral-monotonicity argument; retain this alternative-route disclosure for the faithfulness audit."
       }
     },
     {

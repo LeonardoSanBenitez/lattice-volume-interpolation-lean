@@ -1,5 +1,5 @@
 command: lake env lean CatalogAxioms.lean
-catalog declarations: 69
+catalog declarations: 73
 allowed axioms: Classical.choice, Quot.sound, propext
 exit code: 0
 
@@ -40,6 +40,10 @@ exit code: 0
 'LatticeVolumeInterpolation.theorem_1_1_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.theorem_1_1_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.corollary_1_2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.davenport_inequality' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.volume_projectionOff_shakeUpTo_le' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
 'LatticeVolumeInterpolation.theorem_1_3_paper' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.projCount_eq_classCount' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.theorem_1_3_tight_for_boxes' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -76,6 +80,8 @@ exit code: 0
 'LatticeVolumeInterpolation.image_orthShakingN_eq_coordShaking' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
+'LatticeVolumeInterpolation.convex_orthShakingN' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.isCompact_orthShakingN' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.orthProjN_image_subset_orthShakingN' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]

@@ -17,6 +17,7 @@ import BetaIntegral
 import JoinVolume
 import AntiBlocking
 import Davenport
+import GeneralDavenport
 import WeightedSimplex
 import AntiBlockingUpperBound
 import MinimaAntiBlocking
