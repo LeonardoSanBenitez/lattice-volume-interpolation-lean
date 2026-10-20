@@ -58,5 +58,6 @@ import BoundarySections
 import BoundaryRowCount
 import BoundaryMinima
 import BoundaryFirstDirection
+import ProjectedDeterminantBound
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/

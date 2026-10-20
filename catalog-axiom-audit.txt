@@ -1,5 +1,5 @@
 command: lake env lean CatalogAxioms.lean
-catalog declarations: 97
+catalog declarations: 101
 allowed axioms: Classical.choice, Quot.sound, propext
 exit code: 0
 
@@ -69,6 +69,16 @@ exit code: 0
 'LatticeVolumeInterpolation.theorem_1_3_paper' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.projCount_eq_classCount' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.theorem_1_3_tight_for_boxes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.projected_lattice_determinant_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'LatticeVolumeInterpolation.projected_covolume_ge_reciprocal_zonotope' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'LatticeVolumeInterpolation.covolume_section_mul_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.orthogonalImageLattice_eq_projectedLattice' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
 'LatticeVolumeInterpolation.simplex_upper_equality' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.simplex_lower_equality' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.successiveMinimum_realStandardSimplex_eq_two' depends on axioms: [propext,
