@@ -264,9 +264,11 @@
       ],
       "formalization_notes": "Use Eq. (1.1) as the definition. Prove the gauge characterization through a greedy flag or through the threshold subspaces span({z in Z^n : |z|_cs(K) <= r}), so repeated minima are handled without adding lambda_{i-1} < lambda_i.",
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "The printed strict-smaller-minima recurrence fails at ties. The valid gauge-dilation helpers exist in SuccessiveMinimaBridge; supply the corrected flag-level statement and its exact paper bridge."
+        "status": "stated",
+        "files": ["GaugeMinima.lean"],
+        "declarations": ["LatticeVolumeInterpolation.gauge_flagVector_eq_successiveMinimum", "LatticeVolumeInterpolation.successiveMinimum_isLeast_gauge_outside_flag", "LatticeVolumeInterpolation.firstMinimum_isLeast_gauge_nonzero"],
+        "added_hypotheses": [],
+        "route_note": "The printed recurrence fails at ties, as documented in known_issues_in_paper. The corrected attained minimum excludes the chosen k-dimensional greedy flag for lambda_(k+1), rather than the entire span at the preceding critical scale. Gauge-dilation inequalities identify the chosen flag vector's gauge with the next successive minimum, and greedy minimality supplies the exact IsLeast statement. The k=0 specialization is the paper's minimum over nonzero lattice vectors. No separation of successive minima is assumed."
       }
     },
     {
@@ -386,9 +388,11 @@
         "Written as 'the smallest number mu > 0 such that mu K + Z^n = R^n'; attainment of the minimum again is not argued."
       ],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "coveringRadius is the infimum of positive covering scales. Positive-scale bounds and the mu = 1 endpoint are implemented; the paper's minimum/attainment formulation still needs an explicit bridge in positive dimension."
+        "status": "stated",
+        "files": ["CoveringRadius.lean", "CoveringRadiusAttainment.lean"],
+        "declarations": ["LatticeVolumeInterpolation.coveringRadius", "LatticeVolumeInterpolation.isClosed_setOf_covering", "LatticeVolumeInterpolation.coveringRadius_covers", "LatticeVolumeInterpolation.coveringRadius_pos", "LatticeVolumeInterpolation.coveringRadius_mem_coveringSet", "LatticeVolumeInterpolation.coveringRadius_isLeast"],
+        "added_hypotheses": ["Positive dimension for the minimum among strictly positive scales. In dimension zero every positive scale covers a nonempty body, and the infimum zero is not attained among positive scales."],
+        "route_note": "The infimum of positive covering scales is the paper's least positive scale in positive dimension. Compactness of K makes the fixed-point covering relation closed by projecting a closed subset of R times K; the lattice is closed because it is discrete. The infimum lies in this closed relation. If it were zero, every real vector would be integral, contradicted by a half-integer coordinate. No attainment or positivity premise is assumed."
       }
     },
     {

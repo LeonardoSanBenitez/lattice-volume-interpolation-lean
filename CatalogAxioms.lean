@@ -17,6 +17,9 @@ import LatticeVolumeInterpolation
 #print axioms LatticeVolumeInterpolation.halfDifferenceBody_smul
 #print axioms LatticeVolumeInterpolation.scaledLatticeSpan_smul_body
 #print axioms LatticeVolumeInterpolation.successiveMinimum_smul_body
+#print axioms LatticeVolumeInterpolation.gauge_flagVector_eq_successiveMinimum
+#print axioms LatticeVolumeInterpolation.successiveMinimum_isLeast_gauge_outside_flag
+#print axioms LatticeVolumeInterpolation.firstMinimum_isLeast_gauge_nonzero
 #print axioms LatticeVolumeInterpolation.latticePointEnumerator
 #print axioms LatticeVolumeInterpolation.latticePointEnumerator_eq_card
 #print axioms LatticeVolumeInterpolation.mem_integerSpan_iff
@@ -27,6 +30,12 @@ import LatticeVolumeInterpolation
 #print axioms LatticeVolumeInterpolation.projectedLattice_discrete
 #print axioms LatticeVolumeInterpolation.projectedLattice_span_top
 #print axioms LatticeVolumeInterpolation.projectedLattice_covolume_pos
+#print axioms LatticeVolumeInterpolation.coveringRadius
+#print axioms LatticeVolumeInterpolation.isClosed_setOf_covering
+#print axioms LatticeVolumeInterpolation.coveringRadius_covers
+#print axioms LatticeVolumeInterpolation.coveringRadius_pos
+#print axioms LatticeVolumeInterpolation.coveringRadius_mem_coveringSet
+#print axioms LatticeVolumeInterpolation.coveringRadius_isLeast
 #print axioms LatticeVolumeInterpolation.IsAntiBlocking
 #print axioms LatticeVolumeInterpolation.orthShakingN
 #print axioms LatticeVolumeInterpolation.euclidean_chord_length

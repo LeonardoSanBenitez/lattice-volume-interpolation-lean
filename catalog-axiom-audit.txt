@@ -1,5 +1,5 @@
 command: lake env lean CatalogAxioms.lean
-catalog declarations: 101
+catalog declarations: 110
 allowed axioms: Classical.choice, Quot.sound, propext
 exit code: 0
 
@@ -30,6 +30,15 @@ exit code: 0
 'LatticeVolumeInterpolation.halfDifferenceBody_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.scaledLatticeSpan_smul_body' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.successiveMinimum_smul_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.gauge_flagVector_eq_successiveMinimum' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'LatticeVolumeInterpolation.successiveMinimum_isLeast_gauge_outside_flag' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'LatticeVolumeInterpolation.firstMinimum_isLeast_gauge_nonzero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
 'LatticeVolumeInterpolation.latticePointEnumerator' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.latticePointEnumerator_eq_card' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.mem_integerSpan_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -40,6 +49,12 @@ exit code: 0
 'LatticeVolumeInterpolation.projectedLattice_discrete' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.projectedLattice_span_top' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.projectedLattice_covolume_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.coveringRadius' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.isClosed_setOf_covering' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.coveringRadius_covers' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.coveringRadius_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.coveringRadius_mem_coveringSet' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.coveringRadius_isLeast' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.IsAntiBlocking' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.orthShakingN' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.euclidean_chord_length' depends on axioms: [propext, Classical.choice, Quot.sound]
