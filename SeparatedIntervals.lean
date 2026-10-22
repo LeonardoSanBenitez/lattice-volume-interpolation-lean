@@ -129,4 +129,28 @@ theorem separated_intervals_card_sum_le {ι : Type*} [Fintype ι]
     rw [Finset.sum_eq_single i (fun j _ hji => hzero j hji) (by simp)]
     exact intervalIntegerPoints_card_le (by omega) (hlen i)
 
+/-- Grouping intervals by a finite label set applies the separated-family
+bound independently in every group. Malikiosis labels rows by their height
+residue; no separation is required between different groups. -/
+theorem grouped_separated_intervals_card_sum_le
+    {ι ρ : Type*} [Fintype ι] [Fintype ρ] (g : ι → ρ)
+    {a b : ι → ℝ} {q₁ q₂ : ℕ} (hq₂ : 0 < q₂) (horder : q₂ ≤ q₁)
+    (hlen : ∀ i, b i - a i < q₁)
+    (hsep : ∀ i j, g i = g j → i ≠ j → ∀ x ∈ Icc (a i) (b i),
+      ∀ y ∈ Icc (a j) (b j), ∀ k : ℤ, x - y ≠ (q₂ : ℝ) * k) :
+    ∑ i, (intervalIntegerPoints (a i) (b i)).card ≤ Fintype.card ρ * q₁ := by
+  classical
+  rw [← Fintype.sum_fiberwise g (fun i => (intervalIntegerPoints (a i) (b i)).card)]
+  calc
+    _ ≤ ∑ _r : ρ, q₁ := by
+      apply Finset.sum_le_sum
+      intro r _
+      apply separated_intervals_card_sum_le
+        (a := fun i : {i // g i = r} => a i.1)
+        (b := fun i : {i // g i = r} => b i.1) hq₂ horder (fun i => hlen i.1)
+      intro i j hne x hx y hy k
+      exact hsep i.1 j.1 (i.2.trans j.2.symm)
+        (fun he => hne (Subtype.ext he)) x hx y hy k
+    _ = _ := by simp
+
 end LatticeVolumeInterpolation
