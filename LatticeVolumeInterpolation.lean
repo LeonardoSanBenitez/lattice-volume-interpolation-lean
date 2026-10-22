@@ -72,5 +72,8 @@ import SeparatedPlanarFamily
 import PlanarPeriodAlignment
 import PlanarRankTwo
 import RepairedPlanarFamily
+import AdaptedMinimaCoordinates
+import SpatialSlices
+import SpatialPeriodBound
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
