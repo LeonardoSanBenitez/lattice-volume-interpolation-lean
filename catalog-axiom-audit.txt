@@ -1,5 +1,5 @@
 command: lake env lean CatalogAxioms.lean
-catalog declarations: 110
+catalog declarations: 112
 allowed axioms: Classical.choice, Quot.sound, propext
 exit code: 0
 
@@ -64,6 +64,10 @@ exit code: 0
 'LatticeVolumeInterpolation.minkowski_second_theorem_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.simplex_attains_minkowski_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.cube_attains_minkowski_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.symmetric_planar_floor_product_bound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'LatticeVolumeInterpolation.planar_floor_product_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.integerBox_attains_bhw_lattice_conjecture' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]

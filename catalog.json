@@ -706,9 +706,14 @@
       "known_issues_in_paper": ["This theorem does not establish the target's arbitrary-body dimension-two specialization; origin symmetry is a source hypothesis, not an assumption to be added to Conjecture 1."],
       "formalization_notes": "Prove this exact symmetric theorem as an upstream dependency result and retain the broader dimension-two target specialization as unproved unless independently established.",
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "Established symmetric two-dimensional subcase requires its own proof or verified source bridge. Proposition 1.5 for lattice polygons does not discharge this arbitrary-body floor-product bound."
+        "status": "stated",
+        "declarations": [
+          "LatticeVolumeInterpolation.symmetric_planar_floor_product_bound",
+          "LatticeVolumeInterpolation.planar_floor_product_bound"
+        ],
+        "files": ["PlanarFloorProduct.lean"],
+        "added_hypotheses": [],
+        "route_note": "The proof uses Malikiosis's Section 3.2 residue-slice induction and its one-dimensional separated-interval theorem, rather than Betke-Henk-Wills's planar diagonal map. The symmetric theorem retains the quoted source hypotheses; a separate endpoint proves the nonsymmetric planar extension."
       }
     },
     {
