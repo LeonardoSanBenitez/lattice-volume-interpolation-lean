@@ -65,5 +65,6 @@ import SeparatedIntervals
 import SeparatedRows
 import MinimaDifferenceAvoidance
 import PlanarFloorProduct
+import LatticeEmptyTranslate
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
