@@ -61,5 +61,6 @@ import BoundaryFirstDirection
 import ProjectedDeterminantBound
 import CoveringRadiusAttainment
 import GaugeMinima
+import SeparatedIntervals
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
