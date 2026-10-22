@@ -75,5 +75,6 @@ import RepairedPlanarFamily
 import AdaptedMinimaCoordinates
 import SpatialSlices
 import SpatialPeriodBound
+import SpatialFloorProduct
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
