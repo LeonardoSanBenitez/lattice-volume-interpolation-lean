@@ -674,9 +674,10 @@
         "As stated here, Conjecture 1 allows arbitrary convex bodies because lambda_i(K) is defined through the central symmetral. Betke-Henk-Wills Theorem 2.2 and Malikiosis Section 3.2 prove only the origin-symmetric cases in dimensions 2 and 3. Thus the sentence that 'the conjecture' as printed has been confirmed in those dimensions overstates the cited results."
       ],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "State as a proposition expressing an open conjecture; do not assert it as an axiom or theorem."
+        "status": "stated",
+        "declarations": ["LatticeVolumeInterpolation.BHWLatticePointConjecture"],
+        "files": ["PaperConjectures.lean"],
+        "route_note": "BHWLatticePointConjecture defines the universally quantified proposition in a fixed dimension. It is not an axiom or theorem asserting the conjecture. Natural floors are appropriate because every reciprocal minimum factor is positive on the specified convex bodies."
       }
     },
     {
@@ -908,9 +909,10 @@
       "depends_on": ["successive_minima", "lattice_point_enumerator"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "State the corrected upper and lower ratio conjectures as propositions, retaining the smallness condition and the documented discrepancy with the printed formulas."
+        "status": "stated",
+        "declarations": ["LatticeVolumeInterpolation.BHWRatioConjecture", "LatticeVolumeInterpolation.BHWRatioUpperConjecture", "LatticeVolumeInterpolation.BHWRatioLowerConjecture", "LatticeVolumeInterpolation.BHWSymmetricRatioLowerConjecture"],
+        "files": ["PaperConjectures.lean"],
+        "route_note": "BHWRatioConjecture is the conjunction of separately named upper, lower, and symmetric lower propositions. All three formulas, smallness regimes, and strict-interior counts are explicit. These definitions do not assert the conjecture."
       }
     },
     {
@@ -1303,9 +1305,10 @@
         "The scaling lambda_i(rK) = lambda_i(K)/r is used without statement."
       ],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "The pinned dependency has an unconditional lattice-count asymptotic. Supply the exact volume/count ratio bridge and retain the paper's conditional derivation from the corrected conjecture separately."
+        "status": "stated",
+        "declarations": ["LatticeVolumeInterpolation.volume_count_ratio_limit_of_ratio_conjecture"],
+        "files": ["RatioConjectureLimit.lean"],
+        "route_note": "The real-dilation terminal limit is derived conditionally from Conjecture 2 by the paper's squeeze: the lower smallness regime holds eventually, both finite products tend to one by exact minimum scaling, interior count is bounded by closed count, and the reciprocal density tends to one. The positive-dimension condition is the paper's convention n >= 1. No conjecture is assumed as an axiom, and the pinned unconditional integer-refinement asymptotic is not used as a substitute for this derivation."
       }
     },
     {

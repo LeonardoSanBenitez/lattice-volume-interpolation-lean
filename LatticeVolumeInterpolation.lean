@@ -76,5 +76,7 @@ import AdaptedMinimaCoordinates
 import SpatialSlices
 import SpatialPeriodBound
 import SpatialFloorProduct
+import PaperConjectures
+import RatioConjectureLimit
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
