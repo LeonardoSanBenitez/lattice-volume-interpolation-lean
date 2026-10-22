@@ -63,5 +63,6 @@ import CoveringRadiusAttainment
 import GaugeMinima
 import SeparatedIntervals
 import SeparatedRows
+import MinimaDifferenceAvoidance
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
