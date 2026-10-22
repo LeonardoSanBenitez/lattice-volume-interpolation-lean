@@ -67,5 +67,6 @@ import MinimaDifferenceAvoidance
 import PlanarFloorProduct
 import LatticeEmptyTranslate
 import LatticeCosetTranslate
+import LatticePeriodLines
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
