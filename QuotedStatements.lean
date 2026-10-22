@@ -32,7 +32,7 @@ def BHWTwosidedContextStatement (n : ℕ) : Prop :=
         (1 / DiscreteMinkowski.successiveMinimum K (standardIntegerLattice n) (i.1 + 1) - 1) ≤
         ((DiscreteMinkowski.latticePoints K (standardIntegerLattice n)).ncard : ℝ))
 
-/-- The stronger lower factors in the cited Betke--Henk--Wills corollary.
+/-- The different lower factors in the cited Betke--Henk--Wills corollary.
 It is separate from the target paper's printed formula. -/
 def BHWSourceLowerContextStatement (n : ℕ) : Prop :=
   ∀ K : Set (Fin n → ℝ), IsConvexBody K → DiscreteMinkowski.IsOriginSymmetric K →

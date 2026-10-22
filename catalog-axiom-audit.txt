@@ -1,5 +1,5 @@
 command: lake env lean CatalogAxioms.lean
-catalog declarations: 142
+catalog declarations: 145
 allowed axioms: Classical.choice, Quot.sound, propext
 exit code: 0
 
@@ -120,6 +120,9 @@ exit code: 0
 'LatticeVolumeInterpolation.volume_count_ratio_limit_of_ratio_conjecture' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
+'LatticeVolumeInterpolation.volume_count_ratio_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.coveringSet_smul_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.coveringRadius_smul_body' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.universal_upper_bound_of_ratio_conjecture' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]

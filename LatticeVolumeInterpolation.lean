@@ -83,5 +83,6 @@ import RealRectangles
 import ThinBoxComparison
 import QuotedStatements
 import ShakingTranslations
+import UnconditionalRatioLimit
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/

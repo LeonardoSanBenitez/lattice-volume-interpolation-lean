@@ -626,22 +626,22 @@
       ],
       "statement_informal": "For an origin-symmetric body the number of lattice points is bounded on both sides by products in the successive minima.",
       "statement_formal": "(1/n!) prod_{i=1}^n (1/lambda_i(K) - 1) <= G(K) <= prod_{i=1}^n (2 i / lambda_i(K) + 1), the lower bound under lambda_n(K) <= 2.",
-      "proof_as_in_paper": "Not proved here; attributed to Betke, Henk and Wills, Proposition 2.1 and Corollary 2.1. Their Proposition 2.1 gives the displayed upper bound, but their Corollary 2.1 has the stronger lower factors 2/lambda_i-1, not the target paper's printed 1/lambda_i-1. The target then says its printed lower bound is best possible.",
-      "proof_completeness": "the upper bound relies on external Betke, Henk and Wills, Proposition 2.1; the printed lower bound is true but is not the cited Corollary 2.1 and its best-possible claim is false",
+      "proof_as_in_paper": "Not proved here; attributed to Betke, Henk and Wills, Proposition 2.1 and Corollary 2.1. Their Proposition 2.1 gives the displayed upper bound, but their Corollary 2.1 has lower factors 2/lambda_i-1, not the target paper's printed 1/lambda_i-1. The target then says its printed lower bound is best possible.",
+      "proof_completeness": "the upper bound relies on external Betke, Henk and Wills, Proposition 2.1; the printed lower factors differ from the cited Corollary 2.1, and the best-possible claim requires independent assessment",
       "external_dependencies": [
         "Betke, Henk and Wills, Discrete Comput. Geom. 9 (1993), Proposition 2.1 and Corollary 2.1."
       ],
       "depends_on": ["successive_minima", "lattice_point_enumerator"],
       "known_issues_in_paper": [
         "The cited Betke-Henk-Wills Corollary 2.1 has factors 2/lambda_i-1, whereas the target display prints 1/lambda_i-1. These normalizations agree neither for the target's origin-symmetric K nor under its definition of central symmetral.",
-        "Consequently the sentence 'the lower bound is best-possible' is false for the displayed lower bound: the cited source itself gives a strictly stronger universal lower estimate. Correction 2026-10-22: the earlier catalog's additional origin-based proof claim was invalid; the reciprocal-minimum product need not be at most one. That claimed shortcut is not used in the formalization."
+        "Correction 2026-10-22: the earlier catalog's sharpness objection and origin-based proof justification are withdrawn pending independent assessment. A positive printed reciprocal-minimum product need not be at most one. Nor does the source product pointwise dominate it when the printed product has an even number of negative factors: minima (1/100,1/100,19/10,19/10), realized by a symmetric box, give printed product 793881/361 and source product 39601/361. This invalidates those catalog justifications, not either lattice-count inequality. No Lean proof uses either shortcut."
       ],
-      "formalization_notes": "Formalize the literal target display as printed and separately prove the exact stronger primary-source Corollary 2.1 in the dependency layer. Do not silently replace the target's factor 1 by 2, and do not formalize the false best-possible sentence as a theorem.",
+      "formalization_notes": "State the literal target display and the exact primary-source Corollary 2.1 separately under the recorded contextual-statement exclusion. Do not silently replace the target's factor 1 by 2. The best-possible sentence remains for independent assessment and is not asserted by these proposition definitions.",
       "lean": {
         "status": "stated",
         "declarations": ["LatticeVolumeInterpolation.BHWTwosidedContextStatement", "LatticeVolumeInterpolation.BHWSourceLowerContextStatement"],
         "files": ["QuotedStatements.lean"],
-        "route_note": "BHWTwosidedContextStatement records the literal target formula, while BHWSourceLowerContextStatement separately records the stronger primary-source lower factors. Both are proposition definitions, with no axiom or theorem asserting these excluded contextual results. No sharpness theorem is asserted."
+        "route_note": "BHWTwosidedContextStatement records the literal target formula, while BHWSourceLowerContextStatement separately records the different primary-source lower factors. Both are proposition definitions, with no axiom or theorem asserting these excluded contextual results. No sharpness theorem is asserted."
       }
     },
     {
@@ -1309,9 +1309,9 @@
       ],
       "lean": {
         "status": "stated",
-        "declarations": ["LatticeVolumeInterpolation.volume_count_ratio_limit_of_ratio_conjecture"],
-        "files": ["RatioConjectureLimit.lean"],
-        "route_note": "The real-dilation terminal limit is derived conditionally from Conjecture 2 by the paper's squeeze: the lower smallness regime holds eventually, both finite products tend to one by exact minimum scaling, interior count is bounded by closed count, and the reciprocal density tends to one. The positive-dimension condition is the paper's convention n >= 1. No conjecture is assumed as an axiom, and the pinned unconditional integer-refinement asymptotic is not used as a substitute for this derivation."
+        "declarations": ["LatticeVolumeInterpolation.volume_count_ratio_limit_of_ratio_conjecture", "LatticeVolumeInterpolation.volume_count_ratio_limit", "LatticeVolumeInterpolation.coveringSet_smul_body", "LatticeVolumeInterpolation.coveringRadius_smul_body"],
+        "files": ["RatioConjectureLimit.lean", "UnconditionalRatioLimit.lean"],
+        "route_note": "The real-dilation terminal limit is derived conditionally from Conjecture 2 by the paper's squeeze: the lower smallness regime holds eventually, both finite products tend to one by exact minimum scaling, interior count is bounded by closed count, and the reciprocal density tends to one. The positive-dimension condition is the paper's convention n >= 1. No conjecture is assumed as an axiom, and the pinned unconditional integer-refinement asymptotic is not used as a substitute for this derivation. The separately named unconditional real-dilation theorem uses the proved Proposition 1.6 bounds and the exact covering-radius scaling mu(rK)=mu(K)/r; it supplements the conditional paper-route theorem."
       }
     },
     {
