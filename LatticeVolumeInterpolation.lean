@@ -71,5 +71,6 @@ import LatticePeriodLines
 import SeparatedPlanarFamily
 import PlanarPeriodAlignment
 import PlanarRankTwo
+import RepairedPlanarFamily
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
