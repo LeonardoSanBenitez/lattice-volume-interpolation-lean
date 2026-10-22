@@ -634,13 +634,14 @@
       "depends_on": ["successive_minima", "lattice_point_enumerator"],
       "known_issues_in_paper": [
         "The cited Betke-Henk-Wills Corollary 2.1 has factors 2/lambda_i-1, whereas the target display prints 1/lambda_i-1. These normalizations agree neither for the target's origin-symmetric K nor under its definition of central symmetral.",
-        "Consequently the sentence 'the lower bound is best-possible' is false for the displayed lower bound: the cited source itself gives a strictly stronger universal lower estimate. Under lambda_n <= 2 the printed lower bound can instead be proved directly from 0 in K intersect Z^n, since a negative product is trivial and a positive product is at most 1."
+        "Consequently the sentence 'the lower bound is best-possible' is false for the displayed lower bound: the cited source itself gives a strictly stronger universal lower estimate. Correction 2026-10-22: the earlier catalog's additional origin-based proof claim was invalid; the reciprocal-minimum product need not be at most one. That claimed shortcut is not used in the formalization."
       ],
       "formalization_notes": "Formalize the literal target display as printed and separately prove the exact stronger primary-source Corollary 2.1 in the dependency layer. Do not silently replace the target's factor 1 by 2, and do not formalize the false best-possible sentence as a theorem.",
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "Quoted contextual result: formal statement only under the recorded scope, not a theorem claim."
+        "status": "stated",
+        "declarations": ["LatticeVolumeInterpolation.BHWTwosidedContextStatement", "LatticeVolumeInterpolation.BHWSourceLowerContextStatement"],
+        "files": ["QuotedStatements.lean"],
+        "route_note": "BHWTwosidedContextStatement records the literal target formula, while BHWSourceLowerContextStatement separately records the stronger primary-source lower factors. Both are proposition definitions, with no axiom or theorem asserting these excluded contextual results. No sharpness theorem is asserted."
       }
     },
     {
@@ -826,9 +827,10 @@
       "known_issues_in_paper": [],
       "formalization_notes": "Formalize the stronger primary-source theorem with q_i = floor(2/lambda_i + 1), then derive the target paper's floor-free Eq. (1.3) by factorwise monotonicity. Do not present the two displays as verbatim identical.",
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "Quoted contextual bound: formal statement only under the recorded scope; distinct from the established dimension-three subcase."
+        "status": "stated",
+        "declarations": ["LatticeVolumeInterpolation.MalikiosisContextStatement", "LatticeVolumeInterpolation.MalikiosisFloorContextStatement", "LatticeVolumeInterpolation.malikiosis_floor_context_implies_context"],
+        "files": ["QuotedStatements.lean"],
+        "route_note": "The floor-free target and integer-part primary-source bound are separate proposition definitions in positive dimension; no axiom asserts either excluded contextual result. A checked conditional theorem derives the floor-free statement from the stronger integer-part statement by factorwise floor monotonicity. The dimension-three subcase is independently proved elsewhere."
       }
     },
     {
@@ -1143,9 +1145,10 @@
       ],
       "formalization_notes": "Formalize the cited k = 0 through n theorem. The target paper's name Schymura and the cited source's publication name Henze refer to the same cited result; expose both names in documentation so the provenance is traceable.",
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "Quoted contextual result: formal statement only under the recorded scope, not a theorem claim."
+        "status": "stated",
+        "declarations": ["LatticeVolumeInterpolation.SchymuraContextStatement", "LatticeVolumeInterpolation.schymuraDirection", "LatticeVolumeInterpolation.schymuraZonotope"],
+        "files": ["QuotedStatements.lean"],
+        "route_note": "SchymuraContextStatement defines the cited Henze/Schymura inequality without asserting it. The sum includes every coordinate subset, including the empty set. Both projection volume and zonotope volume use the intrinsic Euclidean subspace measures; the selected independent integer vectors are not assumed primitive."
       }
     },
     {

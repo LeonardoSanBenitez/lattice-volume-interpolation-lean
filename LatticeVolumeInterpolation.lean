@@ -81,5 +81,6 @@ import RatioConjectureLimit
 import UniversalConjectureBounds
 import RealRectangles
 import ThinBoxComparison
+import QuotedStatements
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/

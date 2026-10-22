@@ -1,5 +1,5 @@
 command: lake env lean CatalogAxioms.lean
-catalog declarations: 132
+catalog declarations: 140
 allowed axioms: Classical.choice, Quot.sound, propext
 exit code: 0
 
@@ -64,6 +64,8 @@ exit code: 0
 'LatticeVolumeInterpolation.minkowski_second_theorem_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.simplex_attains_minkowski_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.cube_attains_minkowski_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.BHWTwosidedContextStatement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.BHWSourceLowerContextStatement' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.BHWLatticePointConjecture' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.symmetric_planar_floor_product_bound' depends on axioms: [propext,
  Classical.choice,
@@ -74,6 +76,11 @@ exit code: 0
  Quot.sound]
 'LatticeVolumeInterpolation.spatial_floor_product_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.integerBox_attains_bhw_lattice_conjecture' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'LatticeVolumeInterpolation.MalikiosisContextStatement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.MalikiosisFloorContextStatement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.malikiosis_floor_context_implies_context' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
 'LatticeVolumeInterpolation.product_bound_implies_minkowski' depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -94,6 +101,9 @@ exit code: 0
 'LatticeVolumeInterpolation.volume_projectionOff_shakeUpTo_le' depends on axioms: [propext,
  Classical.choice,
  Quot.sound]
+'LatticeVolumeInterpolation.SchymuraContextStatement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.schymuraDirection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.schymuraZonotope' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.theorem_1_3_paper' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.projCount_eq_classCount' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.theorem_1_3_tight_for_boxes' depends on axioms: [propext, Classical.choice, Quot.sound]
