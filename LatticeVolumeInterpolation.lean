@@ -66,5 +66,6 @@ import SeparatedRows
 import MinimaDifferenceAvoidance
 import PlanarFloorProduct
 import LatticeEmptyTranslate
+import LatticeCosetTranslate
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
