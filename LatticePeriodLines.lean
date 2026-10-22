@@ -116,4 +116,53 @@ theorem latticeSaturations_intersect_of_independent_periods
     (by simpa only [hb₀] using hv) (by simpa only [hb₁] using hw)
     ha (by simpa only [hb₀] using hav) hc (by simpa only [hb₁] using hcw)
 
+/-- Every nonzero vector is independent of at least one member of an
+independent pair. This avoids assuming that the pair is an integral basis. -/
+theorem independent_pair_with_nonzero_vector {v w z : E}
+    (hind : LinearIndependent ℝ ![v, w]) (hz0 : z ≠ 0) :
+    LinearIndependent ℝ ![v, z] ∨ LinearIndependent ℝ ![w, z] := by
+  by_contra hnot
+  push Not at hnot
+  obtain ⟨hnv, hnw⟩ := hnot
+  have hev : ∃ a : ℝ, a • z = v := by
+    by_contra he
+    push Not at he
+    exact hnv (linearIndependent_fin2.mpr ⟨hz0, he⟩)
+  have hew : ∃ b : ℝ, b • z = w := by
+    by_contra he
+    push Not at he
+    exact hnw (linearIndependent_fin2.mpr ⟨hz0, he⟩)
+  obtain ⟨a, ha⟩ := hev
+  obtain ⟨b, hb⟩ := hew
+  have hw0 : w ≠ 0 := hind.ne_zero (1 : Fin 2)
+  have hb0 : b ≠ 0 := by
+    intro he
+    apply hw0
+    rw [← hb, he, zero_smul]
+  have hn := (linearIndependent_fin2.mp hind).2 (a / b)
+  apply hn
+  change (a / b) • w = v
+  rw [← hb, smul_smul]
+  have he : (a / b) * b = a := by field_simp
+  rwa [he]
+
+/-- If one body has two independent periods, every periodically separated
+convex body has no nonzero period. This supplies the rank-two family branch
+without requiring an integral-basis choice or a parallelogram containment. -/
+theorem no_period_of_disjoint_from_two_independent_periods
+    [FiniteDimensional ℝ E] (hdim : finrank ℝ E = 2)
+    {K H : Set E} (hK : Convex ℝ K) (hH : Convex ℝ H) {Λ : Submodule ℤ E}
+    (hdis : Disjoint (latticeSaturation K Λ) (latticeSaturation H Λ))
+    {v w : E} (hv : v ∈ Λ) (hw : w ∈ Λ) (hind : LinearIndependent ℝ ![v, w])
+    {a b : E} (ha : a ∈ K) (hav : a + v ∈ K) (hb : b ∈ K) (hbw : b + w ∈ K)
+    {z c : E} (hz : z ∈ Λ) (hz0 : z ≠ 0) (hc : c ∈ H) : c + z ∉ H := by
+  intro hcz
+  rcases independent_pair_with_nonzero_vector hind hz0 with hvz | hwz
+  · obtain ⟨p, hpK, hpH⟩ := latticeSaturations_intersect_of_independent_periods
+      hdim hK hH hv hz hvz ha hav hc hcz
+    exact (Set.disjoint_left.mp hdis) hpK hpH
+  · obtain ⟨p, hpK, hpH⟩ := latticeSaturations_intersect_of_independent_periods
+      hdim hK hH hw hz hwz hb hbw hc hcz
+    exact (Set.disjoint_left.mp hdis) hpK hpH
+
 end LatticeVolumeInterpolation

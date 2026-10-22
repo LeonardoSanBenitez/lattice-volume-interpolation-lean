@@ -68,5 +68,6 @@ import PlanarFloorProduct
 import LatticeEmptyTranslate
 import LatticeCosetTranslate
 import LatticePeriodLines
+import SeparatedPlanarFamily
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
