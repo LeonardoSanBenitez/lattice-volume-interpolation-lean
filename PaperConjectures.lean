@@ -3,6 +3,9 @@ import PaperNotation
 /-!
 # The two open Betke--Henk--Wills conjectures
 
+Catalog items `bhw_lattice_point_conjecture` (Conjecture 1) and
+`bhw_ratio_conjecture` (Conjecture 2, Eqs. (1.5)--(1.7)).
+
 These declarations define propositions. They neither prove the conjectures
 nor introduce axioms asserting them. Indices `i : Fin n` represent the
 paper's indices `i + 1` in `[n]`.

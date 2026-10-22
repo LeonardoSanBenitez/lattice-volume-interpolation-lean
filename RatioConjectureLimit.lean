@@ -5,6 +5,9 @@ import ProductBoundLimit
 /-!
 # The real-dilation ratio limit conditional on Conjecture 2
 
+Catalog item `volume_lattice_point_limit`, the unnumbered limit display
+after Theorem 1.3, using Eqs. (1.5) and (1.6).
+
 This follows the paper's squeeze argument, including the lower bound's
 eventual smallness regime. No conjecture is asserted as a theorem.
 -/

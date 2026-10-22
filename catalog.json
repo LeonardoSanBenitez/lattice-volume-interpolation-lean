@@ -2627,15 +2627,18 @@
         "status": "stated",
         "files": [
           "LemmaFiveOne.lean",
+          "ShakingTranslations.lean",
           "TheoremOneFour.lean"
         ],
         "declarations": [
           "LatticeVolumeInterpolation.lemma_5_1",
+          "LatticeVolumeInterpolation.lemma_5_1_at",
+          "LatticeVolumeInterpolation.planarReductionAt_eq",
           "LatticeVolumeInterpolation.exists_normalized_antiBlocking",
           "LatticeVolumeInterpolation.exists_planar_reduction"
         ],
         "added_hypotheses": [],
-        "route_note": "The construction is implemented for the diagonal with intercept m = 0. The normalized input hypotheses are discharged for the main theorem by exists_normalized_antiBlocking and exists_planar_reduction. Transport of the construction to every integer intercept in the source presentation is not supplied."
+        "route_note": "The full lemma now also holds for planarReductionAt m K, the exact construction against x_1+x_2=m. Translation covariance makes both diagonal steps differ from their zero-intercept versions only by the vertical shift (0,m), which the final coordinate shaking removes. planarReductionAt_eq holds for every real m, so the source's integer-intercept case has no restriction. The normalized input hypotheses are discharged for the main theorem by exists_normalized_antiBlocking and exists_planar_reduction."
       }
     },
     {

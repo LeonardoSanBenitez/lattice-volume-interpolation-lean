@@ -5,6 +5,9 @@ import PlanarFloorProduct
 /-!
 # The three-dimensional floor-product lattice bound
 
+Catalog item `bhw_lattice_conjecture_dimension_three_symmetric`, the
+dimension-three confirmation sentence after Conjecture 1.
+
 The adapted-minimum flag supplies the three period exclusions, and the
 residue-slice argument supplies their product. This instantiates the
 dimension-three theorem quoted from Malikiosis in Freyer--Lucas.

@@ -1,5 +1,5 @@
 command: lake env lean CatalogAxioms.lean
-catalog declarations: 140
+catalog declarations: 142
 allowed axioms: Classical.choice, Quot.sound, propext
 exit code: 0
 
@@ -214,6 +214,8 @@ exit code: 0
 'LatticeVolumeInterpolation.davenport_antiBlocking' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.diagonal_section_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.lemma_5_1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.lemma_5_1_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.planarReductionAt_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.exists_normalized_antiBlocking' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.exists_planar_reduction' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.concave_integral_chord_le' depends on axioms: [propext, Classical.choice, Quot.sound]

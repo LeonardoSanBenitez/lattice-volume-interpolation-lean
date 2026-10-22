@@ -82,5 +82,6 @@ import UniversalConjectureBounds
 import RealRectangles
 import ThinBoxComparison
 import QuotedStatements
+import ShakingTranslations
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/

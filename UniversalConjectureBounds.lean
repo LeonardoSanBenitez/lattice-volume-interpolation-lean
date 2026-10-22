@@ -5,6 +5,10 @@ import Mathlib.LinearAlgebra.AffineSpace.FiniteDimensional
 /-!
 # Full-dimensional lattice intersections and the conditional universal bounds
 
+Catalog items `universal_bound_from_conjecture_upper` and
+`universal_bound_from_conjecture_lower`, the unnumbered universal estimates
+after Theorem 1.3, derived from Eqs. (1.5) and (1.7).
+
 Full dimension is expressed by the affine span of the lattice intersection.
 It is not replaced by an assumption on the successive minima.
 -/

@@ -4,6 +4,10 @@ import ProjectedDeterminantBound
 /-!
 # Contextual statements quoted in the introduction
 
+Catalog items `betke_henk_wills_two_sided_bound` (Eq. (1.2)),
+`malikiosis_bound` (Eq. (1.3)), and `schymura_inequality` (Eq. (1.11),
+with the cited source's empty-subset correction).
+
 The project's catalog excludes proofs of these three contextual results.
 Their propositions are recorded here without axioms asserting them. This
 distinction does not apply to the separately proved dimensional subcases.

@@ -3,6 +3,9 @@ import RepairedPlanarFamily
 /-!
 # Planar slices of a three-dimensional body
 
+Catalog item `bhw_lattice_conjecture_dimension_three_symmetric`, the
+dimension-three confirmation sentence after Conjecture 1.
+
 The height decomposition used in the dimension-three lattice bound.
 Slices may have empty interior; compactness and convexity are sufficient.
 -/

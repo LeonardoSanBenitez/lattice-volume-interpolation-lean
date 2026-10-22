@@ -5,6 +5,9 @@ import Mathlib.Algebra.Order.Round
 /-!
 # Real half-side lengths for coordinate boxes
 
+Catalog item `covering_radius_bound_not_comparable`, the unnumbered
+elongated-box comparison after Proposition 1.6.
+
 The thin-box comparison needs continuous real lengths, rather than only
 integer boxes or a discrete subsequence of dilations.
 -/

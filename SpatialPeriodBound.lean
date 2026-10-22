@@ -3,6 +3,9 @@ import SpatialSlices
 /-!
 # Counting three-dimensional residue slices
 
+Catalog item `bhw_lattice_conjecture_dimension_three_symmetric`, the
+dimension-three confirmation sentence after Conjecture 1.
+
 The planar separated-family theorem is applied separately to the integer
 heights in each residue class modulo the third period.
 -/

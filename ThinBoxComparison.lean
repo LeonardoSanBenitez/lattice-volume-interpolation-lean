@@ -4,6 +4,9 @@ import RatioConjectureLimit
 /-!
 # The elongated-box comparison
 
+Catalog item `covering_radius_bound_not_comparable`, the unnumbered
+comparison of Eqs. (1.15) and (1.8) after Proposition 1.6.
+
 In dimension `n+1`, the first `n` half-sides equal `r` and the final
 half-side is one half. The covering constant stays `2^(n+1)` while the
 minimum-based constant tends to `n+2`.

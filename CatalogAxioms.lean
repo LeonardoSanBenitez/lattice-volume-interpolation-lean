@@ -137,6 +137,8 @@ import LatticeVolumeInterpolation
 #print axioms LatticeVolumeInterpolation.davenport_antiBlocking
 #print axioms LatticeVolumeInterpolation.diagonal_section_bound
 #print axioms LatticeVolumeInterpolation.lemma_5_1
+#print axioms LatticeVolumeInterpolation.lemma_5_1_at
+#print axioms LatticeVolumeInterpolation.planarReductionAt_eq
 #print axioms LatticeVolumeInterpolation.exists_normalized_antiBlocking
 #print axioms LatticeVolumeInterpolation.exists_planar_reduction
 #print axioms LatticeVolumeInterpolation.concave_integral_chord_le
