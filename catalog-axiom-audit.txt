@@ -1,5 +1,5 @@
 command: lake env lean CatalogAxioms.lean
-catalog declarations: 124
+catalog declarations: 132
 allowed axioms: Classical.choice, Quot.sound, propext
 exit code: 0
 
@@ -142,6 +142,18 @@ exit code: 0
 'LatticeVolumeInterpolation.proposition_1_6_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.proposition_1_6_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.proposition_1_6_tight_for_cubes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.thinBox_isConvexBody' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.successiveMinimum_thinBox' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.coveringRadius_thinBox' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.thinBox_covering_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.thinBox_minima_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.thinBox_minima_constant_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'LatticeVolumeInterpolation.thinBox_cube_covering_constant_lt_minima' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'LatticeVolumeInterpolation.eventually_thinBox_minima_constant_lt_covering' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
 'LatticeVolumeInterpolation.lattice_tile_sandwich' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.van_der_corput' depends on axioms: [propext, Classical.choice, Quot.sound]
 'LatticeVolumeInterpolation.rogers_shephard_section_projection' depends on axioms: [propext,

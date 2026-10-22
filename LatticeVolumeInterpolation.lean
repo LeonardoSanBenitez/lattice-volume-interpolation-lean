@@ -79,5 +79,7 @@ import SpatialFloorProduct
 import PaperConjectures
 import RatioConjectureLimit
 import UniversalConjectureBounds
+import RealRectangles
+import ThinBoxComparison
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/

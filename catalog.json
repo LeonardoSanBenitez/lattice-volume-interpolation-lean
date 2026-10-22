@@ -1814,9 +1814,19 @@
       "depends_on": ["proposition_1_6_upper_bound", "theorem_1_1_upper_bound", "covering_radius"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "Formalize both directions of non-comparability, including the elongated-box limiting constants; cube tightness alone is insufficient."
+        "status": "stated",
+        "declarations": [
+          "LatticeVolumeInterpolation.thinBox_isConvexBody",
+          "LatticeVolumeInterpolation.successiveMinimum_thinBox",
+          "LatticeVolumeInterpolation.coveringRadius_thinBox",
+          "LatticeVolumeInterpolation.thinBox_covering_constant",
+          "LatticeVolumeInterpolation.thinBox_minima_constant",
+          "LatticeVolumeInterpolation.thinBox_minima_constant_limit",
+          "LatticeVolumeInterpolation.thinBox_cube_covering_constant_lt_minima",
+          "LatticeVolumeInterpolation.eventually_thinBox_minima_constant_lt_covering"
+        ],
+        "files": ["ThinBoxComparison.lean", "RealRectangles.lean"],
+        "route_note": "The real-parameter family in dimension n+1 is exactly [-r,r]^n times [-1/2,1/2]. For every r>=1/2 its covering radius is one, its first n minima are 1/r and its last is two. The covering multiplier is 2^(n+1), while the minimum multiplier tends to n+2. For dimensions at least two it is eventually strictly smaller; at r=1/2 the strict inequality reverses. Thus both directions use actual convex bodies and checked constants, not cube tightness alone."
       }
     },
     {
