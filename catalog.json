@@ -1340,9 +1340,10 @@
         "The implication dim(K intersect Z^n) = n implies lambda_i(K) <= 2 is asserted in one clause; it comes from the fact that n independent lattice points of K lie in 2 cs(K)."
       ],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "Prove the paper's implication from the corrected conjecture; do not assume the conjecture as an axiom."
+        "status": "stated",
+        "declarations": ["LatticeVolumeInterpolation.universal_upper_bound_of_ratio_conjecture", "LatticeVolumeInterpolation.last_minimum_le_two_of_full_lattice_intersection"],
+        "files": ["UniversalConjectureBounds.lean"],
+        "route_note": "Full dimension is expressed as affineSpan of the body's lattice intersection equal to top. Its difference-vector span puts the final minimum below two; monotonicity bounds every earlier minimum, and the upper conjecture product is at most (n+1)!. The needed branch of Conjecture 2 is an explicit hypothesis, not an axiom."
       }
     },
     {
@@ -1372,9 +1373,10 @@
       "depends_on": ["bhw_ratio_conjecture", "successive_minima"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "planned",
-        "declarations": [],
-        "route_note": "Prove the paper's implication from the corrected conjecture with its smallness regime and strict-interior count."
+        "status": "stated",
+        "declarations": ["LatticeVolumeInterpolation.universal_lower_bound_of_ratio_conjecture", "LatticeVolumeInterpolation.last_minimum_le_one_of_symmetric_full_lattice_intersection"],
+        "files": ["UniversalConjectureBounds.lean"],
+        "route_note": "Full-dimensional affine lattice span implies linear lattice span. Symmetry identifies the central symmetral with K, so the final minimum is at most one. Every factor of the symmetric lower conjecture is then at least one half. The required conjecture branch remains an explicit hypothesis with its smallness regime and strict-interior count."
       }
     },
     {

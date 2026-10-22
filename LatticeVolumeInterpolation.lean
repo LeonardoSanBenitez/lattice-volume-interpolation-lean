@@ -78,5 +78,6 @@ import SpatialPeriodBound
 import SpatialFloorProduct
 import PaperConjectures
 import RatioConjectureLimit
+import UniversalConjectureBounds
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
