@@ -19,6 +19,8 @@ open scoped Pointwise
 
 namespace LatticeVolumeInterpolation
 
+variable {n : ℕ}
+
 /-- The `i`-th real coordinate unit vector. -/
 def coordinateUnitVector (n : ℕ) (i : Fin n) : Fin n → ℝ :=
   Pi.single i 1

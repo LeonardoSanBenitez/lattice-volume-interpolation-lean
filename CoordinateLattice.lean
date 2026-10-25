@@ -18,6 +18,8 @@ open scoped BigOperators Pointwise
 
 namespace LatticeVolumeInterpolation
 
+variable {n : ℕ}
+
 /-- The coordinatewise inclusion of the integer module into the real coordinate space. -/
 noncomputable def intToRealCoordinates (n : ℕ) :
     (Fin n → ℤ) →ₗ[ℤ] (Fin n → ℝ) :=

@@ -19,6 +19,8 @@ open scoped BigOperators
 
 namespace LatticeVolumeInterpolation
 
+variable {n : ℕ}
+
 /-- The integral points of the closed coordinate box with half-side lengths `m`. -/
 noncomputable def integerBox (m : Fin n → ℕ) : Finset (Fin n → ℤ) :=
   Finset.Icc (fun i => -(m i : ℤ)) (fun i => m i)
