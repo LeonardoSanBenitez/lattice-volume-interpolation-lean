@@ -4,7 +4,7 @@ import ProjectedDeterminantBound
 /-!
 # Contextual statements quoted in the introduction
 
-Catalog items `betke_henk_wills_two_sided_bound` (Eq. (1.2)),
+Catalog items `betke_henk_wills_two_sided_bound` (the unnumbered display before Conjecture 1),
 `malikiosis_bound` (Eq. (1.3)), and `schymura_inequality` (Eq. (1.11),
 with the cited source's empty-subset correction).
 
@@ -20,7 +20,8 @@ namespace LatticeVolumeInterpolation
 
 noncomputable section
 
-/-- Literal target-paper Eq. (1.2), including its printed lower factor `1`.
+/-- The two-sided Betke--Henk--Wills display before Conjecture 1 (unnumbered in the published
+version), literally as printed, including its lower factor `1/λ_i - 1`.
 This definition does not assert the statement or its sharpness. -/
 def BHWTwosidedContextStatement (n : ℕ) : Prop :=
   ∀ K : Set (Fin n → ℝ), IsConvexBody K → DiscreteMinkowski.IsOriginSymmetric K →

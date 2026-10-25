@@ -84,5 +84,6 @@ import ThinBoxComparison
 import QuotedStatements
 import ShakingTranslations
 import UnconditionalRatioLimit
+import EqualityCasesPaperNotation
 
 /-! Umbrella module for the Freyer--Lucas formalization. -/
