@@ -41,7 +41,7 @@
       "depends_on": [],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "PaperNotation.lean",
           "DilationBridge.lean"
@@ -83,7 +83,7 @@
       "depends_on": ["convex_body_class"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "PaperNotation.lean"
         ],
@@ -125,7 +125,7 @@
       ],
       "formalization_notes": "Use Mathlib's gauge/Minkowski functional or an infimum-based definition with |0|_K = 0, then prove the attained-minimum characterization only for x nonzero.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "SuccessiveMinimaBridge.lean"
         ],
@@ -166,7 +166,7 @@
       "known_issues_in_paper": [],
       "formalization_notes": "Bridge cs(K) to the half difference body already used by the preceding discrete-Minkowski formalization. Prove cs(U K) = U(cs(K)) for the unimodular-invariance lemma.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "SuccessiveMinimaBridge.lean",
           "CoordinateLattice.lean"
@@ -215,7 +215,7 @@
         "Eq. (1.1) writes min rather than inf; attainment holds because the set of admissible dilation factors is closed under the compactness of K, but the paper does not say so."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "SuccessiveMinimaBridge.lean",
           "CoordinateLattice.lean",
@@ -264,9 +264,15 @@
       ],
       "formalization_notes": "Use Eq. (1.1) as the definition. Prove the gauge characterization through a greedy flag or through the threshold subspaces span({z in Z^n : |z|_cs(K) <= r}), so repeated minima are handled without adding lambda_{i-1} < lambda_i.",
       "lean": {
-        "status": "stated",
-        "files": ["GaugeMinima.lean"],
-        "declarations": ["LatticeVolumeInterpolation.gauge_flagVector_eq_successiveMinimum", "LatticeVolumeInterpolation.successiveMinimum_isLeast_gauge_outside_flag", "LatticeVolumeInterpolation.firstMinimum_isLeast_gauge_nonzero"],
+        "status": "proved",
+        "files": [
+          "GaugeMinima.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.gauge_flagVector_eq_successiveMinimum",
+          "LatticeVolumeInterpolation.successiveMinimum_isLeast_gauge_outside_flag",
+          "LatticeVolumeInterpolation.firstMinimum_isLeast_gauge_nonzero"
+        ],
         "added_hypotheses": [],
         "route_note": "The printed recurrence fails at ties, as documented in known_issues_in_paper. The corrected attained minimum excludes the chosen k-dimensional greedy flag for lambda_(k+1), rather than the entire span at the preceding critical scale. Gauge-dilation inequalities identify the chosen flag vector's gauge with the next successive minimum, and greedy minimality supplies the exact IsLeast statement. The k=0 specialization is the paper's minimum over nonzero lattice vectors. No separation of successive minima is assumed."
       }
@@ -299,7 +305,7 @@
       "depends_on": [],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "PaperNotation.lean",
           "DilationBridge.lean",
@@ -345,20 +351,20 @@
         "The statement is true because span(X) is spanned by lattice vectors, which makes the projected group discrete. Projecting along the span of an arbitrary subspace does not give a lattice, so the hypothesis X subseteq Lambda carries the whole content and is easy to lose."
       ],
       "lean": {
-        "status": "stated",
-      "files": [
-        "ProjectedLattice.lean",
-        "ProjectedLatticeInstances.lean"
-      ],
+        "status": "proved",
+        "files": [
+          "ProjectedLattice.lean",
+          "ProjectedLatticeInstances.lean"
+        ],
         "declarations": [
           "LatticeVolumeInterpolation.finite_projMap_inter_bounded",
-        "LatticeVolumeInterpolation.span_projMap_eq_top",
-        "LatticeVolumeInterpolation.projectedLattice_discrete",
-        "LatticeVolumeInterpolation.projectedLattice_span_top",
-        "LatticeVolumeInterpolation.projectedLattice_covolume_pos"
+          "LatticeVolumeInterpolation.span_projMap_eq_top",
+          "LatticeVolumeInterpolation.projectedLattice_discrete",
+          "LatticeVolumeInterpolation.projectedLattice_span_top",
+          "LatticeVolumeInterpolation.projectedLattice_covolume_pos"
         ],
         "added_hypotheses": [],
-      "route_note": "The projection image is now a Z-submodule of the orthogonal-complement subtype. Its induced topology is discrete and its real span is the full subtype; these are instantiated locally to obtain a positive covolume. The ambient/projected covolume comparison belongs to the separate projection-determinant item."
+        "route_note": "The projection image is now a Z-submodule of the orthogonal-complement subtype. Its induced topology is discrete and its real span is the full subtype; these are instantiated locally to obtain a positive covolume. The ambient/projected covolume comparison belongs to the separate projection-determinant item."
       }
     },
     {
@@ -388,10 +394,22 @@
         "Written as 'the smallest number mu > 0 such that mu K + Z^n = R^n'; attainment of the minimum again is not argued."
       ],
       "lean": {
-        "status": "stated",
-        "files": ["CoveringRadius.lean", "CoveringRadiusAttainment.lean"],
-        "declarations": ["LatticeVolumeInterpolation.coveringRadius", "LatticeVolumeInterpolation.isClosed_setOf_covering", "LatticeVolumeInterpolation.coveringRadius_covers", "LatticeVolumeInterpolation.coveringRadius_pos", "LatticeVolumeInterpolation.coveringRadius_mem_coveringSet", "LatticeVolumeInterpolation.coveringRadius_isLeast"],
-        "added_hypotheses": ["Positive dimension for the minimum among strictly positive scales. In dimension zero every positive scale covers a nonempty body, and the infimum zero is not attained among positive scales."],
+        "status": "proved",
+        "files": [
+          "CoveringRadius.lean",
+          "CoveringRadiusAttainment.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.coveringRadius",
+          "LatticeVolumeInterpolation.isClosed_setOf_covering",
+          "LatticeVolumeInterpolation.coveringRadius_covers",
+          "LatticeVolumeInterpolation.coveringRadius_pos",
+          "LatticeVolumeInterpolation.coveringRadius_mem_coveringSet",
+          "LatticeVolumeInterpolation.coveringRadius_isLeast"
+        ],
+        "added_hypotheses": [
+          "Positive dimension for the minimum among strictly positive scales. In dimension zero every positive scale covers a nonempty body, and the infimum zero is not attained among positive scales."
+        ],
         "route_note": "The infimum of positive covering scales is the paper's least positive scale in positive dimension. Compactness of K makes the fixed-point covering relation closed by projecting a closed subset of R times K; the lattice is closed because it is discrete. The infimum lies in this closed relation. If it were zero, every real vector would be integral, contradicted by a half-integer coordinate. No attainment or positivity premise is assumed."
       }
     },
@@ -424,7 +442,7 @@
       "depends_on": ["convex_body_class"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "AntiBlocking.lean"
         ],
@@ -462,7 +480,7 @@
       "depends_on": ["convex_body_class"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "GeneralOrthShaking.lean"
         ],
@@ -502,7 +520,7 @@
       "depends_on": ["blaschke_shaking"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "GeneralShaking.lean"
         ],
@@ -546,7 +564,7 @@
       "depends_on": ["successive_minima", "convex_body_class"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "MinkowskiBounds.lean",
           "MinkowskiLower.lean"
@@ -590,7 +608,7 @@
       "known_issues_in_paper": [],
       "formalization_notes": "Reuse the same proof of lambda_i(T_n)=2 required by simplex_equality_cases; prove the cube computation coordinatewise.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "MinkowskiBounds.lean"
         ],
@@ -633,14 +651,19 @@
       ],
       "depends_on": ["successive_minima", "lattice_point_enumerator"],
       "known_issues_in_paper": [
-        "The cited Betke-Henk-Wills Corollary 2.1 has factors 2/lambda_i-1, whereas the target display prints 1/lambda_i-1. These normalizations agree neither for the target's origin-symmetric K nor under its definition of central symmetral.",
-        "Correction 2026-10-22: the earlier catalog's sharpness objection and origin-based proof justification are withdrawn pending independent assessment. A positive printed reciprocal-minimum product need not be at most one. Nor does the source product pointwise dominate it when the printed product has an even number of negative factors: minima (1/100,1/100,19/10,19/10), realized by a symmetric box, give printed product 793881/361 and source product 39601/361. This invalidates those catalog justifications, not either lattice-count inequality. No Lean proof uses either shortcut."
+        "The display prints the lower factors as 1/lambda_i - 1. The cited Betke-Henk-Wills Corollary 2.1 has 2/lambda_i - 1 (read on page 7 of the authors' preprint), which is also the form under which the hypothesis lambda_n <= 2 makes every factor non-negative.",
+        "The printed lower bound is not a consequence of the cited one: for minima (1/100, 1/100, 19/10, 19/10), realized by a symmetric box, the printed product of factors is 793881/361 and the source product is 39601/361."
       ],
       "formalization_notes": "State the literal target display and the exact primary-source Corollary 2.1 separately under the recorded contextual-statement exclusion. Do not silently replace the target's factor 1 by 2. The best-possible sentence remains for independent assessment and is not asserted by these proposition definitions.",
       "lean": {
         "status": "stated",
-        "declarations": ["LatticeVolumeInterpolation.BHWTwosidedContextStatement", "LatticeVolumeInterpolation.BHWSourceLowerContextStatement"],
-        "files": ["QuotedStatements.lean"],
+        "declarations": [
+          "LatticeVolumeInterpolation.BHWTwosidedContextStatement",
+          "LatticeVolumeInterpolation.BHWSourceLowerContextStatement"
+        ],
+        "files": [
+          "QuotedStatements.lean"
+        ],
         "route_note": "BHWTwosidedContextStatement records the literal target formula, while BHWSourceLowerContextStatement separately records the different primary-source lower factors. Both are proposition definitions, with no axiom or theorem asserting these excluded contextual results. No sharpness theorem is asserted."
       }
     },
@@ -708,12 +731,14 @@
       "known_issues_in_paper": ["This theorem does not establish the target's arbitrary-body dimension-two specialization; origin symmetry is a source hypothesis, not an assumption to be added to Conjecture 1."],
       "formalization_notes": "Prove this exact symmetric theorem as an upstream dependency result and retain the broader dimension-two target specialization as unproved unless independently established.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "declarations": [
           "LatticeVolumeInterpolation.symmetric_planar_floor_product_bound",
           "LatticeVolumeInterpolation.planar_floor_product_bound"
         ],
-        "files": ["PlanarFloorProduct.lean"],
+        "files": [
+          "PlanarFloorProduct.lean"
+        ],
         "added_hypotheses": [],
         "route_note": "The proof uses Malikiosis's Section 3.2 residue-slice induction and its one-dimensional separated-interval theorem, rather than Betke-Henk-Wills's planar diagonal map. The symmetric theorem retains the quoted source hypotheses; a separate endpoint proves the nonsymmetric planar extension."
       }
@@ -745,12 +770,14 @@
       "known_issues_in_paper": ["This theorem does not establish the target's arbitrary-body dimension-three specialization; the source's initial body is origin-symmetric."],
       "formalization_notes": "Formalize the exact symmetric theorem and its source hypotheses. Do not infer the arbitrary-body case merely because the inductive slices are non-symmetric.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "declarations": [
           "LatticeVolumeInterpolation.symmetric_spatial_floor_product_bound",
           "LatticeVolumeInterpolation.spatial_floor_product_bound"
         ],
-        "files": ["SpatialFloorProduct.lean"],
+        "files": [
+          "SpatialFloorProduct.lean"
+        ],
         "added_hypotheses": [],
         "route_note": "Malikiosis Section 3.2 is instantiated by adapted minimum-flag coordinates, exact integer-height slicing, and the planar separated-family theorem in each height residue. The rank-two planar subargument uses the direct independent-period collision rather than the source's integral-basis/parallelogram detour. The symmetric endpoint retains the quoted hypotheses. The separate general endpoint is proved from difference-body avoidance, not inferred from the existence of nonsymmetric slices."
       }
@@ -787,15 +814,19 @@
       "known_issues_in_paper": [],
       "formalization_notes": "Prove this together with the integer-vertex symmetric lower equality case: the same minima computation feeds the closed count prod_i(2m_i+1) and interior count prod_i(2m_i-1).",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
-          "BoxEquality.lean"
+          "BoxEquality.lean",
+          "EqualityCasesPaperNotation.lean",
+          "CoordinateLattice.lean"
         ],
         "declarations": [
-          "LatticeVolumeInterpolation.integerBox_attains_bhw_lattice_conjecture"
+          "LatticeVolumeInterpolation.integerBox_attains_bhw_lattice_conjecture",
+          "LatticeVolumeInterpolation.integerBox_attains_bhw_lattice_conjecture_paper",
+          "LatticeVolumeInterpolation.coordinateLatticePoints_coe_eq_latticePoints"
         ],
         "added_hypotheses": [],
-        "route_note": "The terminal equality uses the exact closed-box count and ordered-box minima. Its proof dependencies carry the coordinate-lattice bridges."
+        "route_note": "The terminal statement is integerBox_attains_bhw_lattice_conjecture_paper, in the paper's notation G(B) = ncard of the lattice points of the closed box. It rewrites the finite coordinate enumeration through coordinateLatticePoints_coe_eq_latticePoints; integerBox_attains_bhw_lattice_conjecture is the same equality for the enumeration."
       }
     },
     {
@@ -865,7 +896,7 @@
         "The step that the successive minima scale under lattice refinement, lambda_i(K, rZ^n) = r lambda_i(K, Z^n), is used silently."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "ProductBoundLimit.lean",
           "DilationBridge.lean"
@@ -961,7 +992,7 @@
         "The reduction to an anti-blocking body changes the successive minima, so the final product must be monotone in each lambda_i; this is true for the upper bound because lambda_i(A) <= lambda_i(K), and the step is left implicit."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "UpperBound.lean"
         ],
@@ -1012,7 +1043,7 @@
         "The proof of Eq. (1.9) does not go through the anti-blocking reduction, although the sentence introducing Sec. 3 says the reduction suffices for Eqs. (1.5) and (1.6)."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "PropOneSix.lean"
         ],
@@ -1055,7 +1086,7 @@
         "The comparison paragraph writes 'our bound is tight for convex bodies rK, r to infinity'; tightness here means asymptotic, in the sense that both sides have the same leading behaviour, not that equality is attained."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "UpperBound.lean"
         ],
@@ -1099,7 +1130,7 @@
       ],
       "formalization_notes": "Formalize the intended k = 0 through n theorem and retain the printed k = 1 formula only as a documented source discrepancy; do not add a hypothesis to rescue the literal formula. The index bridge is m = n-k: Davenport's V_m becomes the inner sum over |I| = k.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "GeneralDavenport.lean",
           "ProjectionShaking.lean"
@@ -1109,7 +1140,7 @@
           "LatticeVolumeInterpolation.volume_projectionOff_shakeUpTo_le"
         ],
         "added_hypotheses": [],
-        "route_note": "The general all-coordinate-subsets upper bound is proved for every compact convex set. The proof uses successive coordinate shakings: lattice count increases, each intrinsic projection volume decreases, and the final anti-blocking body satisfies the paper's prism bound. This is an alternative derivation of the quoted upper bound; it does not mechanize Davenport's two-sided discrepancy induction. Source-route disposition remains subject to the faithfulness audit."
+        "route_note": "The general inequality, with every coordinate subset including the empty one, is proved for every compact convex set. The proof uses successive coordinate shakings: the lattice count does not decrease, each intrinsic projection volume does not increase, and the final anti-blocking body satisfies the paper's prism bound. This is a proof of the quoted inequality by the paper's own anti-blocking argument plus shaking; it does not follow Davenport's original induction."
       }
     },
     {
@@ -1191,7 +1222,7 @@
         "Eq. (1.12) correctly runs over every I subseteq [n], including the empty set. The contrast with the printed k = 1 in Eq. (1.11) is further evidence that Eq. (1.11) omitted its k = 0 term."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "ReverseSchymura.lean"
         ],
@@ -1235,7 +1266,7 @@
       ],
       "formalization_notes": "Prove the projected count with the complement indices, then reindex the finite sum by set complement before applying the product expansion.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "TheoremOneThreeTight.lean"
         ],
@@ -1271,9 +1302,19 @@
       "known_issues_in_paper": [],
       "formalization_notes": "The direction is correct. If Lambda_I = Z^n intersect L_I is the primitive lattice in L_I, then det(Z^n|L_I^perp) = 1/det(Lambda_I). The lattice generated by the b_i, i in I, is a sublattice of Lambda_I, so vol_k(P_I) is an integer index times det(Lambda_I), giving det(Z^n|L_I^perp) >= 1/vol_k(P_I).",
       "lean": {
-        "status": "stated",
-        "files": ["OrthogonalLatticeSplit.lean", "OrthogonalLatticeDiscrete.lean", "ProjectedCovolume.lean", "ProjectedDeterminantBound.lean"],
-        "declarations": ["LatticeVolumeInterpolation.projected_lattice_determinant_bound", "LatticeVolumeInterpolation.projected_covolume_ge_reciprocal_zonotope", "LatticeVolumeInterpolation.covolume_section_mul_projection", "LatticeVolumeInterpolation.orthogonalImageLattice_eq_projectedLattice"],
+        "status": "proved",
+        "files": [
+          "OrthogonalLatticeSplit.lean",
+          "OrthogonalLatticeDiscrete.lean",
+          "ProjectedCovolume.lean",
+          "ProjectedDeterminantBound.lean"
+        ],
+        "declarations": [
+          "LatticeVolumeInterpolation.projected_lattice_determinant_bound",
+          "LatticeVolumeInterpolation.projected_covolume_ge_reciprocal_zonotope",
+          "LatticeVolumeInterpolation.covolume_section_mul_projection",
+          "LatticeVolumeInterpolation.orthogonalImageLattice_eq_projectedLattice"
+        ],
         "added_hypotheses": [],
         "route_note": "The selected independent integer vectors are a real basis of their Euclidean subspace; their zonotope has intrinsic parallelepiped volume. Integral splitting supplies arbitrary lifts of a projected basis. An adapted-basis block determinant gives ambient covolume = full-section covolume times projected covolume. The lattice-index theorem compares the selected-vector lattice with the full intersection, without a primitivity assumption. The standard integer lattice has covolume one, and the intrinsic orthogonal image is identified with the paper's projected lattice."
       }
@@ -1308,9 +1349,17 @@
         "The scaling lambda_i(rK) = lambda_i(K)/r is used without statement."
       ],
       "lean": {
-        "status": "stated",
-        "declarations": ["LatticeVolumeInterpolation.volume_count_ratio_limit_of_ratio_conjecture", "LatticeVolumeInterpolation.volume_count_ratio_limit", "LatticeVolumeInterpolation.coveringSet_smul_body", "LatticeVolumeInterpolation.coveringRadius_smul_body"],
-        "files": ["RatioConjectureLimit.lean", "UnconditionalRatioLimit.lean"],
+        "status": "proved",
+        "declarations": [
+          "LatticeVolumeInterpolation.volume_count_ratio_limit_of_ratio_conjecture",
+          "LatticeVolumeInterpolation.volume_count_ratio_limit",
+          "LatticeVolumeInterpolation.coveringSet_smul_body",
+          "LatticeVolumeInterpolation.coveringRadius_smul_body"
+        ],
+        "files": [
+          "RatioConjectureLimit.lean",
+          "UnconditionalRatioLimit.lean"
+        ],
         "route_note": "The real-dilation terminal limit is derived conditionally from Conjecture 2 by the paper's squeeze: the lower smallness regime holds eventually, both finite products tend to one by exact minimum scaling, interior count is bounded by closed count, and the reciprocal density tends to one. The positive-dimension condition is the paper's convention n >= 1. No conjecture is assumed as an axiom, and the pinned unconditional integer-refinement asymptotic is not used as a substitute for this derivation. The separately named unconditional real-dilation theorem uses the proved Proposition 1.6 bounds and the exact covering-radius scaling mu(rK)=mu(K)/r; it supplements the conditional paper-route theorem."
       }
     },
@@ -1343,9 +1392,14 @@
         "The implication dim(K intersect Z^n) = n implies lambda_i(K) <= 2 is asserted in one clause; it comes from the fact that n independent lattice points of K lie in 2 cs(K)."
       ],
       "lean": {
-        "status": "stated",
-        "declarations": ["LatticeVolumeInterpolation.universal_upper_bound_of_ratio_conjecture", "LatticeVolumeInterpolation.last_minimum_le_two_of_full_lattice_intersection"],
-        "files": ["UniversalConjectureBounds.lean"],
+        "status": "proved",
+        "declarations": [
+          "LatticeVolumeInterpolation.universal_upper_bound_of_ratio_conjecture",
+          "LatticeVolumeInterpolation.last_minimum_le_two_of_full_lattice_intersection"
+        ],
+        "files": [
+          "UniversalConjectureBounds.lean"
+        ],
         "route_note": "Full dimension is expressed as affineSpan of the body's lattice intersection equal to top. Its difference-vector span puts the final minimum below two; monotonicity bounds every earlier minimum, and the upper conjecture product is at most (n+1)!. The needed branch of Conjecture 2 is an explicit hypothesis, not an axiom."
       }
     },
@@ -1376,9 +1430,14 @@
       "depends_on": ["bhw_ratio_conjecture", "successive_minima"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
-        "declarations": ["LatticeVolumeInterpolation.universal_lower_bound_of_ratio_conjecture", "LatticeVolumeInterpolation.last_minimum_le_one_of_symmetric_full_lattice_intersection"],
-        "files": ["UniversalConjectureBounds.lean"],
+        "status": "proved",
+        "declarations": [
+          "LatticeVolumeInterpolation.universal_lower_bound_of_ratio_conjecture",
+          "LatticeVolumeInterpolation.last_minimum_le_one_of_symmetric_full_lattice_intersection"
+        ],
+        "files": [
+          "UniversalConjectureBounds.lean"
+        ],
         "route_note": "Full-dimensional affine lattice span implies linear lattice span. Symmetry identifies the central symmetral with K, so the final minimum is at most one. Every factor of the symmetric lower conjecture is then at least one half. The required conjecture branch remains an explicit hypothesis with its smallness regime and strict-interior count."
       }
     },
@@ -1413,19 +1472,23 @@
       ],
       "formalization_notes": "Prove the two lattice-point counts directly by stars and bars and prove lambda_i(T_n) = 2 from coordinate bounds on T_n - T_n. This yields the exact equality case without importing general Ehrhart theory.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "SimplexEquality.lean",
-          "SimplexMinima.lean"
+          "SimplexMinima.lean",
+          "EqualityCasesPaperNotation.lean"
         ],
         "declarations": [
           "LatticeVolumeInterpolation.simplex_upper_equality",
           "LatticeVolumeInterpolation.simplex_lower_equality",
           "LatticeVolumeInterpolation.successiveMinimum_realStandardSimplex_eq_two",
-          "LatticeVolumeInterpolation.successiveMinimum_realDilatedStandardSimplex_eq_two_div"
+          "LatticeVolumeInterpolation.successiveMinimum_realDilatedStandardSimplex_eq_two_div",
+          "LatticeVolumeInterpolation.simplex_upper_equality_paper",
+          "LatticeVolumeInterpolation.simplex_lower_equality_paper",
+          "LatticeVolumeInterpolation.interior_realDilatedStandardSimplex"
         ],
         "added_hypotheses": [],
-        "route_note": "Direct simplex volume, minima, closed count and strict-interior count calculations. The paper's positive dimension and positive dilation regimes are retained; no general Ehrhart theory is assumed."
+        "route_note": "The terminal statements are simplex_upper_equality_paper and simplex_lower_equality_paper, in the paper's notation G(m T_n) and G(int(m T_n)). interior_realDilatedStandardSimplex identifies the interior of m T_n with the strict-inequality set {x > 0, sum x_i < m} in positive dimension. The counts themselves are direct stars-and-bars calculations; no general Ehrhart theory is assumed. The paper's positive dimension and positive dilation regimes are retained."
       }
     },
     {
@@ -1462,15 +1525,18 @@
       ],
       "formalization_notes": "Preserve the literal source defect in documentation and prove the exact intended integer-vertex family B = product_i [-m_i,m_i]. Do not add a parity hypothesis to the paper's printed sentence and pretend it was the original statement.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
-          "BoxEquality.lean"
+          "BoxEquality.lean",
+          "EqualityCasesPaperNotation.lean"
         ],
         "declarations": [
-          "LatticeVolumeInterpolation.symmetricIntegerBox_attains_lower_conjectured_bound"
+          "LatticeVolumeInterpolation.symmetricIntegerBox_attains_lower_conjectured_bound",
+          "LatticeVolumeInterpolation.symmetricIntegerBox_attains_lower_conjectured_bound_paper",
+          "LatticeVolumeInterpolation.interior_realCoordinateBox"
         ],
         "added_hypotheses": [],
-        "route_note": "The terminal equality uses integer vertices, strict-interior lattice counts and ordered-box minima. The literal integral-side-length wording remains false as documented in known_issues_in_paper."
+        "route_note": "The terminal statement is symmetricIntegerBox_attains_lower_conjectured_bound_paper, in the paper's notation G(int B), with interior_realCoordinateBox identifying the interior of the closed box with the open box. It covers the boxes with integer vertices, the family for which equality holds; the printed wording 'integral side lengths' is too broad, as documented in known_issues_in_paper."
       }
     },
     {
@@ -1517,7 +1583,7 @@
         "The step G(K intersect l_i) <= f(i) + 1 is the one-dimensional count on a segment of length f(i) and is used without comment."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "TheoremOneFour.lean"
         ],
@@ -1570,7 +1636,7 @@
       ],
       "formalization_notes": "The theorem must remain quantified over every planar convex body. Either formalize the paper's smooth-from-below approximation with all preserved endpoint and containment data, or replace only this analytic substep by an equivalent nonsmooth concavity argument. Do not add differentiability of the section function as a hypothesis.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "TheoremOneFour.lean"
         ],
@@ -1607,7 +1673,7 @@
       "depends_on": ["theorem_1_4_lower_bound"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "TheoremOneFour.lean"
         ],
@@ -1652,7 +1718,7 @@
       "depends_on": ["pick_theorem_interior", "henk_schurmann_wills_boundary_bound", "minkowski_second_theorem"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "PropOneFive.lean"
         ],
@@ -1697,7 +1763,7 @@
         "The paper notes that the same tiling strategy appears in the proof of Blichfeldt's classical variant of Theorem 2.1, and that convex tilings of this kind need not exist."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "CoveringTile.lean"
         ],
@@ -1742,7 +1808,7 @@
       ],
       "formalization_notes": "Split mu = 1, where nonnegativity of G(int K) proves the claim, from mu < 1, where the paper's van der Corput and convex-combination argument applies.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "PropOneSix.lean"
         ],
@@ -1781,7 +1847,7 @@
       "depends_on": ["proposition_1_6_upper_bound", "proposition_1_6_lower_bound"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "Tiles.lean"
         ],
@@ -1817,7 +1883,7 @@
       "depends_on": ["proposition_1_6_upper_bound", "theorem_1_1_upper_bound", "covering_radius"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "declarations": [
           "LatticeVolumeInterpolation.thinBox_isConvexBody",
           "LatticeVolumeInterpolation.successiveMinimum_thinBox",
@@ -1828,7 +1894,10 @@
           "LatticeVolumeInterpolation.thinBox_cube_covering_constant_lt_minima",
           "LatticeVolumeInterpolation.eventually_thinBox_minima_constant_lt_covering"
         ],
-        "files": ["ThinBoxComparison.lean", "RealRectangles.lean"],
+        "files": [
+          "ThinBoxComparison.lean",
+          "RealRectangles.lean"
+        ],
         "route_note": "The real-parameter family in dimension n+1 is exactly [-r,r]^n times [-1/2,1/2]. For every r>=1/2 its covering radius is one, its first n minima are 1/r and its last is two. The covering multiplier is 2^(n+1), while the minimum multiplier tends to n+2. For dimensions at least two it is eventually strictly smaller; at r=1/2 the strict inequality reverses. Thus both directions use actual convex bodies and checked constants, not cube tightness alone."
       }
     },
@@ -1860,14 +1929,18 @@
         "vol(K) = 1 and mu(K) = 1 for a convex lattice tile are stated without proof; the first is the tiling property and the second follows from it."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
-          "Tiles.lean"
+          "Tiles.lean",
+          "EqualityCasesPaperNotation.lean"
         ],
         "declarations": [
-          "LatticeVolumeInterpolation.lattice_tile_sandwich"
+          "LatticeVolumeInterpolation.lattice_tile_sandwich",
+          "LatticeVolumeInterpolation.lattice_tile_sandwich_sharp",
+          "LatticeVolumeInterpolation.isLatticeTile_cube_one"
         ],
-        "added_hypotheses": []
+        "added_hypotheses": [],
+        "route_note": "lattice_tile_sandwich proves the two-sided display for every convex lattice tile and r >= 1. lattice_tile_sandwich_sharp proves the sharpness sentence: [0,1]^n is a lattice tile (isLatticeTile_cube_one) and for every integer m >= 1 the outer inequalities are equalities, G(int(m[0,1]^n)) = (m-1)^n and G(m[0,1]^n) = (m+1)^n."
       }
     },
 
@@ -1900,7 +1973,7 @@
       "depends_on": ["lattice_point_enumerator"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "VanDerCorput.lean"
         ],
@@ -1940,7 +2013,7 @@
         "The cited theorem is stronger than the displayed consequence: it uses the maximum volume over all translates of the section, whereas Eq. (4.1) keeps only the section through the origin. No assumption that the origin section is maximal is needed."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "GeneralRogersShephard.lean",
           "JoinVolume.lean"
@@ -1984,7 +2057,7 @@
       "known_issues_in_paper": [],
       "formalization_notes": "Expose the notation bridge explicitly: primary lambda_i(K-K) = lambda_i((K-K)/2)/2, and primary mu_n(K,Lambda) is the target covering radius.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "CoveringRadius.lean"
         ],
@@ -2022,7 +2095,7 @@
       "depends_on": ["lattice_point_enumerator"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "Pick.lean"
         ],
@@ -2060,7 +2133,7 @@
       "depends_on": ["lattice_point_enumerator", "successive_minima"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "BoundaryFirstDirection.lean"
         ],
@@ -2101,7 +2174,7 @@
       "depends_on": ["blaschke_shaking", "general_blaschke_shaking", "lemma_5_3_shaking_is_monotone"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "GeneralShaking.lean",
           "CoordShaking.lean",
@@ -2116,7 +2189,7 @@
           "LatticeVolumeInterpolation.isCompact_orthShakingN"
         ],
         "added_hypotheses": [],
-        "route_note": "Planar oblique convexity and arbitrary-dimensional orthogonal convexity and compactness are explicit. The general-direction proof transports the coordinate concavity-of-fibre-length construction through an exact orthogonal chart. The planar proof uses the same fibre-length argument rather than the source's quadrilateral-monotonicity argument; retain this alternative-route disclosure for the faithfulness audit."
+        "route_note": "Planar oblique convexity and arbitrary-dimensional orthogonal convexity and compactness are proved. The general-direction proof transports the coordinate concavity-of-fibre-length construction through an exact orthogonal chart. The planar oblique case uses the same fibre-length argument, through a determinant-one chart that turns the oblique shaking into a coordinate one, instead of the paper's quadrilateral-monotonicity argument; both establish the same statement."
       }
     },
     {
@@ -2155,7 +2228,7 @@
         "Item ii) is stated for all u, and its proof 'follows directly from the definition'; the underlying fact is that the fibres keep their length, which is Fubini in coordinates adapted to u."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "GeneralOrthShaking.lean",
           "CoordShaking.lean",
@@ -2202,16 +2275,19 @@
       "depends_on": ["central_symmetral", "lattice_point_enumerator", "successive_minima"],
       "known_issues_in_paper": [],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
-          "Unimodular.lean"
+          "Unimodular.lean",
+          "TheoremThreeOne.lean"
         ],
         "declarations": [
           "LatticeVolumeInterpolation.ncard_latticePoints_image",
           "LatticeVolumeInterpolation.successiveMinimum_image",
-          "LatticeVolumeInterpolation.volume_image_of_det"
+          "LatticeVolumeInterpolation.volume_image_of_det",
+          "LatticeVolumeInterpolation.interior_image_linearEquiv"
         ],
-        "added_hypotheses": []
+        "added_hypotheses": [],
+        "route_note": "The maps are real linear equivalences preserving Z^n (equivalently U in GL(n,Z)); volume invariance uses |det| = 1. Invariance of G(int K) is ncard_latticePoints_image applied to int K together with interior_image_linearEquiv, int(VK) = V(int K)."
       }
     },
     {
@@ -2245,7 +2321,7 @@
         "Schrijver's convention is lower triangular and uses column operations. The paper's upper-triangular ambient-coordinate conclusion follows only after applying the theorem to the transpose, as made explicit here."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "Triangularize.lean",
           "Unimodular.lean"
@@ -2299,7 +2375,7 @@
         "The shaken bodies K_j are convex by the cited result of Campi, Colesanti and Gronchi, and compact; compactness is needed for the minima of the shaken body to be attained and is not discussed."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "TheoremThreeOne.lean"
         ],
@@ -2345,14 +2421,19 @@
         "Linear independence after the projection is argued from the shape of the matrix, which requires the diagonal entries to remain non-zero."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
-          "ClaimOne.lean"
+          "ClaimOne.lean",
+          "TheoremThreeOne.lean"
         ],
         "declarations": [
-          "LatticeVolumeInterpolation.claim_1"
+          "LatticeVolumeInterpolation.claim_1",
+          "LatticeVolumeInterpolation.claimVector_n_eq_smul",
+          "LatticeVolumeInterpolation.triangular_diag_ne_zero",
+          "LatticeVolumeInterpolation.successiveMinimum_shakeUpTo_le"
         ],
-        "added_hypotheses": []
+        "added_hypotheses": [],
+        "route_note": "claim_1 proves the gauge bounds for the explicit vectors claimVector u k i, which are u_i with the coordinates l < k, l != i set to zero; that is the block form diag(D_k, T_{n-k}) of the claim, by definition. Linear independence is needed only at k = n, where claimVector_n_eq_smul and triangular_diag_ne_zero make the vectors non-zero multiples of distinct coordinate axes; successiveMinimum_shakeUpTo_le is the resulting bound lambda_i(K_n) <= lambda_i(K) used in Theorem 3.1."
       }
     },
     {
@@ -2387,7 +2468,7 @@
         "That the segment [y|e_i^perp, y|e_i^perp + x_{j+1} e_{j+1}] lies in K_j uses the induction hypothesis applied to every point of the segment, not only to its endpoints."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "ShakingIterate.lean"
         ],
@@ -2430,7 +2511,7 @@
       ],
       "formalization_notes": "Orient each matched lattice vector so its selected coordinate is positive, project to obtain a nonzero integer multiple of a coordinate axis, and derive an upper bound for that axis gauge. Sort the n axis gauges and use the definition of successive minima in both directions: the first i axes give lambda_i <= the i-th ordered axis gauge, while the matching bounds and a counting/order-statistics argument give the reverse inequality even across repeated-minimum blocks. Then show the positive point (2/lambda_i)e_i lies in K by the paper's extremal central-symmetral argument.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "MinimaAntiBlocking.lean"
         ],
@@ -2482,7 +2563,7 @@
         "K is allowed to be non-closed here, which is what lets the final application take K = int K."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "ReverseSchymura.lean"
         ],
@@ -2524,7 +2605,7 @@
       ],
       "formalization_notes": "Prove the corrected k = 0 identity directly from the all-subsets prism decomposition. This is an internal proof of the anti-blocking specialization and does not depend on the separately quoted Davenport theorem.",
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "Davenport.lean"
         ],
@@ -2567,7 +2648,7 @@
         "f(0) = 2/lambda_1 uses that the reduced body meets the horizontal axis in a segment of exactly that length, which comes from Lemma 3.3 and the diagonal containment."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "TheoremOneFour.lean"
         ],
@@ -2624,7 +2705,7 @@
         "Item iii) invokes Fubini for the oblique shaking, where the product decomposition is along span{u} and a line l not orthogonal to u; the paper removed the justifying sentence to a comment in the source."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "LemmaFiveOne.lean",
           "ShakingTranslations.lean",
@@ -2674,7 +2755,7 @@
         "The second inequality is written with an intermediate step that is an equality for the tangent, so the displayed chain contains a redundant inequality sign."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "ConcaveIntegralBounds.lean"
         ],
@@ -2716,7 +2797,7 @@
         "The hypothesis is written as u in R^n minus {0} inside a planar statement; the intended space is R^2."
       ],
       "lean": {
-        "status": "stated",
+        "status": "proved",
         "files": [
           "GeneralShaking.lean"
         ],
